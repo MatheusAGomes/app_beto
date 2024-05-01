@@ -24,34 +24,43 @@ class _Signup4ScreenState extends State<Signup4Screen> {
       backgroundColor: ColorService.roxo,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                      onPressed: () {
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: InkWell(
+                      onTap: () {
                         Navigator.pop(context);
                       },
-                      icon: Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         color: Colors.white,
-                      )),
+                        size: 20,
+                      ),
+                    ),
+                  ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.75,
+                    width: MediaQuery.of(context).size.width * 0.78,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: LinearProgressBar(
                           minHeight: 8,
-                          maxSteps: 9,
+                          maxSteps: 5,
                           progressType: LinearProgressBar.progressTypeLinear,
-                          currentStep: 8,
+                          currentStep: 4,
                           progressColor: Color(0XFF4FFFAA),
                           backgroundColor: Color(0XFF7646FE)),
                     ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 10,
               ),
               Text(
                 'Digite o nome do seu filho(a)',
