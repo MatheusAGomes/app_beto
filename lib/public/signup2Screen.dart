@@ -1,13 +1,15 @@
 import 'package:app_beto/public/signup3Screen.dart';
-import 'package:app_beto/service/ColorSevice.dart';
+import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../models/user.dart';
 import '../widget/textFieldPadrao.dart';
 
 class Signup2Screen extends StatefulWidget {
-  const Signup2Screen({super.key});
+  User user;
+  Signup2Screen({super.key, required this.user});
 
   @override
   State<Signup2Screen> createState() => _Signup2ScreenState();
@@ -84,8 +86,14 @@ class _Signup2ScreenState extends State<Signup2Screen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Signup3Screen()));
+                  User user =
+                      User(nome: widget.user.nome, email: emailController.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Signup3Screen(
+                                user: user,
+                              )));
                 },
                 child: Container(
                   height: 46,

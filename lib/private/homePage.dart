@@ -1,18 +1,23 @@
+import 'package:app_beto/models/licaoCompleta.dart';
 import 'package:app_beto/private/licaoScreen.dart';
 import 'package:app_beto/private/perfilScreen.dart';
-import 'package:app_beto/service/ColorSevice.dart';
+import 'package:app_beto/repository/licao-repository.dart';
+import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../main.dart';
+import '../models/licao.dart';
+import '../models/user.dart';
 import '../widget/bannerPrincipal.dart';
 import '../widget/hexagonoFase.dart';
 import '../widget/starMenuPrincipal.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    super.key,
-  });
+  List<Licao> licoes;
+  User user;
+  MyHomePage({super.key, required this.licoes, required this.user});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -29,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final ScrollController _scrollController;
+
   double valor = 0.3;
   bool cordalinha = false;
   @override
@@ -60,8 +66,21 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  LicaoCompleta? findLicaoCompleta(
+      Licao licao, List<LicaoCompleta?> licoesCompletas) {
+    if (licoesCompletas.length > 0)
+      for (LicaoCompleta? licaoCompleta in licoesCompletas) {
+        if (licaoCompleta!.numeracao == licao.numeracao) {
+          return licaoCompleta;
+        }
+      }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<LicaoCompleta?> listaDelicoes = widget.user.filhos![0]!.licoes;
+
     return Scaffold(
         appBar: cordalinha
             ? AppBar(
@@ -228,12 +247,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: ListView.separated(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemBuilder: (context, index) => InkWell(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LicaoScreen())),
-                            child: StarMenuPrincipal()),
+                        itemBuilder: (context, index) {
+                          LicaoCompleta? licao = findLicaoCompleta(
+                              widget.licoes[index], listaDelicoes ?? []);
+
+                          return InkWell(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LicaoScreen())),
+                              child: StarMenuPrincipal(
+                                qntEstrelas: licao?.estrelas ?? 0,
+                                exercicioFeito: licao != null ? true : false,
+                                numeroDaLicao:
+                                    widget.licoes[index].numeracao.toString(),
+                              ));
+                        },
                         separatorBuilder: (context, index) => Center(
                               child: Container(
                                   height: (MediaQuery.of(context).size.height *
@@ -249,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   )),
                             ),
-                        itemCount: 10),
+                        itemCount: widget.licoes.length),
                   )
                 ],
               ),

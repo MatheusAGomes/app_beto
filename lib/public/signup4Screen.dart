@@ -1,13 +1,18 @@
-import 'package:app_beto/service/ColorSevice.dart';
+import 'package:app_beto/models/filho.dart';
+import 'package:app_beto/models/licaoCompleta.dart';
+import 'package:app_beto/models/resposta.dart';
+import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../models/user.dart';
 import '../widget/textFieldPadrao.dart';
 import 'signup5Screen.dart';
 
 class Signup4Screen extends StatefulWidget {
-  const Signup4Screen({super.key});
+  User user;
+  Signup4Screen({super.key, required this.user});
 
   @override
   State<Signup4Screen> createState() => _Signup4ScreenState();
@@ -86,8 +91,40 @@ class _Signup4ScreenState extends State<Signup4Screen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Signup5Screen()));
+                  User user = widget.user;
+                  Filho filho = Filho(
+                    foto: "url",
+                    nome: nomeController.text,
+                    licoes: [
+                      LicaoCompleta(
+                          numeracao: 1,
+                          respostas: [
+                            Resposta(resposta: ["ex", "ex"])
+                          ],
+                          estrelas: 3),
+                      LicaoCompleta(
+                          numeracao: 2,
+                          respostas: [
+                            Resposta(resposta: ["ex", "ex"])
+                          ],
+                          estrelas: 2),
+                      LicaoCompleta(
+                          numeracao: 3,
+                          respostas: [
+                            Resposta(resposta: ["ex", "ex"])
+                          ],
+                          estrelas: 1)
+                    ],
+                    id: 0,
+                  );
+                  user.filhos = [filho];
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Signup5Screen(
+                                user: user,
+                              )));
                 },
                 child: Container(
                   height: 46,

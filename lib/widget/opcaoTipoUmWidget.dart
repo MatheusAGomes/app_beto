@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../service/ColorSevice.dart';
+import '../shared/service/ColorSevice.dart';
 
 class OpcaoTipoUmWidget extends StatelessWidget {
   const OpcaoTipoUmWidget({

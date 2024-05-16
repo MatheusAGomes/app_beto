@@ -1,0 +1,24 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'user.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+User _$UserFromJson(Map<String, dynamic> json) => User(
+      id: (json['id'] as num?)?.toInt(),
+      nome: json['nome'] as String?,
+      email: json['email'] as String?,
+      filhos: (json['filhos'] as List<dynamic>?)
+          ?.map((e) =>
+              e == null ? null : Filho.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+      'id': instance.id,
+      'nome': instance.nome,
+      'email': instance.email,
+      'filhos': instance.filhos,
+    };

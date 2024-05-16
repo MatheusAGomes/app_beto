@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../service/ColorSevice.dart';
-import '../service/InputDecorationService.dart';
+import '../shared/service/ColorSevice.dart';
+import '../shared/service/InputDecorationService.dart';
 
 class TextFieldPadrao extends StatefulWidget {
   final GlobalKey<FormFieldState>? textFormFildKey;

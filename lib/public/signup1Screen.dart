@@ -1,9 +1,10 @@
 import 'package:app_beto/public/signup2Screen.dart';
-import 'package:app_beto/service/ColorSevice.dart';
+import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../models/user.dart';
 import '../widget/textFieldPadrao.dart';
 
 class Signup1Screen extends StatefulWidget {
@@ -84,8 +85,16 @@ class _Signup1ScreenState extends State<Signup1Screen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Signup2Screen()));
+                  User user = User(
+                    id: null,
+                    nome: nomeController.text,
+                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Signup2Screen(
+                                user: user,
+                              )));
                 },
                 child: Container(
                   height: 46,

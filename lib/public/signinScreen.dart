@@ -1,10 +1,14 @@
+import 'package:app_beto/main.dart';
 import 'package:app_beto/public/signup1Screen.dart';
-import 'package:app_beto/service/ColorSevice.dart';
+import 'package:app_beto/repository/licao-repository.dart';
+import 'package:app_beto/repository/user-repository.dart';
+import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../models/user.dart';
 import '../private/homePage.dart';
 import '../widget/textFieldPadrao.dart';
 
@@ -56,9 +60,16 @@ class _SigninScreenState extends State<SigninScreen> {
                 errorText: 'Senha',
               ),
               InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()));
+                onTap: () async {
+                  var licoes = await LicaoApi(dio).getLicoes(false);
+                  var user = await UserApi(dio).getUsers();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyHomePage(
+                                licoes: licoes,
+                                user: user[0],
+                              )));
                 },
                 child: Container(
                   height: 46,
