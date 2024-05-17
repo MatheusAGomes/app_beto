@@ -8,10 +8,12 @@ class StarMenuPrincipal extends StatelessWidget {
   String numeroDaLicao;
   bool exercicioFeito;
   int qntEstrelas;
+  int proximaLicao;
   StarMenuPrincipal(
       {super.key,
       required this.numeroDaLicao,
       required this.exercicioFeito,
+      required this.proximaLicao,
       required this.qntEstrelas});
 
   @override
@@ -172,9 +174,11 @@ class StarMenuPrincipal extends StatelessWidget {
       children: [
         HexagonoWigetProject(
           string: numeroDaLicao,
-          color: exercicioFeito
-              ? ColorService.verde
-              : Colors.grey.withOpacity(0.4),
+          color: proximaLicao == int.parse(numeroDaLicao)
+              ? Colors.yellow
+              : exercicioFeito
+                  ? ColorService.verde
+                  : Colors.grey.withOpacity(0.4),
         ),
         exercicioFeito ? estrelas() : SizedBox()
       ],

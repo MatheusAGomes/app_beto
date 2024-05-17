@@ -62,7 +62,7 @@ class _SigninScreenState extends State<SigninScreen> {
               InkWell(
                 onTap: () async {
                   var licoes = await LicaoApi(dio).getLicoes(false);
-                  var user = await UserApi(dio).getUsers();
+                  List<User> user = await UserApi(dio).getUsers();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../shared/service/ColorSevice.dart';
 
 class BannerPrincipal extends StatelessWidget {
-  const BannerPrincipal({
+  int estelas;
+  int qntConculidas;
+  BannerPrincipal({
+    required this.estelas,
+    required this.qntConculidas,
     super.key,
   });
 
@@ -48,7 +52,7 @@ class BannerPrincipal extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '20',
+                            '${estelas}',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           )
@@ -84,7 +88,7 @@ class BannerPrincipal extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '20',
+                            '${qntConculidas}',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           )

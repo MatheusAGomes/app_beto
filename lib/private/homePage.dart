@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_beto/models/licaoCompleta.dart';
 import 'package:app_beto/private/licaoScreen.dart';
 import 'package:app_beto/private/perfilScreen.dart';
@@ -50,7 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (_scrollController.offset > 70) {
       valor = (_scrollController.offset * 0.0042);
-      print("este [e] o valor ${valor}");
       setState(() {});
     } else {
       valor = 0.3;
@@ -80,6 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     List<LicaoCompleta?> listaDelicoes = widget.user.filhos![0]!.licoes;
+
+    int estrelas =
+        listaDelicoes.fold(0, (soma, item) => soma + item!.estrelas!);
+    int qntEstrelas = listaDelicoes.length;
+    print(estrelas);
+
+    int proximaLicao = listaDelicoes.length + 1;
 
     return Scaffold(
         appBar: cordalinha
@@ -118,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             Text(
-                              '20',
+                              estrelas.toString(),
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -145,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             Text(
-                              '20',
+                              qntEstrelas.toString(),
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -241,7 +249,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                   ),
-                  BannerPrincipal(),
+                  BannerPrincipal(
+                    estelas: estrelas,
+                    qntConculidas: qntEstrelas,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: ListView.separated(
@@ -255,8 +266,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LicaoScreen())),
+                                      builder: (context) => LicaoScreen(
+                                            licao: widget.licoes[index],
+                                          ))),
                               child: StarMenuPrincipal(
+                                proximaLicao: proximaLicao,
                                 qntEstrelas: licao?.estrelas ?? 0,
                                 exercicioFeito: licao != null ? true : false,
                                 numeroDaLicao:
