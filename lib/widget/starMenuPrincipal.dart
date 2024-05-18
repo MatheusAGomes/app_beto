@@ -37,11 +37,18 @@ class StarMenuPrincipal extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50),
-                child: Icon(
-                  Icons.star,
-                  color: Colors.yellow,
-                  size: 25,
-                ),
+                child: Stack(alignment: AlignmentDirectional.center, children: [
+                  Icon(
+                    Icons.star,
+                    color: Colors.white,
+                    size: 25,
+                  ),
+                  Icon(
+                    Icons.star,
+                    color: Colors.yellow,
+                    size: 20,
+                  ),
+                ]),
               ),
               Transform.rotate(
                 angle: -184 * 3.14,
@@ -65,20 +72,35 @@ class StarMenuPrincipal extends StatelessWidget {
                 angle: 184 * 3.14,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 70, right: 10),
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.yellow,
-                    size: 25,
-                  ),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: 20,
+                    ),
+                  ]),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50),
-                child: Icon(
-                  Icons.star,
-                  color: Colors.yellow,
-                  size: 25,
-                ),
+                child: Stack(alignment: AlignmentDirectional.center, children: [
+                  Icon(
+                    Icons.star,
+                    color: Colors.white,
+                    size: 25,
+                  ),
+                  Icon(
+                    Icons.star,
+                    color: Colors.yellow,
+                    size: 20,
+                  ),
+                ]),
               ),
               Transform.rotate(
                 angle: -184 * 3.14,
@@ -102,30 +124,53 @@ class StarMenuPrincipal extends StatelessWidget {
                 angle: 184 * 3.14,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 70, right: 10),
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.yellow,
-                    size: 25,
-                  ),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: 20,
+                    ),
+                  ]),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50),
-                child: Icon(
-                  Icons.star,
-                  color: Colors.yellow,
-                  size: 25,
-                ),
+                child: Stack(alignment: AlignmentDirectional.center, children: [
+                  Icon(
+                    Icons.star,
+                    color: Colors.white,
+                    size: 25,
+                  ),
+                  Icon(
+                    Icons.star,
+                    color: Colors.yellow,
+                    size: 20,
+                  ),
+                ]),
               ),
               Transform.rotate(
                 angle: -184 * 3.14,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 70, left: 10),
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.yellow,
-                    size: 25,
-                  ),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: 20,
+                    ),
+                  ]),
                 ),
               )
             ],
@@ -138,30 +183,53 @@ class StarMenuPrincipal extends StatelessWidget {
                 angle: 184 * 3.14,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 70, right: 10),
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.yellow,
-                    size: 25,
-                  ),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: 20,
+                    ),
+                  ]),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50),
-                child: Icon(
-                  Icons.star,
-                  color: Colors.yellow,
-                  size: 25,
-                ),
+                child: Stack(alignment: AlignmentDirectional.center, children: [
+                  Icon(
+                    Icons.star,
+                    color: Colors.white,
+                    size: 25,
+                  ),
+                  Icon(
+                    Icons.star,
+                    color: Colors.yellow,
+                    size: 20,
+                  ),
+                ]),
               ),
               Transform.rotate(
                 angle: -184 * 3.14,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 70, left: 10),
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.yellow,
-                    size: 25,
-                  ),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: 20,
+                    ),
+                  ]),
                 ),
               )
             ],

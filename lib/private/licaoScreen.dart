@@ -1,3 +1,5 @@
+import 'package:app_beto/models/licaoCompleta.dart';
+import 'package:app_beto/private/fimDaLicao.dart';
 import 'package:app_beto/shared/enum/tipoDaLicaoEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,16 @@ class LicaoScreen extends StatefulWidget {
 }
 
 class _LicaoScreenState extends State<LicaoScreen> {
+  late DateTime _openTime;
+  late DateTime finishTime;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _openTime = DateTime.now();
+    print('A tela foi aberta em: ${_openTime}');
+  }
+
   String respostaFinal = "LAPIS";
   List<dynamic> resposta = [];
   // List<dynamic> possiveisRespostas = [
@@ -73,8 +85,29 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   void verficandoRespostas() {
     String juncao = joinSilabas(resposta);
+    print(juncao);
+    print(respostaFinal);
     if (juncao == respostaFinal) {
       print('acertou');
+      if (((indexExercicios) + 1) == widget.licao.exercicios.length) {
+        finishTime = DateTime.now();
+
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FimLicaoScreen(
+                      qntEstrelas: 3,
+                      tempo: finishTime.difference(_openTime),
+                    )));
+      } else {
+        indexExercicios++;
+        semaforo = false;
+        resposta = [];
+      }
+
+      setState(() {});
+    } else {
+      print('errou');
     }
   }
 
@@ -200,7 +233,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
               ),
             ),
             const SizedBox(
-              height: 100,
+              height: 20,
             ),
             DragTarget(
               builder: (context, candidateData, rejectedData) => Container(
@@ -234,7 +267,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
                               resposta.removeAt(index);
 
                               setState(() {});
-                              verficandoRespostas();
                             },
                             index: resposta[index]['index'],
                             silaba: resposta[index]['silaba'])),
@@ -255,7 +287,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
                 print(i);
                 setState(() {});
-                verficandoRespostas();
               },
             ),
             Container(
@@ -283,7 +314,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
                 print(i);
                 setState(() {});
-                verficandoRespostas();
               },
               builder: (context, candidateData, rejectedData) => Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
@@ -316,10 +346,32 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                   possiveisRespostas.removeAt(index);
 
                                   setState(() {});
-                                  verficandoRespostas();
                                 },
                                 index: possiveisRespostas[index]['index'],
                                 silaba: possiveisRespostas[index]['silaba'])))),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: InkWell(
+                onTap: () {
+                  verficandoRespostas();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      color: ColorService.verde,
+                      borderRadius: BorderRadius.circular(7)),
+                  width: double.infinity,
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      'Check',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
               ),
             )
           ],

@@ -263,12 +263,19 @@ class _MyHomePageState extends State<MyHomePage> {
                               widget.licoes[index], listaDelicoes ?? []);
 
                           return InkWell(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LicaoScreen(
-                                            licao: widget.licoes[index],
-                                          ))),
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onTap: () {
+                                if ((licao != null) ||
+                                    (proximaLicao ==
+                                        widget.licoes[index].numeracao))
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LicaoScreen(
+                                                licao: widget.licoes[index],
+                                              )));
+                              },
                               child: StarMenuPrincipal(
                                 proximaLicao: proximaLicao,
                                 qntEstrelas: licao?.estrelas ?? 0,
