@@ -114,6 +114,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   bool semaforo = false;
   int indexExercicios = 0;
   String titulo = "";
+  bool possible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -283,6 +284,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
                   "silaba": "${details.data?['silaba']}"
                 });
 
+                if (resposta.isNotEmpty) {
+                  possible = true;
+                }
+
                 possiveisRespostas.removeAt(i);
 
                 print(i);
@@ -311,6 +316,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 });
 
                 resposta.removeAt(i);
+
+                if (resposta.isEmpty) {
+                  possible = false;
+                }
 
                 print(i);
                 setState(() {});
@@ -355,12 +364,14 @@ class _LicaoScreenState extends State<LicaoScreen> {
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: InkWell(
                 onTap: () {
-                  verficandoRespostas();
+                  if (possible) {
+                    verficandoRespostas();
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
-                      color: ColorService.verde,
+                      color: possible ? ColorService.verde : Colors.grey,
                       borderRadius: BorderRadius.circular(7)),
                   width: double.infinity,
                   height: 50,
