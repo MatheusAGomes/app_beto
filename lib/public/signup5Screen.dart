@@ -19,9 +19,35 @@ class Signup5Screen extends StatefulWidget {
 }
 
 class _Signup5ScreenState extends State<Signup5Screen> {
-  GlobalKey<FormFieldState> nomeKey = GlobalKey<FormFieldState>();
+  List<bool> selecionados = [false, false, false, false, false, false];
+  final TextEditingController nomeController = TextEditingController();
 
-  TextEditingController nomeController = TextEditingController();
+  void selecionarImagem(int index) {
+    setState(() {
+      for (int i = 0; i < selecionados.length; i++) {
+        selecionados[i] = i == index;
+      }
+    });
+  }
+
+  List<String> imagens = [
+    'assets/images/boiadeiro.jpg',
+    'assets/images/elefante.png',
+    'assets/images/guaxinim.png',
+    'assets/images/porquinhoDaIndia.jpg',
+    'assets/images/gato.jpg',
+    'assets/images/unicornio.jpg'
+  ];
+
+  int getSelectedIndex(List<bool> selecionados) {
+    for (int i = 0; i < selecionados.length; i++) {
+      if (selecionados[i]) {
+        return i;
+      }
+    }
+    return -1; // Nenhuma foto selecionada
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,84 +103,43 @@ class _Signup5ScreenState extends State<Signup5Screen> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: 40,
-                        runAlignment: WrapAlignment.center,
-                        alignment: WrapAlignment.center,
-                        runSpacing: 40,
-                        direction: Axis.horizontal,
-                        children: [
-                          //testar com um List Generat
-                          CircleAvatar(
-                            radius: 72,
-                            backgroundColor: Colors.white,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 41,
+                      runAlignment: WrapAlignment.center,
+                      alignment: WrapAlignment.center,
+                      runSpacing: 35,
+                      children: List.generate(imagens.length, (index) {
+                        return InkWell(
+                          onTap: () => selecionarImagem(index),
+                          child: CircleAvatar(
+                            radius: selecionados[index] ? 72 : 67,
+                            backgroundColor: selecionados[index]
+                                ? ColorService.laranja
+                                : Colors.white,
                             child: CircleAvatar(
-                              radius: 70,
+                              radius: selecionados[index] ? 70 : 65,
                               child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(120),
-                                  child: Image.asset('assets/images/urso.jpg')),
+                                borderRadius: BorderRadius.circular(120),
+                                child: Image.asset(imagens[index]),
+                              ),
                             ),
                           ),
-                          CircleAvatar(
-                            radius: 72,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 70,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(120),
-                                  child: Image.asset('assets/images/urso.jpg')),
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 72,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 70,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(120),
-                                  child: Image.asset('assets/images/urso.jpg')),
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 72,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 70,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(120),
-                                  child: Image.asset('assets/images/urso.jpg')),
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 72,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 70,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(120),
-                                  child: Image.asset('assets/images/urso.jpg')),
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 72,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 70,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(120),
-                                  child: Image.asset('assets/images/urso.jpg')),
-                            ),
-                          )
-                        ],
-                      )),
+                        );
+                      }),
+                    ),
+                  ),
                 ),
                 InkWell(
                   onTap: () async {
                     //to passando
-                    await UserApi(dio).postLicao(widget.user);
+                    int indexDaFoto = getSelectedIndex(selecionados);
+                    if (indexDaFoto == -1) return;
+                    User user = widget.user;
+                    user.filhos![0]!.foto = indexDaFoto.toString();
+                    await UserApi(dio).postUser(widget.user);
 
                     Navigator.pop(context);
                     Navigator.pop(context);

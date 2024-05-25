@@ -1,4 +1,5 @@
 import 'package:app_beto/main.dart';
+import 'package:app_beto/private/telaDeSelecaoDeFilho.dart';
 import 'package:app_beto/public/signup1Screen.dart';
 import 'package:app_beto/repository/licao-repository.dart';
 import 'package:app_beto/repository/user-repository.dart';
@@ -66,10 +67,8 @@ class _SigninScreenState extends State<SigninScreen> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyHomePage(
-                                licoes: licoes,
-                                user: user[0],
-                              )));
+                          builder: (context) =>
+                              SelecaoDeFilhoScreen(user: user[0])));
                 },
                 child: Container(
                   height: 46,

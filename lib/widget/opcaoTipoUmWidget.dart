@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 import '../shared/service/ColorSevice.dart';
 
@@ -21,6 +22,13 @@ class OpcaoTipoUmWidget extends StatefulWidget {
 }
 
 class _OpcaoTipoUmWidgetState extends State<OpcaoTipoUmWidget> {
+  final FlutterTts fluttertts = FlutterTts();
+  speak(String texto) async {
+    await fluttertts.setLanguage('pt-BR');
+    await fluttertts.setPitch(1);
+    await fluttertts.speak(texto);
+  }
+
   @override
   Widget build(BuildContext context) {
     return LongPressDraggable(
@@ -45,6 +53,7 @@ class _OpcaoTipoUmWidgetState extends State<OpcaoTipoUmWidget> {
       childWhenDragging: SizedBox(),
       child: InkWell(
         onTap: () {
+          speak(widget.silaba);
           widget.ontap!();
         },
         child: Container(

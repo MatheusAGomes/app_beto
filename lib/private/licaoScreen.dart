@@ -3,6 +3,7 @@ import 'package:app_beto/private/fimDaLicao.dart';
 import 'package:app_beto/shared/enum/tipoDaLicaoEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -24,6 +25,13 @@ class LicaoScreen extends StatefulWidget {
 class _LicaoScreenState extends State<LicaoScreen> {
   late DateTime _openTime;
   late DateTime finishTime;
+  final FlutterTts fluttertts = FlutterTts();
+  speak(String texto) async {
+    await fluttertts.setLanguage('pt-BR');
+    await fluttertts.setPitch(1);
+    await fluttertts.speak(texto);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,7 +40,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
     print('A tela foi aberta em: ${_openTime}');
   }
 
-  String respostaFinal = "LAPIS";
+  String respostaFinal = "";
   List<dynamic> resposta = [];
   // List<dynamic> possiveisRespostas = [
   //   {"index": "0", "silaba": "LA"},
@@ -114,7 +122,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
   bool semaforo = false;
   int indexExercicios = 0;
   String titulo = "";
-  bool possible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +133,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
         possiveisRespostas = convertToJsonList(
             widget.licao.exercicios[indexExercicios].possiveisSilabas!);
         titulo = widget.licao.exercicios[indexExercicios].titulo;
+        respostaFinal =
+            widget.licao.exercicios[indexExercicios].respostaEsperada;
       }
       semaforo = true;
 
@@ -196,20 +205,25 @@ class _LicaoScreenState extends State<LicaoScreen> {
                     top: -30,
                     child: Column(
                       children: [
-                        Container(
-                          child: Center(
-                              child: Container(
-                            height: MediaQuery.of(context).size.height * 0.14,
-                            width: MediaQuery.of(context).size.height * 0.14,
-                            child: Image.asset(
-                              'assets/images/Pencil.png',
-                            ),
-                          )),
-                          decoration: BoxDecoration(
-                              color: ColorService.laranja,
-                              borderRadius: BorderRadius.circular(12)),
-                          height: MediaQuery.of(context).size.height * 0.17,
-                          width: MediaQuery.of(context).size.height * 0.17,
+                        InkWell(
+                          onTap: () {
+                            speak(respostaFinal);
+                          },
+                          child: Container(
+                            child: Center(
+                                child: Container(
+                              height: MediaQuery.of(context).size.height * 0.14,
+                              width: MediaQuery.of(context).size.height * 0.14,
+                              child: Image.asset(
+                                'assets/images/Pencil.png',
+                              ),
+                            )),
+                            decoration: BoxDecoration(
+                                color: ColorService.laranja,
+                                borderRadius: BorderRadius.circular(12)),
+                            height: MediaQuery.of(context).size.height * 0.17,
+                            width: MediaQuery.of(context).size.height * 0.17,
+                          ),
                         ),
                         Container(
                           alignment: Alignment.center,
@@ -284,10 +298,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
                   "silaba": "${details.data?['silaba']}"
                 });
 
-                if (resposta.isNotEmpty) {
-                  possible = true;
-                }
-
                 possiveisRespostas.removeAt(i);
 
                 print(i);
@@ -316,10 +326,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 });
 
                 resposta.removeAt(i);
-
-                if (resposta.isEmpty) {
-                  possible = false;
-                }
 
                 print(i);
                 setState(() {});
@@ -364,14 +370,16 @@ class _LicaoScreenState extends State<LicaoScreen> {
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: InkWell(
                 onTap: () {
-                  if (possible) {
+                  if (resposta.isNotEmpty) {
                     verficandoRespostas();
                   }
                 },
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
-                      color: possible ? ColorService.verde : Colors.grey,
+                      color: resposta.isNotEmpty
+                          ? ColorService.verde
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(7)),
                   width: double.infinity,
                   height: 50,

@@ -7,6 +7,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../models/user.dart';
+import '../shared/utils.dart';
 import '../widget/textFieldPadrao.dart';
 
 class Signup6Screen extends StatefulWidget {
@@ -40,7 +41,8 @@ class _Signup6ScreenState extends State<Signup6Screen> {
                   radius: 70,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(120),
-                      child: Image.asset('assets/images/urso.jpg')),
+                      child: Image.asset(getImageUrlFromIndexString(
+                          (widget.user.filhos![0]!.foto!)))),
                 ),
               ),
               Text(
@@ -69,6 +71,7 @@ class _Signup6ScreenState extends State<Signup6Screen> {
                           builder: (context) => MyHomePage(
                                 licoes: licoes,
                                 user: widget.user,
+                                indexDoFilho: 0,
                               )));
                 },
                 child: Container(

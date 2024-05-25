@@ -12,14 +12,20 @@ import 'package:flutter/widgets.dart';
 import '../main.dart';
 import '../models/licao.dart';
 import '../models/user.dart';
+import '../shared/utils.dart';
 import '../widget/bannerPrincipal.dart';
 import '../widget/hexagonoFase.dart';
 import '../widget/starMenuPrincipal.dart';
 
 class MyHomePage extends StatefulWidget {
   List<Licao> licoes;
+  int indexDoFilho;
   User user;
-  MyHomePage({super.key, required this.licoes, required this.user});
+  MyHomePage(
+      {super.key,
+      required this.licoes,
+      required this.user,
+      required this.indexDoFilho});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -99,7 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: CircleAvatar(
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
-                        child: Image.asset('assets/images/urso.jpg')),
+                        child: Image.asset(getImageUrlFromIndexString(
+                            (widget.user.filhos![0]!.foto!)))),
                   ),
                 ),
                 backgroundColor: ColorService.roxo,
@@ -226,11 +233,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(25),
                                       child: Image.asset(
-                                          'assets/images/urso.jpg')),
+                                          getImageUrlFromIndexString((widget
+                                              .user.filhos![0]!.foto!)))),
                                 ),
                               ),
                               Text(
-                                'Olá, Luca',
+                                'Olá, ${widget.user.filhos![widget.indexDoFilho]!.nome!}',
                                 style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 17,

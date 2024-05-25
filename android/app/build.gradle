@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.app_beto"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -45,11 +45,14 @@ android {
         applicationId "com.example.app_beto"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 34
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
+    
 
     buildTypes {
         release {
@@ -64,4 +67,4 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+
