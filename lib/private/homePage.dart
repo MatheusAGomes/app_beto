@@ -86,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<LicaoCompleta?> listaDelicoes = widget.user.filhos![0]!.licoes;
+    List<LicaoCompleta?> listaDelicoes =
+        widget.user.filhos![widget.indexDoFilho]!.licoes;
 
     int estrelas =
         listaDelicoes.fold(0, (soma, item) => soma + item!.estrelas!);
@@ -105,8 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: CircleAvatar(
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
-                        child: Image.asset(getImageUrlFromIndexString(
-                            (widget.user.filhos![0]!.foto!)))),
+                        child: Image.asset(getImageUrlFromIndexString((widget
+                            .user.filhos![widget.indexDoFilho]!.foto!)))),
                   ),
                 ),
                 backgroundColor: ColorService.roxo,
@@ -234,7 +235,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       borderRadius: BorderRadius.circular(25),
                                       child: Image.asset(
                                           getImageUrlFromIndexString((widget
-                                              .user.filhos![0]!.foto!)))),
+                                              .user
+                                              .filhos![widget.indexDoFilho]!
+                                              .foto!)))),
                                 ),
                               ),
                               Text(

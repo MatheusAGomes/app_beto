@@ -127,7 +127,7 @@ class _SelecaoDeFilhoScreenState extends State<SelecaoDeFilhoScreen> {
                             builder: (context) => MyHomePage(
                                   licoes: licoes,
                                   user: user[0],
-                                  indexDoFilho: 0,
+                                  indexDoFilho: index,
                                 )));
                   },
                   child: Column(
