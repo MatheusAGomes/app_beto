@@ -5,12 +5,10 @@ part 'licaoCompleta.g.dart';
 
 @JsonSerializable()
 class LicaoCompleta {
-  int? numeracao;
   List<Resposta?>? respostas;
   int? estrelas;
 
   LicaoCompleta({
-    this.numeracao,
     this.respostas,
     this.estrelas,
   });

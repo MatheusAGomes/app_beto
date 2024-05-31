@@ -8,7 +8,6 @@ part of 'licaoCompleta.dart';
 
 LicaoCompleta _$LicaoCompletaFromJson(Map<String, dynamic> json) =>
     LicaoCompleta(
-      numeracao: (json['numeracao'] as num?)?.toInt(),
       respostas: (json['respostas'] as List<dynamic>?)
           ?.map((e) =>
               e == null ? null : Resposta.fromJson(e as Map<String, dynamic>))
@@ -18,7 +17,6 @@ LicaoCompleta _$LicaoCompletaFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$LicaoCompletaToJson(LicaoCompleta instance) =>
     <String, dynamic>{
-      'numeracao': instance.numeracao,
       'respostas': instance.respostas,
       'estrelas': instance.estrelas,
     };

@@ -96,24 +96,15 @@ class _Signup4ScreenState extends State<Signup4Screen> {
                     foto: "url",
                     nome: nomeController.text,
                     licoes: [
-                      LicaoCompleta(
-                          numeracao: 1,
-                          respostas: [
-                            Resposta(resposta: ["ex", "ex"])
-                          ],
-                          estrelas: 3),
-                      LicaoCompleta(
-                          numeracao: 2,
-                          respostas: [
-                            Resposta(resposta: ["ex", "ex"])
-                          ],
-                          estrelas: 2),
-                      LicaoCompleta(
-                          numeracao: 3,
-                          respostas: [
-                            Resposta(resposta: ["ex", "ex"])
-                          ],
-                          estrelas: 1)
+                      LicaoCompleta(respostas: [
+                        Resposta(resposta: ["ex", "ex"])
+                      ], estrelas: 3),
+                      LicaoCompleta(respostas: [
+                        Resposta(resposta: ["ex", "ex"])
+                      ], estrelas: 2),
+                      LicaoCompleta(respostas: [
+                        Resposta(resposta: ["ex", "ex"])
+                      ], estrelas: 1)
                     ],
                     id: 0,
                   );

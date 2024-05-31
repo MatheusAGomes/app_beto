@@ -214,12 +214,25 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                 child: Container(
                               height: MediaQuery.of(context).size.height * 0.14,
                               width: MediaQuery.of(context).size.height * 0.14,
-                              child: Image.asset(
-                                'assets/images/Pencil.png',
-                              ),
+                              child: widget.licao.exercicios[indexExercicios]
+                                          .imagem !=
+                                      null
+                                  ? Image.network(
+                                      widget.licao.exercicios[indexExercicios]
+                                          .imagem!,
+                                    )
+                                  : Icon(
+                                      Icons.volume_up_rounded,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
                             )),
                             decoration: BoxDecoration(
-                                color: ColorService.laranja,
+                                color: widget.licao.exercicios[indexExercicios]
+                                            .imagem !=
+                                        null
+                                    ? ColorService.laranja
+                                    : ColorService.roxo,
                                 borderRadius: BorderRadius.circular(12)),
                             height: MediaQuery.of(context).size.height * 0.17,
                             width: MediaQuery.of(context).size.height * 0.17,

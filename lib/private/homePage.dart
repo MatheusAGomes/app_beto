@@ -74,13 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   LicaoCompleta? findLicaoCompleta(
-      Licao licao, List<LicaoCompleta?> licoesCompletas) {
-    if (licoesCompletas.length > 0)
-      for (LicaoCompleta? licaoCompleta in licoesCompletas) {
-        if (licaoCompleta!.numeracao == licao.numeracao) {
-          return licaoCompleta;
-        }
+      int indexListaDeTodasAsLicoes, List<LicaoCompleta?> licoesCompletas) {
+    if (indexListaDeTodasAsLicoes < licoesCompletas.length) {
+      if (licoesCompletas[indexListaDeTodasAsLicoes] != null) {
+        return licoesCompletas[indexListaDeTodasAsLicoes];
       }
+    }
     return null;
   }
 
@@ -92,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
     int estrelas =
         listaDelicoes.fold(0, (soma, item) => soma + item!.estrelas!);
     int qntEstrelas = listaDelicoes.length;
-    print(estrelas);
 
     int proximaLicao = listaDelicoes.length + 1;
 
@@ -270,29 +268,29 @@ class _MyHomePageState extends State<MyHomePage> {
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          LicaoCompleta? licao = findLicaoCompleta(
-                              widget.licoes[index], listaDelicoes ?? []);
+                          LicaoCompleta? licao =
+                              findLicaoCompleta(index, listaDelicoes ?? []);
 
                           return InkWell(
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
                               onTap: () {
                                 if ((licao != null) ||
-                                    (proximaLicao ==
-                                        widget.licoes[index].numeracao))
+                                    (proximaLicao == (index + 1))) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => LicaoScreen(
                                                 licao: widget.licoes[index],
                                               )));
+                                }
                               },
                               child: StarMenuPrincipal(
                                 proximaLicao: proximaLicao,
                                 qntEstrelas: licao?.estrelas ?? 0,
-                                exercicioFeito: licao != null ? true : false,
-                                numeroDaLicao:
-                                    widget.licoes[index].numeracao.toString(),
+                                exercicioFeito:
+                                    licao?.estrelas != null ? true : false,
+                                numeroDaLicao: (index + 1).toString(),
                               ));
                         },
                         separatorBuilder: (context, index) => Center(
