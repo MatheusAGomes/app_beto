@@ -1,4 +1,9 @@
+import 'package:app_beto/models/user.dart';
+import 'package:app_beto/private/settingScreen.dart';
+import 'package:app_beto/private/telaDeSelecaoDeFilho.dart';
+import 'package:app_beto/public/signinScreen.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
+import 'package:app_beto/shared/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,7 +13,11 @@ import '../widget/hexagonoFase.dart';
 import '../widget/starMenuPrincipal.dart';
 
 class PerfilScreen extends StatefulWidget {
-  const PerfilScreen({
+  User user;
+  int indexUsuario;
+  PerfilScreen({
+    required this.user,
+    required this.indexUsuario,
     super.key,
   });
 
@@ -48,12 +57,45 @@ class _PerfilScreenState extends State<PerfilScreen> {
               color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
         ),
         actions: [
-          TextButton(
-              onPressed: () {},
-              child: Text(
-                'Sair',
-                style: TextStyle(color: Colors.white, fontSize: 15),
-              ))
+          PopupMenuButton<String>(
+            iconColor: Colors.white,
+            onSelected: (String result) {
+              // Ação a ser tomada quando uma opção é selecionada
+              switch (result) {
+                case 'Opção 1':
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SelecaoDeFilhoScreen(
+                              user: widget.user,
+                            )),
+                    (Route<dynamic> route) => false,
+                  );
+                  break;
+                case 'Opção 2':
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => SigninScreen()),
+                    (Route<dynamic> route) => false,
+                  );
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Opção 1',
+                child: Text('Trocar usuario'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Opção 2',
+                child: Text(
+                  'Sair',
+                  style:
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          )
         ],
       ),
       body: Stack(
@@ -76,12 +118,13 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       radius: 110,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(120),
-                          child: Image.asset('assets/images/urso.jpg')),
+                          child: Image.asset(getImageUrlFromIndexString((widget
+                              .user.filhos![widget.indexUsuario]!.foto!)))),
                     ),
                   ),
                 ),
                 Text(
-                  'Luca Gomes',
+                  widget.user.filhos![widget.indexUsuario]!.nome!,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
                 ),
                 Row(

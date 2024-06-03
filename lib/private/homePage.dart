@@ -222,7 +222,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PerfilScreen()));
+                                    builder: (context) => PerfilScreen(
+                                          user: widget.user,
+                                          indexUsuario: widget.indexDoFilho,
+                                        )));
                           },
                           child: Row(
                             children: [
@@ -249,12 +252,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             ],
                           ),
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.more_horiz,
-                              color: Colors.white,
-                            ))
                       ],
                     ),
                   ),

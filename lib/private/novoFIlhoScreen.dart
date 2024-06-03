@@ -1,5 +1,6 @@
 import 'package:app_beto/main.dart';
 import 'package:app_beto/models/filho.dart';
+import 'package:app_beto/private/imagemDePerfil.dart';
 import 'package:app_beto/repository/user-repository.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:app_beto/shared/utils.dart';
@@ -20,6 +21,7 @@ class NovoFilhoScreen extends StatefulWidget {
 class _NovoFilhoScreenState extends State<NovoFilhoScreen> {
   TextEditingController nomeController = TextEditingController();
   bool podeEnviar = false;
+  String? foto;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,10 +50,10 @@ class _NovoFilhoScreenState extends State<NovoFilhoScreen> {
                 Filho filho = Filho(
                   licoes: [],
                   nome: nomeController.text,
-                  foto: '1',
+                  foto: foto ?? '1',
                   id: widget.index,
                 );
-                if (podeEnviar) {
+                if (podeEnviar && foto != null) {
                   await UserApi(dio)
                       .criarNovofilho(widget.idUser, filho)
                       .then((value) {
@@ -61,7 +63,8 @@ class _NovoFilhoScreenState extends State<NovoFilhoScreen> {
               },
               icon: Icon(
                 Icons.check,
-                color: podeEnviar ? Colors.white : Colors.grey,
+                color:
+                    (podeEnviar && foto != null) ? Colors.white : Colors.grey,
                 size: 18,
               ))
         ],
@@ -80,17 +83,36 @@ class _NovoFilhoScreenState extends State<NovoFilhoScreen> {
                     radius: 65,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(120),
-                      child: Image.asset(getImageUrlFromIndexString('1')),
+                      child: foto != null
+                          ? Image.asset(getImageUrlFromIndexString(foto!))
+                          : Icon(
+                              Icons.photo_camera,
+                              size: 40,
+                              color: Colors.white,
+                            ),
                     ),
                   ),
                 ),
-                CircleAvatar(
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
+                InkWell(
+                  onTap: () async {
+                    foto = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ImagemDePerfilScreen()));
+                    setState(() {});
+                  },
+                  child: CircleAvatar(
+                    radius: 17,
+                    backgroundColor: Colors.white,
+                    child: CircleAvatar(
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      backgroundColor: ColorService.laranja,
+                      radius: 15,
+                    ),
                   ),
-                  backgroundColor: ColorService.laranja,
-                  radius: 15,
                 ),
               ],
             ),
