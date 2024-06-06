@@ -95,17 +95,7 @@ class _Signup4ScreenState extends State<Signup4Screen> {
                   Filho filho = Filho(
                     foto: "url",
                     nome: nomeController.text,
-                    licoes: [
-                      LicaoCompleta(respostas: [
-                        Resposta(resposta: ["ex", "ex"])
-                      ], estrelas: 3),
-                      LicaoCompleta(respostas: [
-                        Resposta(resposta: ["ex", "ex"])
-                      ], estrelas: 2),
-                      LicaoCompleta(respostas: [
-                        Resposta(resposta: ["ex", "ex"])
-                      ], estrelas: 1)
-                    ],
+                    licoes: [],
                     id: 0,
                   );
                   user.filhos = [filho];

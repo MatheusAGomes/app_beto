@@ -13,7 +13,7 @@ class _UserApi implements UserApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.0.192:2020/';
+    baseUrl ??= 'http://192.168.0.197:2020/';
   }
 
   final Dio _dio;
@@ -121,6 +121,35 @@ class _UserApi implements UserApi {
         .compose(
           _dio.options,
           '/users/${id}/novofilho',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> finalizarLicao(
+    String id,
+    String idFilho,
+    LicaoCompleta licaoCompleta,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(licaoCompleta.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/users/${id}/finalizarLicao/${idFilho}',
           queryParameters: queryParameters,
           data: _data,
         )

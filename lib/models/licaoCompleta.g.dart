@@ -8,15 +8,17 @@ part of 'licaoCompleta.dart';
 
 LicaoCompleta _$LicaoCompletaFromJson(Map<String, dynamic> json) =>
     LicaoCompleta(
-      respostas: (json['respostas'] as List<dynamic>?)
-          ?.map((e) =>
+      id: json['id'] as String,
+      respostas: (json['respostas'] as List<dynamic>)
+          .map((e) =>
               e == null ? null : Resposta.fromJson(e as Map<String, dynamic>))
           .toList(),
-      estrelas: (json['estrelas'] as num?)?.toInt(),
+      estrelas: (json['estrelas'] as num).toInt(),
     );
 
 Map<String, dynamic> _$LicaoCompletaToJson(LicaoCompleta instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'respostas': instance.respostas,
       'estrelas': instance.estrelas,
     };

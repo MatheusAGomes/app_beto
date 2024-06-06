@@ -1,3 +1,4 @@
+import 'package:app_beto/models/licaoCompleta.dart';
 import 'package:app_beto/models/user.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
@@ -23,4 +24,8 @@ abstract class UserApi {
   //novo filho
   @POST("/users/{id}/novofilho")
   Future<void> criarNovofilho(@Path('id') String id, @Body() Filho filho);
+
+  @POST("/users/{id}/finalizarLicao/{idFilho}")
+  Future<void> finalizarLicao(@Path('id') String id,
+      @Path('idFilho') String idFilho, @Body() LicaoCompleta licaoCompleta);
 }

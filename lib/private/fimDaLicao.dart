@@ -1,12 +1,25 @@
+import 'package:app_beto/main.dart';
+import 'package:app_beto/models/licaoCompleta.dart';
+import 'package:app_beto/repository/user-repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../models/user.dart';
 import '../shared/service/ColorSevice.dart';
 
 class FimLicaoScreen extends StatefulWidget {
+  User user;
+  int indexFilho;
   int qntEstrelas;
+  String idLicao;
   Duration tempo;
-  FimLicaoScreen({super.key, required this.qntEstrelas, required this.tempo});
+  FimLicaoScreen(
+      {super.key,
+      required this.user,
+      required this.indexFilho,
+      required this.qntEstrelas,
+      required this.idLicao,
+      required this.tempo});
 
   @override
   State<FimLicaoScreen> createState() => _FimLicaoScreenState();
@@ -170,7 +183,12 @@ class _FimLicaoScreenState extends State<FimLicaoScreen> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
             child: InkWell(
-              onTap: () {
+              onTap: () async {
+                await UserApi(dio).finalizarLicao(
+                    widget.user.id!,
+                    widget.indexFilho.toString(),
+                    LicaoCompleta(
+                        id: widget.idLicao, respostas: [], estrelas: 3));
                 Navigator.pop(context);
               },
               child: Container(

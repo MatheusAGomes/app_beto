@@ -5,12 +5,14 @@ part 'licaoCompleta.g.dart';
 
 @JsonSerializable()
 class LicaoCompleta {
-  List<Resposta?>? respostas;
-  int? estrelas;
+  String id;
+  List<Resposta?> respostas;
+  int estrelas;
 
   LicaoCompleta({
-    this.respostas,
-    this.estrelas,
+    required this.id,
+    required this.respostas,
+    required this.estrelas,
   });
 
   factory LicaoCompleta.fromJson(Map<String, dynamic> json) =>

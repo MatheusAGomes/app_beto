@@ -4,9 +4,10 @@ part 'licao.g.dart';
 
 @JsonSerializable()
 class Licao {
+  String id;
   final List<ExercicioSchema> exercicios;
 
-  Licao({required this.exercicios});
+  Licao({required this.exercicios, required this.id});
 
   void adicionarExercicio(ExercicioSchema exercicio) {
     exercicios.add(exercicio);

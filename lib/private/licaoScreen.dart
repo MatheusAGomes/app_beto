@@ -9,6 +9,8 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../models/licao.dart';
+import '../models/user.dart';
+import '../shared/service/stroreService.dart';
 import '../widget/opcaoTipoUmWidget.dart';
 
 class LicaoScreen extends StatefulWidget {
@@ -91,7 +93,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
     return lista.map((item) => item['silaba']).join('');
   }
 
-  void verficandoRespostas() {
+  void verficandoRespostas() async {
     String juncao = joinSilabas(resposta);
     print(juncao);
     print(respostaFinal);
@@ -99,11 +101,17 @@ class _LicaoScreenState extends State<LicaoScreen> {
       print('acertou');
       if (((indexExercicios) + 1) == widget.licao.exercicios.length) {
         finishTime = DateTime.now();
+        final user = User.fromJson(await Store.read("user"));
+
+        int indexFilho = await Store.read("indexFilho");
 
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => FimLicaoScreen(
+                      idLicao: widget.licao.id,
+                      indexFilho: indexFilho,
+                      user: user,
                       qntEstrelas: 3,
                       tempo: finishTime.difference(_openTime),
                     )));

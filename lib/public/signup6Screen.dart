@@ -7,6 +7,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../models/user.dart';
+import '../shared/service/stroreService.dart';
 import '../shared/utils.dart';
 import '../widget/textFieldPadrao.dart';
 
@@ -65,6 +66,8 @@ class _Signup6ScreenState extends State<Signup6Screen> {
               InkWell(
                 onTap: () async {
                   var licoes = await LicaoApi(dio).getLicoes(false);
+                  await Store.save("user", widget.user);
+                  await Store.save("indexFilho", 0);
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
