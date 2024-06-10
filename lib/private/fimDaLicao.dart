@@ -1,11 +1,13 @@
 import 'package:app_beto/main.dart';
 import 'package:app_beto/models/licaoCompleta.dart';
+import 'package:app_beto/private/homePage.dart';
 import 'package:app_beto/repository/user-repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../models/user.dart';
 import '../shared/service/ColorSevice.dart';
+import '../shared/service/stroreService.dart';
 
 class FimLicaoScreen extends StatefulWidget {
   User user;
@@ -184,12 +186,17 @@ class _FimLicaoScreenState extends State<FimLicaoScreen> {
             padding: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
             child: InkWell(
               onTap: () async {
-                await UserApi(dio).finalizarLicao(
+                User user = await UserApi(dio).finalizarLicao(
                     widget.user.id!,
                     widget.indexFilho.toString(),
                     LicaoCompleta(
                         id: widget.idLicao, respostas: [], estrelas: 3));
-                Navigator.pop(context);
+                await Store.save("user", user);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                  (Route<dynamic> route) => false,
+                );
               },
               child: Container(
                 decoration: BoxDecoration(

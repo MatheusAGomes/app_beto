@@ -120,19 +120,12 @@ class _SelecaoDeFilhoScreenState extends State<SelecaoDeFilhoScreen> {
               } else {
                 return InkWell(
                   onTap: () async {
-                    var licoes = await LicaoApi(dio).getLicoes(false);
                     List<User> user = await UserApi(dio).getUsers();
                     await Store.save("user", user[0]);
                     await Store.save("indexFilho", index);
 
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyHomePage(
-                                  licoes: licoes,
-                                  user: user[0],
-                                  indexDoFilho: index,
-                                )));
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => MyHomePage()));
                   },
                   child: Column(
                     children: [

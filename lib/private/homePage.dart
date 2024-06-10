@@ -12,20 +12,14 @@ import 'package:flutter/widgets.dart';
 import '../main.dart';
 import '../models/licao.dart';
 import '../models/user.dart';
+import '../shared/service/stroreService.dart';
 import '../shared/utils.dart';
 import '../widget/bannerPrincipal.dart';
 import '../widget/hexagonoFase.dart';
 import '../widget/starMenuPrincipal.dart';
 
 class MyHomePage extends StatefulWidget {
-  List<Licao> licoes;
-  int indexDoFilho;
-  User user;
-  MyHomePage(
-      {super.key,
-      required this.licoes,
-      required this.user,
-      required this.indexDoFilho});
+  MyHomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -42,15 +36,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final ScrollController _scrollController;
-
+  late User user;
+  late int indexDoFilho;
   double valor = 0.3;
   bool cordalinha = false;
+  List<Licao?> licoes = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(infiniteScrolling);
+    _fetchLicoes();
+    _fetchUser();
+    _fetchIndex();
   }
 
   infiniteScrolling() {
@@ -83,16 +82,43 @@ class _MyHomePageState extends State<MyHomePage> {
     return null;
   }
 
+  // Crie um método para buscar as lições
+  Future<void> _fetchLicoes() async {
+    // Certifique-se de substituir `dio` pelo seu objeto Dio configurado
+    var result = await LicaoApi(dio).getLicoes(false);
+    setState(() {
+      licoes = result;
+    });
+  }
+
+  Future<void> _fetchUser() async {
+    // Certifique-se de substituir `dio` pelo seu objeto Dio configurado
+    final result = User.fromJson(await Store.read("user"));
+
+    setState(() {
+      user = result;
+    });
+  }
+
+  Future<void> _fetchIndex() async {
+    // Certifique-se de substituir `dio` pelo seu objeto Dio configurado
+    final result = await Store.read("indexFilho");
+
+    setState(() {
+      indexDoFilho = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<LicaoCompleta?> listaDelicoes =
-        widget.user.filhos![widget.indexDoFilho]!.licoes;
+    List<LicaoCompleta?> listaDelicoes = user.filhos![indexDoFilho]!.licoes;
 
     int estrelas =
         listaDelicoes.fold(0, (soma, item) => soma + item!.estrelas!);
     int qntEstrelas = listaDelicoes.length;
 
     int proximaLicao = listaDelicoes.length + 1;
+    _fetchUser();
 
     return Scaffold(
         appBar: cordalinha
@@ -104,8 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: CircleAvatar(
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
-                        child: Image.asset(getImageUrlFromIndexString((widget
-                            .user.filhos![widget.indexDoFilho]!.foto!)))),
+                        child: Image.asset(getImageUrlFromIndexString(
+                            (user.filhos![indexDoFilho]!.foto!)))),
                   ),
                 ),
                 backgroundColor: ColorService.roxo,
@@ -223,8 +249,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => PerfilScreen(
-                                          user: widget.user,
-                                          indexUsuario: widget.indexDoFilho,
+                                          user: user,
+                                          indexUsuario: indexDoFilho,
                                         )));
                           },
                           child: Row(
@@ -235,14 +261,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(25),
                                       child: Image.asset(
-                                          getImageUrlFromIndexString((widget
-                                              .user
-                                              .filhos![widget.indexDoFilho]!
-                                              .foto!)))),
+                                          getImageUrlFromIndexString((user
+                                              .filhos![indexDoFilho]!.foto!)))),
                                 ),
                               ),
                               Text(
-                                'Olá, ${widget.user.filhos![widget.indexDoFilho]!.nome!}',
+                                'Olá, ${user.filhos![indexDoFilho]!.nome!}',
                                 style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 17,
@@ -271,15 +295,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           return InkWell(
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
-                              onTap: () {
+                              onTap: () async {
                                 if ((licao != null) ||
                                     (proximaLicao == (index + 1))) {
-                                  Navigator.push(
+                                  await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => LicaoScreen(
-                                                licao: widget.licoes[index],
+                                                licao: licoes[index]!,
                                               )));
+                                  setState(() {});
                                 }
                               },
                               child: StarMenuPrincipal(
@@ -305,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   )),
                             ),
-                        itemCount: widget.licoes.length),
+                        itemCount: licoes.length),
                   )
                 ],
               ),

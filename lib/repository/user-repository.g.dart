@@ -13,7 +13,7 @@ class _UserApi implements UserApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.0.197:2020/';
+    baseUrl ??= 'http://172.16.234.115:2020/';
   }
 
   final Dio _dio;
@@ -132,7 +132,7 @@ class _UserApi implements UserApi {
   }
 
   @override
-  Future<void> finalizarLicao(
+  Future<User> finalizarLicao(
     String id,
     String idFilho,
     LicaoCompleta licaoCompleta,
@@ -142,22 +142,25 @@ class _UserApi implements UserApi {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(licaoCompleta.toJson());
-    await _dio.fetch<void>(_setStreamType<void>(Options(
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<User>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/users/${id}/finalizarLicao/${idFilho}',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
+            .compose(
+              _dio.options,
+              '/users/${id}/finalizarLicao/${idFilho}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = User.fromJson(_result.data!);
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

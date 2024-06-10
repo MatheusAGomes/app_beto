@@ -33,82 +33,105 @@ class _SigninScreenState extends State<SigninScreen> {
       backgroundColor: ColorService.roxo,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 22),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                height: 200,
-                width: 300,
-                color: Colors.white,
-              ),
-              TextFieldPadrao(
-                onchange: (p0) {
-                  // usernameKey.currentState?.validate();
-                },
-                textFormFildKey: usernameKey,
-                validator: Validatorless.required('Campo obrigatorio'),
-                controller: usernameController,
-                errorText: 'E-mail',
-              ),
-              TextFieldPadrao(
-                onchange: (p0) {
-                  // usernameKey.currentState?.validate();
-                },
-                textFormFildKey: passwordKey,
-                validator: Validatorless.required('Campo obrigatorio'),
-                controller: passwordController,
-                errorText: 'Senha',
-              ),
-              InkWell(
-                onTap: () async {
-                  var licoes = await LicaoApi(dio).getLicoes(false);
-                  List<User> user = await UserApi(dio).getUsers();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SelecaoDeFilhoScreen(user: user[0])));
-                },
-                child: Container(
-                  height: 46,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Color(0XFFFF9051),
-                      border: Border.all(color: Colors.white, width: 1),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                    child: Text(
-                      'Entrar',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 50,
+            ),
+            Container(
+              height: 350,
+              width: 300,
+              color: Colors.transparent,
+              child: Image.asset('assets/images/beto.png'),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Column(
+              children: [
+                TextFieldPadrao(
+                  onchange: (p0) {
+                    // usernameKey.currentState?.validate();
+                  },
+                  textFormFildKey: usernameKey,
+                  validator: Validatorless.required('Campo obrigatorio'),
+                  controller: usernameController,
+                  errorText: 'E-mail',
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                TextFieldPadrao(
+                  onchange: (p0) {
+                    // usernameKey.currentState?.validate();
+                  },
+                  textFormFildKey: passwordKey,
+                  validator: Validatorless.required('Campo obrigatorio'),
+                  controller: passwordController,
+                  errorText: 'Senha',
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Column(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    var licoes = await LicaoApi(dio).getLicoes(false);
+                    List<User> user = await UserApi(dio).getUsers();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SelecaoDeFilhoScreen(user: user[0])));
+                  },
+                  child: Container(
+                    height: 46,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0XFFFF9051),
+                        border: Border.all(color: Colors.white, width: 1),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Center(
+                      child: Text(
+                        'Entrar',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Signup1Screen()));
-                },
-                child: Container(
-                  height: 46,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Color(0XFFAA8DFF),
-                      border: Border.all(color: Colors.white, width: 1),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                    child: Text(
-                      'Cadastrar',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                SizedBox(
+                  height: 25,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Signup1Screen()));
+                  },
+                  child: Container(
+                    height: 46,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0XFFAA8DFF),
+                        border: Border.all(color: Colors.white, width: 1),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Center(
+                      child: Text(
+                        'Cadastrar',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
