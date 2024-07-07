@@ -48,10 +48,10 @@ class _NovoFilhoScreenState extends State<NovoFilhoScreen> {
           IconButton(
               onPressed: () async {
                 Filho filho = Filho(
-                  licoes: [],
+                  licaoCompleta: [],
                   nome: nomeController.text,
                   foto: foto ?? '1',
-                  id: widget.index,
+                  idDoFilho: widget.index,
                 );
                 if (podeEnviar && foto != null) {
                   await UserApi(dio)

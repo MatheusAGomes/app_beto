@@ -111,7 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<LicaoCompleta?> listaDelicoes = user.filhos![indexDoFilho]!.licoes;
+    List<LicaoCompleta?> listaDelicoes =
+        user.filhos![indexDoFilho]!.licaoCompleta;
 
     int estrelas =
         listaDelicoes.fold(0, (soma, item) => soma + item!.estrelas!);

@@ -7,9 +7,9 @@ part of 'filho.dart';
 // **************************************************************************
 
 Filho _$FilhoFromJson(Map<String, dynamic> json) => Filho(
-      id: (json['id'] as num?)?.toInt(),
+      idDoFilho: (json['idDoFilho'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      licoes: (json['licoes'] as List<dynamic>)
+      licaoCompleta: (json['licaoCompleta'] as List<dynamic>)
           .map((e) => e == null
               ? null
               : LicaoCompleta.fromJson(e as Map<String, dynamic>))
@@ -18,8 +18,8 @@ Filho _$FilhoFromJson(Map<String, dynamic> json) => Filho(
     );
 
 Map<String, dynamic> _$FilhoToJson(Filho instance) => <String, dynamic>{
-      'id': instance.id,
+      'idDoFilho': instance.idDoFilho,
       'nome': instance.nome,
       'foto': instance.foto,
-      'licoes': instance.licoes,
+      'licaoCompleta': instance.licaoCompleta,
     };

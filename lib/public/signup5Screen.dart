@@ -139,21 +139,16 @@ class _Signup5ScreenState extends State<Signup5Screen> {
                     if (indexDaFoto == -1) return;
                     User user = widget.user;
                     user.filhos![0]!.foto = indexDaFoto.toString();
-                    await UserApi(dio).postUser(widget.user);
+                    await UserApi(dio).postUser(user);
 
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Signup6Screen(
-                                  user: widget.user,
-                                )));
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => Signup6Screen()));
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Signup6Screen(
+                                user: widget.user,
+                              )),
+                      (Route<dynamic> route) => false,
+                    );
                   },
                   child: Container(
                     height: 46,

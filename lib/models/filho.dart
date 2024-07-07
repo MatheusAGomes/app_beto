@@ -5,12 +5,12 @@ part 'filho.g.dart';
 
 @JsonSerializable()
 class Filho {
-  int? id;
+  int? idDoFilho;
   String? nome;
   String? foto;
-  List<LicaoCompleta?> licoes;
+  List<LicaoCompleta?> licaoCompleta;
 
-  Filho({this.id, this.nome, required this.licoes, this.foto});
+  Filho({this.idDoFilho, this.nome, required this.licaoCompleta, this.foto});
 
   factory Filho.fromJson(Map<String, dynamic> json) => _$FilhoFromJson(json);
 
