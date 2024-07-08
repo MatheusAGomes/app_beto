@@ -1,5 +1,6 @@
 import 'package:app_beto/main.dart';
 import 'package:app_beto/models/licaoCompleta.dart';
+import 'package:app_beto/models/resposta.dart';
 import 'package:app_beto/private/homePage.dart';
 import 'package:app_beto/repository/user-repository.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +16,14 @@ class FimLicaoScreen extends StatefulWidget {
   int qntEstrelas;
   String idLicao;
   Duration tempo;
+  List<Resposta> resposta;
   FimLicaoScreen(
       {super.key,
       required this.user,
       required this.indexFilho,
       required this.qntEstrelas,
       required this.idLicao,
+      required this.resposta,
       required this.tempo});
 
   @override
@@ -186,11 +189,14 @@ class _FimLicaoScreenState extends State<FimLicaoScreen> {
             padding: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
             child: InkWell(
               onTap: () async {
+                //TODO DINAMIZAR ISSO AQUI
                 User user = await UserApi(dio).finalizarLicao(
                     widget.user.id!,
                     widget.indexFilho.toString(),
                     LicaoCompleta(
-                        id: widget.idLicao, respostas: [], estrelas: 3));
+                        idLicao: widget.idLicao,
+                        respostas: widget.resposta,
+                        estrelas: widget.qntEstrelas));
                 await Store.save("user", user);
                 Navigator.pushAndRemoveUntil(
                   context,

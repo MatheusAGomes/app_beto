@@ -1,4 +1,5 @@
 import 'package:app_beto/models/licaoCompleta.dart';
+import 'package:app_beto/models/resposta.dart';
 import 'package:app_beto/private/fimDaLicao.dart';
 import 'package:app_beto/shared/enum/tipoDaLicaoEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
@@ -44,14 +45,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   String respostaFinal = "";
   List<dynamic> resposta = [];
-  // List<dynamic> possiveisRespostas = [
-  //   {"index": "0", "silaba": "LA"},
-  //   {"index": "1", "silaba": "PIS"},
-  //   {"index": "2", "silaba": "CA"},
-  //   {"index": "3", "silaba": "DER"},
-  //   {"index": "4", "silaba": "NO"},
-  //   {"index": "5", "silaba": "CU"},
-  // ];
+
   List<dynamic> possiveisRespostas = [];
 
   List<Map<String, String>> convertToJsonList(List<String> lista) {
@@ -93,11 +87,19 @@ class _LicaoScreenState extends State<LicaoScreen> {
     return lista.map((item) => item['silaba']).join('');
   }
 
+  List<String> respostasDadas = [];
+  List<Resposta> listaDeResposta = [];
+
   void verficandoRespostas() async {
     String juncao = joinSilabas(resposta);
     print(juncao);
+    respostasDadas.add(juncao);
     print(respostaFinal);
+
+    //Lista de respostas [[String,String,String,String],[String,String,String]]
+
     if (juncao == respostaFinal) {
+      listaDeResposta.add(Resposta(resposta: respostasDadas));
       print('acertou');
       if (((indexExercicios) + 1) == widget.licao.exercicios.length) {
         finishTime = DateTime.now();
@@ -109,13 +111,19 @@ class _LicaoScreenState extends State<LicaoScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => FimLicaoScreen(
-                      idLicao: widget.licao.id,
+                      idLicao: widget.licao.id!,
                       indexFilho: indexFilho,
+                      resposta: listaDeResposta,
                       user: user,
-                      qntEstrelas: 3,
+                      qntEstrelas: qntEstrelasFun(
+                          widget.licao.exercicios.length,
+                          listaDeResposta
+                              .expand((element) => element.resposta)
+                              .length),
                       tempo: finishTime.difference(_openTime),
                     )));
       } else {
+        respostasDadas = [];
         indexExercicios++;
         semaforo = false;
         resposta = [];
@@ -126,6 +134,19 @@ class _LicaoScreenState extends State<LicaoScreen> {
       print('errou');
     }
   }
+
+  int qntEstrelasFun(int qntExercicios, int qntRespostas) =>
+      //caso a quantindade de exercicios dividio por resposta seja:
+      // 1 = 3 estrelas
+      // maior que 0.5 mas menor que 1 = 2 estrelas
+      // menor que 0.5 = 1 estrela
+      // qualquer erro 3 estrelas
+      switch (qntExercicios / qntRespostas) {
+        1 => 3,
+        > 0.5 && < 1 => 2,
+        <= 0.5 => 1,
+        _ => 3
+      };
 
   bool semaforo = false;
   int indexExercicios = 0;
@@ -348,7 +369,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
                 resposta.removeAt(i);
 
-                print(i);
                 setState(() {});
               },
               builder: (context, candidateData, rejectedData) => Padding(
@@ -372,12 +392,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                     "silaba":
                                         "${possiveisRespostas[index]['silaba']}"
                                   });
-                                  // int i = indexOfMap(possiveisRespostas, {
-                                  //   "index":
-                                  //       "${possiveisRespostas[index]['index']}",
-                                  //   "silaba":
-                                  //       "${possiveisRespostas[index]['index']}"
-                                  // });
 
                                   possiveisRespostas.removeAt(index);
 

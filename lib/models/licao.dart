@@ -4,7 +4,8 @@ part 'licao.g.dart';
 
 @JsonSerializable()
 class Licao {
-  String id;
+  @JsonKey(name: '_id')
+  String? id;
   final List<ExercicioSchema> exercicios;
 
   Licao({required this.exercicios, required this.id});

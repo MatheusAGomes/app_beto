@@ -5,12 +5,12 @@ part 'licaoCompleta.g.dart';
 
 @JsonSerializable()
 class LicaoCompleta {
-  String id;
-  List<Resposta?> respostas;
+  String idLicao;
+  List<Resposta> respostas;
   int estrelas;
 
   LicaoCompleta({
-    required this.id,
+    required this.idLicao,
     required this.respostas,
     required this.estrelas,
   });
