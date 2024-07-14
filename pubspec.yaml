@@ -55,6 +55,7 @@ dependencies:
   validatorless: ^1.2.3
   drag_and_drop_flutter: ^0.3.0
   flutter_tts: ^4.0.2
+  speech_to_text: ^6.6.2
 
 
 dev_dependencies:

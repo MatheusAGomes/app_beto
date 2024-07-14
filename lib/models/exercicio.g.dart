@@ -16,6 +16,12 @@ ExercicioSchema _$ExercicioSchemaFromJson(Map<String, dynamic> json) =>
       possiveisSilabas: (json['possiveisSilabas'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      letrasParaExercicio: (json['letrasParaExercicio'] as List<dynamic>?)
+          ?.map((e) => e as String?)
+          .toList(),
+      respostaSemLetras: (json['respostaSemLetras'] as List<dynamic>?)
+          ?.map((e) => e as String?)
+          .toList(),
     );
 
 Map<String, dynamic> _$ExercicioSchemaToJson(ExercicioSchema instance) =>
@@ -26,6 +32,8 @@ Map<String, dynamic> _$ExercicioSchemaToJson(ExercicioSchema instance) =>
       'imagem': instance.imagem,
       'respostaEsperada': instance.respostaEsperada,
       'possiveisSilabas': instance.possiveisSilabas,
+      'respostaSemLetras': instance.respostaSemLetras,
+      'letrasParaExercicio': instance.letrasParaExercicio,
     };
 
 const _$TipoLicaoEnumEnumMap = {
