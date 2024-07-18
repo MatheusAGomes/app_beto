@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../shared/enum/tipoDaLicaoEnum.dart';
-
 part 'exercicio.g.dart';
 
 @JsonSerializable()
@@ -12,7 +11,7 @@ class ExercicioSchema {
   final String? imagem;
   final String respostaEsperada;
   final List<String>? possiveisSilabas;
-  final List<String?>? respostaSemLetras;
+  final List<int?>? posicoesSemLetra;
   final List<String?>? letrasParaExercicio;
 
   ExercicioSchema(
@@ -23,7 +22,7 @@ class ExercicioSchema {
       required this.respostaEsperada,
       this.possiveisSilabas,
       this.letrasParaExercicio,
-      this.respostaSemLetras});
+      this.posicoesSemLetra});
 
   factory ExercicioSchema.fromJson(Map<String, dynamic> json) =>
       _$ExercicioSchemaFromJson(json);

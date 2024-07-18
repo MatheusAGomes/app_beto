@@ -4,6 +4,7 @@ import 'package:app_beto/private/fimDaLicao.dart';
 import 'package:app_beto/shared/enum/tipoDaLicaoEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -66,6 +67,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   }
 
   String respostaFinal = "";
+  List<String> letras = [];
   List<dynamic> resposta = [];
 
   List<dynamic> possiveisRespostas = [];
@@ -145,7 +147,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                   )));
     } else {
       //limpando os elementos da fase
-      respostaSemLetra = [];
+      posicoesSemLetra = [];
       letrasParaExercicio = [];
       respostasDadas = [];
       indexExercicios++;
@@ -158,6 +160,16 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   void verficandoRespostas() async {
     String juncao = joinSilabas(resposta);
+    respostasDadas.add(juncao);
+
+    if (juncao == respostaFinal) {
+      listaDeResposta.add(Resposta(resposta: respostasDadas));
+      await finalizandoFase();
+    }
+  }
+
+  void verficandoRespostasLicaoCompleta() async {
+    String juncao = resposta.join('');
     respostasDadas.add(juncao);
 
     if (juncao == respostaFinal) {
@@ -182,7 +194,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   bool semaforo = false;
   int indexExercicios = 0;
   String titulo = "";
-  List<String?>? respostaSemLetra = [];
+  List<int?>? posicoesSemLetra = [];
   List<String?>? letrasParaExercicio = [];
 
   List<Widget> reproducao() {
@@ -402,12 +414,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
                           "index": "${resposta[index]['index']}",
                           "silaba": "${resposta[index]['silaba']}"
                         });
-                        // int i = indexOfMap(possiveisRespostas, {
-                        //   "index":
-                        //       "${possiveisRespostas[index]['index']}",
-                        //   "silaba":
-                        //       "${possiveisRespostas[index]['index']}"
-                        // });
 
                         resposta.removeAt(index);
 
@@ -590,34 +596,143 @@ class _LicaoScreenState extends State<LicaoScreen> {
                     alignment: WrapAlignment.center,
                     runSpacing: 10,
                     direction: Axis.horizontal,
-                    children: List.generate(
-                        respostaSemLetra!.length,
-                        (index) => Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 2, vertical: 0),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 0),
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(0XFFAA8DFF).withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 20,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
+                    children: List.generate(letras.length, (index) {
+                      if (posicoesSemLetra?.contains(index) ?? false) {
+                        return DragTarget(
+                          builder: (context, candidateData, rejectedData) {
+                            return letras[index] == ""
+                                ? Container(
+                                    width: 50,
+                                    height: 50,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 0),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0XFFAA8DFF)
+                                                .withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 20,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Color(0XFFAA8DFF),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1)),
+                                    child: Text(
+                                      letras[index],
+                                      style: TextStyle(
+                                          fontSize: 35,
+                                          color: Colors.transparent,
+                                          fontWeight: FontWeight.bold),
+                                    ))
+                                : InkWell(
+                                    onTap: () {
+                                      letrasParaExercicio?.add(letras[index]);
+                                      letras[index] = '';
+                                      print(resposta);
+                                      setState(() {});
+                                    },
+                                    child: Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        Container(
+                                            width: 50,
+                                            height: 50,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 2, vertical: 0),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 0),
+                                            decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Color(0XFFAA8DFF)
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 5,
+                                                    blurRadius: 20,
+                                                    offset: Offset(0,
+                                                        3), // changes position of shadow
+                                                  ),
+                                                ],
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                color: Color(0XFFAA8DFF),
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 1)),
+                                            child: Text(
+                                              letras[index],
+                                              style: TextStyle(
+                                                  fontSize: 35,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Positioned(
+                                          left: 35,
+                                          top: -5,
+                                          child: CircleAvatar(
+                                            radius: 10,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.red,
+                                              size: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                          },
+                          onAcceptWithDetails: (dynamic details) {
+                            letras[index] = details.data?['silaba'];
+                            resposta = letras;
+                            int i = letrasParaExercicio!
+                                .indexOf(details.data?['silaba']);
+                            if (i != -1) letrasParaExercicio!.removeAt(i);
+                            setState(() {});
+                          },
+                        );
+                      }
+                      return DragTarget(
+                        builder: (context, candidateData, rejectedData) =>
+                            Container(
+                                width: 50,
+                                height: 50,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 2, vertical: 0),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 0),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            Color(0XFFAA8DFF).withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 20,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Color(0XFFAA8DFF),
+                                    border: Border.all(
+                                        color: Colors.white, width: 1)),
+                                child: Center(
+                                  child: Text(
+                                    letras[index],
+                                    style: TextStyle(
+                                        fontSize: 35,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                                color: Color(0XFFAA8DFF),
-                                border:
-                                    Border.all(color: Colors.white, width: 1)),
-                            child: Text(
-                              respostaSemLetra![index]!,
-                              style: TextStyle(
-                                  fontSize: 35,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ))),
+                                )),
+                      );
+                    }),
                   )
                 ],
               ),
@@ -680,9 +795,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
         padding: EdgeInsets.symmetric(horizontal: 40),
         child: InkWell(
           onTap: () {
-            if (resposta.isNotEmpty) {
-              verficandoRespostas();
-            }
+            verficandoRespostasLicaoCompleta();
           },
           child: Container(
             decoration: BoxDecoration(
@@ -725,15 +838,22 @@ class _LicaoScreenState extends State<LicaoScreen> {
         respostaFinal =
             widget.licao.exercicios[indexExercicios].respostaEsperada;
         titulo = widget.licao.exercicios[indexExercicios].titulo;
-        respostaSemLetra =
-            widget.licao.exercicios[indexExercicios].respostaSemLetras;
+        posicoesSemLetra =
+            widget.licao.exercicios[indexExercicios].posicoesSemLetra;
         letrasParaExercicio =
             widget.licao.exercicios[indexExercicios].letrasParaExercicio;
+        letras = respostaFinal.split('');
+        for (var i = 0; i < letras.length; i++) {
+          if (posicoesSemLetra!.contains(i)) {
+            letras[i] = '';
+          }
+        }
       }
       semaforo = true;
 
       setState(() {});
     }
+    print('a');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorService.roxo,

@@ -19,8 +19,8 @@ ExercicioSchema _$ExercicioSchemaFromJson(Map<String, dynamic> json) =>
       letrasParaExercicio: (json['letrasParaExercicio'] as List<dynamic>?)
           ?.map((e) => e as String?)
           .toList(),
-      respostaSemLetras: (json['respostaSemLetras'] as List<dynamic>?)
-          ?.map((e) => e as String?)
+      posicoesSemLetra: (json['posicoesSemLetra'] as List<dynamic>?)
+          ?.map((e) => (e as num?)?.toInt())
           .toList(),
     );
 
@@ -32,7 +32,7 @@ Map<String, dynamic> _$ExercicioSchemaToJson(ExercicioSchema instance) =>
       'imagem': instance.imagem,
       'respostaEsperada': instance.respostaEsperada,
       'possiveisSilabas': instance.possiveisSilabas,
-      'respostaSemLetras': instance.respostaSemLetras,
+      'posicoesSemLetra': instance.posicoesSemLetra,
       'letrasParaExercicio': instance.letrasParaExercicio,
     };
 
