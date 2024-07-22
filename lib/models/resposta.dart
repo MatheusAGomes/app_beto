@@ -4,7 +4,7 @@ part 'resposta.g.dart';
 
 @JsonSerializable()
 class Resposta {
-  final List<String> resposta;
+  final List<dynamic> resposta;
 
   Resposta({required this.resposta});
 

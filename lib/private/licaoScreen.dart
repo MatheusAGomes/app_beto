@@ -3,6 +3,7 @@ import 'package:app_beto/models/resposta.dart';
 import 'package:app_beto/private/fimDaLicao.dart';
 import 'package:app_beto/shared/enum/tipoDaLicaoEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
+import 'package:app_beto/widget/opcaoTipoUmWidgetSelectble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -56,7 +57,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
     // caso o usuario tenha acertado
     if (speachResult.recognizedWords.toLowerCase() ==
         widget.licao.exercicios[indexExercicios].respostaEsperada
-            .toLowerCase()) {
+            ?.toLowerCase()) {
       //para de ouvir
       speech.stop();
       //adiciona as respostas a lista de resposta dessa fase
@@ -66,10 +67,9 @@ class _LicaoScreenState extends State<LicaoScreen> {
     setState(() {});
   }
 
-  String respostaFinal = "";
+  String? respostaFinal = "";
   List<String> letras = [];
   List<dynamic> resposta = [];
-
   List<dynamic> possiveisRespostas = [];
 
   List<Map<String, String>> convertToJsonList(List<String> lista) {
@@ -111,7 +111,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
     return lista.map((item) => item['silaba']).join('');
   }
 
-  List<String> respostasDadas = [];
+  List<dynamic> respostasDadas = [];
   List<Resposta> listaDeResposta = [];
 
   stt.SpeechToText speech = stt.SpeechToText();
@@ -153,6 +153,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
       indexExercicios++;
       semaforo = false;
       resposta = [];
+      possiveisRespostas = [];
     }
 
     setState(() {});
@@ -178,6 +179,26 @@ class _LicaoScreenState extends State<LicaoScreen> {
     }
   }
 
+  bool arraysHaveSameContent(List<dynamic> array1, List<dynamic> array2) {
+    return Set.from(array1).difference(Set.from(array2)).isEmpty &&
+        Set.from(array2).difference(Set.from(array1)).isEmpty;
+  }
+
+  void verficandoRespostasSelecaoDeTexto() async {
+    // onde esta a reposta do usuario
+    // possiveisRespostas
+    //onde esta a resposta
+    //respostasEmArray
+    //funcao se verifica que os dois sao validos
+
+    respostasDadas.add(possiveisRespostas);
+
+    if (arraysHaveSameContent(possiveisRespostas, respostasEmArray!)) {
+      listaDeResposta.add(Resposta(resposta: respostasDadas));
+      await finalizandoFase();
+    }
+  }
+
   int qntEstrelasFun(int qntExercicios, int qntRespostas) =>
       // caso a quantindade de exercicios dividio por resposta seja:
       // 1 = 3 estrelas
@@ -196,6 +217,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   String titulo = "";
   List<int?>? posicoesSemLetra = [];
   List<String?>? letrasParaExercicio = [];
+  List<String?>? respostasEmArray = [];
 
   List<Widget> reproducao() {
     return [
@@ -217,7 +239,9 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      speak(respostaFinal);
+                      if (respostaFinal != null) {
+                        speak(respostaFinal!);
+                      }
                     },
                     child: Container(
                       child: Center(
@@ -336,7 +360,9 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      speak(respostaFinal);
+                      if (respostaFinal != null) {
+                        speak(respostaFinal!);
+                      }
                     },
                     child: Container(
                       child: Center(
@@ -541,7 +567,9 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      speak(respostaFinal);
+                      if (respostaFinal != null) {
+                        speak(respostaFinal!);
+                      }
                     },
                     child: Container(
                       child: Center(
@@ -817,6 +845,145 @@ class _LicaoScreenState extends State<LicaoScreen> {
     ];
   }
 
+  List<Widget> selecioneTexto() {
+    return [
+      Padding(
+        padding: const EdgeInsets.only(top: 60),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(40)),
+              height: MediaQuery.of(context).size.height * 0.35,
+              width: MediaQuery.of(context).size.width * 0.8,
+            ),
+            Positioned(
+              top: -30,
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (respostaFinal != null) {
+                        speak(respostaFinal!);
+                      } else {
+                        speak(titulo);
+                      }
+                    },
+                    child: Container(
+                      child: Center(
+                          child: Container(
+                        height: MediaQuery.of(context).size.height * 0.14,
+                        width: MediaQuery.of(context).size.height * 0.14,
+                        child:
+                            widget.licao.exercicios[indexExercicios].imagem !=
+                                    null
+                                ? Image.network(
+                                    widget.licao.exercicios[indexExercicios]
+                                        .imagem!,
+                                  )
+                                : Icon(
+                                    Icons.volume_up_rounded,
+                                    color: Colors.white,
+                                    size: 50,
+                                  ),
+                      )),
+                      decoration: BoxDecoration(
+                          color:
+                              widget.licao.exercicios[indexExercicios].imagem !=
+                                      null
+                                  ? ColorService.laranja
+                                  : ColorService.roxo,
+                          borderRadius: BorderRadius.circular(12)),
+                      height: MediaQuery.of(context).size.height * 0.17,
+                      width: MediaQuery.of(context).size.height * 0.17,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 180,
+                    width: 330,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        titulo,
+                        style: TextStyle(
+                            color: ColorService.azul,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(
+        height: 46,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        child: Container(
+            color: Colors.transparent,
+            height: 80,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Wrap(
+                spacing: 3,
+                alignment: WrapAlignment.center,
+                runSpacing: 10,
+                direction: Axis.horizontal,
+                children: List.generate(
+                    letrasParaExercicio!.length,
+                    (index) => opcaoTipoUmWidgetSelectble(
+                        ontap: (isSelect) {
+                          if (!isSelect) {
+                            possiveisRespostas.add(letrasParaExercicio![index]);
+                          } else {
+                            possiveisRespostas
+                                .remove(letrasParaExercicio![index]);
+                          }
+                          print(possiveisRespostas);
+                          setState(() {});
+                        },
+                        silaba: letrasParaExercicio![index]!)))),
+      ),
+      const SizedBox(
+        height: 46,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 40),
+        child: InkWell(
+          onTap: () {
+            if (possiveisRespostas.isNotEmpty) {
+              verficandoRespostasSelecaoDeTexto();
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                color: possiveisRespostas.isNotEmpty
+                    ? ColorService.verde
+                    : Colors.grey,
+                borderRadius: BorderRadius.circular(7)),
+            width: double.infinity,
+            height: 50,
+            child: Center(
+              child: Text(
+                'Check',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (semaforo == false) {
@@ -842,12 +1009,19 @@ class _LicaoScreenState extends State<LicaoScreen> {
             widget.licao.exercicios[indexExercicios].posicoesSemLetra;
         letrasParaExercicio =
             widget.licao.exercicios[indexExercicios].letrasParaExercicio;
-        letras = respostaFinal.split('');
+        letras = respostaFinal!.split('');
         for (var i = 0; i < letras.length; i++) {
           if (posicoesSemLetra!.contains(i)) {
             letras[i] = '';
           }
         }
+      } else if (widget.licao.exercicios[indexExercicios].tipo ==
+          TipoLicaoEnum.SelecioneTextos) {
+        titulo = widget.licao.exercicios[indexExercicios].titulo;
+        letrasParaExercicio =
+            widget.licao.exercicios[indexExercicios].letrasParaExercicio;
+        respostasEmArray =
+            widget.licao.exercicios[indexExercicios].respostasEmArray;
       }
       semaforo = true;
 
@@ -907,6 +1081,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 TipoLicaoEnum.JuncaoDeSilabas => juncaoDeSilabas(),
                 TipoLicaoEnum.Reproduza => reproducao(),
                 TipoLicaoEnum.CompleteAPalavra => completePalavra(),
+                TipoLicaoEnum.SelecioneTextos => selecioneTexto(),
                 _ => []
               },
             )

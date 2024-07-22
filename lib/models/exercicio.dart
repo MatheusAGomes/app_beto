@@ -9,20 +9,22 @@ class ExercicioSchema {
   final String titulo;
   final bool somenteAudio;
   final String? imagem;
-  final String respostaEsperada;
+  final String? respostaEsperada;
   final List<String>? possiveisSilabas;
   final List<int?>? posicoesSemLetra;
   final List<String?>? letrasParaExercicio;
+  final List<String?>? respostasEmArray;
 
   ExercicioSchema(
       {required this.tipo,
       required this.titulo,
       required this.somenteAudio,
       this.imagem,
-      required this.respostaEsperada,
+      this.respostaEsperada,
       this.possiveisSilabas,
       this.letrasParaExercicio,
-      this.posicoesSemLetra});
+      this.posicoesSemLetra,
+      this.respostasEmArray});
 
   factory ExercicioSchema.fromJson(Map<String, dynamic> json) =>
       _$ExercicioSchemaFromJson(json);
