@@ -13,7 +13,7 @@ class ExercicioSchema {
   final List<String>? possiveisSilabas;
   final List<int?>? posicoesSemLetra;
   final List<String?>? letrasParaExercicio;
-  final List<String?>? respostasEmArray;
+  final List<dynamic>? respostasEmArray;
 
   ExercicioSchema(
       {required this.tipo,

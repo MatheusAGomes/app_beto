@@ -1,4 +1,5 @@
 import 'package:app_beto/models/licaoCompleta.dart';
+import 'package:app_beto/models/objetoSelecionePares.dart';
 import 'package:app_beto/models/resposta.dart';
 import 'package:app_beto/private/fimDaLicao.dart';
 import 'package:app_beto/shared/enum/tipoDaLicaoEnum.dart';
@@ -16,6 +17,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 import '../models/licao.dart';
 import '../models/user.dart';
 import '../shared/service/stroreService.dart';
+import '../widget/WidgetSelecionePares.dart';
 import '../widget/opcaoTipoUmWidget.dart';
 
 class LicaoScreen extends StatefulWidget {
@@ -217,7 +219,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   String titulo = "";
   List<int?>? posicoesSemLetra = [];
   List<String?>? letrasParaExercicio = [];
-  List<String?>? respostasEmArray = [];
+  List<dynamic?>? respostasEmArray = [];
 
   List<Widget> reproducao() {
     return [
@@ -984,6 +986,139 @@ class _LicaoScreenState extends State<LicaoScreen> {
     ];
   }
 
+  List<Widget> selecionePares() {
+    List<ObjetoSelecionePares> objetos = respostasEmArray!
+        .map((e) =>
+            ObjetoSelecionePares(nome: e['nome'], urlimagem: e['urlimagem']))
+        .toList();
+    List<String> palavra =
+        respostasEmArray!.map((e) => e['nome'] as String).toList();
+    List<dynamic> mistura = [];
+    mistura.addAll(objetos);
+    mistura.addAll(palavra);
+    mistura.shuffle();
+    return [
+      Padding(
+        padding: const EdgeInsets.only(top: 60),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(40)),
+              height: MediaQuery.of(context).size.height * 0.7,
+              width: MediaQuery.of(context).size.width * 0.8,
+            ),
+            Positioned(
+              top: -30,
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (respostaFinal != null) {
+                        speak(respostaFinal!);
+                      } else {
+                        speak(titulo);
+                      }
+                    },
+                    child: Container(
+                      child: Center(
+                          child: Container(
+                        height: MediaQuery.of(context).size.height * 0.14,
+                        width: MediaQuery.of(context).size.height * 0.14,
+                        child: Icon(
+                          Icons.compare_arrows_sharp,
+                          color: Colors.white,
+                          size: 50,
+                        ),
+                      )),
+                      decoration: BoxDecoration(
+                          color: ColorService.roxo,
+                          borderRadius: BorderRadius.circular(12)),
+                      height: MediaQuery.of(context).size.height * 0.17,
+                      width: MediaQuery.of(context).size.height * 0.17,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 180,
+                    width: 330,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        titulo,
+                        style: TextStyle(
+                            color: ColorService.azul,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 20,
+                    runSpacing: 100,
+                    direction: Axis.vertical,
+                    children:
+                        List.generate((mistura.length / 2).ceil(), (index) {
+                      // Calcule o índice base para cada par
+                      int baseIndex = index * 2;
+
+                      // Obtenha os dois elementos do par
+                      var firstElement = mistura[baseIndex];
+                      var secondElement = baseIndex + 1 < mistura.length
+                          ? mistura[baseIndex + 1]
+                          : null;
+
+                      // Gere os widgets para o par
+                      List<Widget> pairWidgets = [];
+
+                      if (firstElement is ObjetoSelecionePares) {
+                        pairWidgets.add(
+                          WidgetSelecionePares(
+                            objetoSelecionePares: firstElement,
+                            isImage: true,
+                          ),
+                        );
+                      } else {
+                        pairWidgets
+                            .add(OpcaoTipoUmWidget(silaba: firstElement));
+                      }
+
+                      if (secondElement != null) {
+                        if (secondElement is ObjetoSelecionePares) {
+                          pairWidgets.add(
+                            WidgetSelecionePares(
+                              objetoSelecionePares: secondElement,
+                              isImage: true,
+                            ),
+                          );
+                        } else {
+                          pairWidgets
+                              .add(OpcaoTipoUmWidget(silaba: secondElement));
+                        }
+                      }
+
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.55,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: pairWidgets,
+                        ),
+                      );
+                    }),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (semaforo == false) {
@@ -1022,12 +1157,16 @@ class _LicaoScreenState extends State<LicaoScreen> {
             widget.licao.exercicios[indexExercicios].letrasParaExercicio;
         respostasEmArray =
             widget.licao.exercicios[indexExercicios].respostasEmArray;
+      } else if (widget.licao.exercicios[indexExercicios].tipo ==
+          TipoLicaoEnum.SelecionePares) {
+        titulo = widget.licao.exercicios[indexExercicios].titulo;
+        respostasEmArray =
+            widget.licao.exercicios[indexExercicios].respostasEmArray;
       }
       semaforo = true;
 
       setState(() {});
     }
-    print('a');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorService.roxo,
@@ -1082,6 +1221,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 TipoLicaoEnum.Reproduza => reproducao(),
                 TipoLicaoEnum.CompleteAPalavra => completePalavra(),
                 TipoLicaoEnum.SelecioneTextos => selecioneTexto(),
+                TipoLicaoEnum.SelecionePares => selecionePares(),
                 _ => []
               },
             )

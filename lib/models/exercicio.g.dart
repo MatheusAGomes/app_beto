@@ -22,9 +22,7 @@ ExercicioSchema _$ExercicioSchemaFromJson(Map<String, dynamic> json) =>
       posicoesSemLetra: (json['posicoesSemLetra'] as List<dynamic>?)
           ?.map((e) => (e as num?)?.toInt())
           .toList(),
-      respostasEmArray: (json['respostasEmArray'] as List<dynamic>?)
-          ?.map((e) => e as String?)
-          .toList(),
+      respostasEmArray: json['respostasEmArray'] as List<dynamic>?,
     );
 
 Map<String, dynamic> _$ExercicioSchemaToJson(ExercicioSchema instance) =>
