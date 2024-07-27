@@ -4,7 +4,9 @@ import 'package:app_beto/models/resposta.dart';
 import 'package:app_beto/private/fimDaLicao.dart';
 import 'package:app_beto/shared/enum/tipoDaLicaoEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
+import 'package:app_beto/shared/utils.dart';
 import 'package:app_beto/widget/opcaoTipoUmWidgetSelectble.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -941,16 +943,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 children: List.generate(
                     letrasParaExercicio!.length,
                     (index) => opcaoTipoUmWidgetSelectble(
-                        ontap: (isSelect) {
-                          if (!isSelect) {
-                            possiveisRespostas.add(letrasParaExercicio![index]);
-                          } else {
-                            possiveisRespostas
-                                .remove(letrasParaExercicio![index]);
-                          }
-                          print(possiveisRespostas);
-                          setState(() {});
-                        },
                         silaba: letrasParaExercicio![index]!)))),
       ),
       const SizedBox(
@@ -987,16 +979,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
   }
 
   List<Widget> selecionePares() {
-    List<ObjetoSelecionePares> objetos = respostasEmArray!
-        .map((e) =>
-            ObjetoSelecionePares(nome: e['nome'], urlimagem: e['urlimagem']))
-        .toList();
-    List<String> palavra =
-        respostasEmArray!.map((e) => e['nome'] as String).toList();
-    List<dynamic> mistura = [];
-    mistura.addAll(objetos);
-    mistura.addAll(palavra);
-    mistura.shuffle();
     return [
       Padding(
         padding: const EdgeInsets.only(top: 60),
@@ -1056,60 +1038,64 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       ),
                     ),
                   ),
-                  Wrap(
-                    spacing: 20,
-                    runSpacing: 100,
-                    direction: Axis.vertical,
-                    children:
-                        List.generate((mistura.length / 2).ceil(), (index) {
-                      // Calcule o índice base para cada par
-                      int baseIndex = index * 2;
-
-                      // Obtenha os dois elementos do par
-                      var firstElement = mistura[baseIndex];
-                      var secondElement = baseIndex + 1 < mistura.length
-                          ? mistura[baseIndex + 1]
-                          : null;
-
-                      // Gere os widgets para o par
-                      List<Widget> pairWidgets = [];
-
-                      if (firstElement is ObjetoSelecionePares) {
-                        pairWidgets.add(
-                          WidgetSelecionePares(
-                            objetoSelecionePares: firstElement,
-                            isImage: true,
-                          ),
-                        );
-                      } else {
-                        pairWidgets
-                            .add(OpcaoTipoUmWidget(silaba: firstElement));
-                      }
-
-                      if (secondElement != null) {
-                        if (secondElement is ObjetoSelecionePares) {
-                          pairWidgets.add(
-                            WidgetSelecionePares(
-                              objetoSelecionePares: secondElement,
-                              isImage: true,
-                            ),
-                          );
-                        } else {
-                          pairWidgets
-                              .add(OpcaoTipoUmWidget(silaba: secondElement));
-                        }
-                      }
-
-                      return SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.55,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: pairWidgets,
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.width * 0.8,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: List.generate(
+                              objetos.length,
+                              (index) => Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      WidgetSelecionePares(
+                                        isDisable:
+                                            jaFoiAcertado(index, palavra),
+                                        colorDisable:
+                                            jaFoiAcertado(index, palavra)
+                                                ? ColorService.roxo
+                                                : null,
+                                        ontap: () {
+                                          if ((!jaFoiAcertado(
+                                              index, objetos))) {
+                                            indexDasImagensSelecioandas = index;
+                                            verificandoSelecionarPares();
+                                            setState(() {});
+                                          }
+                                        },
+                                        objetoSelecionePares: objetos[index],
+                                        isImage: true,
+                                        isSelected:
+                                            (indexDasImagensSelecioandas ==
+                                                index),
+                                      ),
+                                      opcaoTipoUmWidgetSelectble(
+                                          isDisable:
+                                              jaFoiAcertado(index, palavra),
+                                          ontap: () {
+                                            if ((!jaFoiAcertado(
+                                                index, objetos))) {
+                                              indexDosTextosSelecionados =
+                                                  index;
+                                              verificandoSelecionarPares();
+                                              setState(() {});
+                                            }
+                                          },
+                                          colorDisable:
+                                              jaFoiAcertado(index, palavra)
+                                                  ? ColorService.roxo
+                                                  : null,
+                                          isSelected:
+                                              (indexDosTextosSelecionados ==
+                                                  index),
+                                          silaba: palavra[index])
+                                    ],
+                                  )),
                         ),
-                      );
-                    }),
-                  )
+                      ))
                 ],
               ),
             ),
@@ -1118,6 +1104,47 @@ class _LicaoScreenState extends State<LicaoScreen> {
       ),
     ];
   }
+
+  Future<void> verificandoSelecionarPares() async {
+    if (indexDasImagensSelecioandas != null &&
+        indexDosTextosSelecionados != null) {
+      respostasDadas.add({
+        "objeto": objetos[indexDasImagensSelecioandas!],
+        "palavra": palavra[indexDosTextosSelecionados!]
+      });
+      if (objetos[indexDasImagensSelecioandas!].nome ==
+          palavra[indexDosTextosSelecionados!]) {
+        acertados.add(objetos[indexDasImagensSelecioandas!].nome!);
+        print('acertou');
+        indexDasImagensSelecioandas = null;
+        indexDosTextosSelecionados = null;
+        if (acertados.length == objetos.length) {
+          await finalizandoFase();
+        }
+      } else {
+        print('errou');
+        indexDasImagensSelecioandas = null;
+        indexDosTextosSelecionados = null;
+      }
+    }
+  }
+
+  bool jaFoiAcertado(index, list) {
+    bool retorno = list is List<String>
+        ? acertados.contains(list[index])
+        : acertados.contains(list[index].nome!);
+    print(retorno);
+    return retorno;
+  }
+
+  List<String> acertados = [];
+
+// variavei selecione pares
+  List<ObjetoSelecionePares> objetos = [];
+  List<String> palavra = [];
+
+  int? indexDasImagensSelecioandas;
+  int? indexDosTextosSelecionados;
 
   @override
   Widget build(BuildContext context) {
@@ -1162,6 +1189,11 @@ class _LicaoScreenState extends State<LicaoScreen> {
         titulo = widget.licao.exercicios[indexExercicios].titulo;
         respostasEmArray =
             widget.licao.exercicios[indexExercicios].respostasEmArray;
+        objetos = respostasEmArray!
+            .map((e) => ObjetoSelecionePares(
+                nome: e['nome'], urlimagem: e['urlimagem']))
+            .toList();
+        palavra = respostasEmArray!.map((e) => e['nome'] as String).toList();
       }
       semaforo = true;
 

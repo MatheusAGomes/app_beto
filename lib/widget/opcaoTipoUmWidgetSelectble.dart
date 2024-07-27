@@ -6,10 +6,16 @@ import 'package:flutter_tts/flutter_tts.dart';
 import '../shared/service/ColorSevice.dart';
 
 class opcaoTipoUmWidgetSelectble extends StatefulWidget {
-  final Function(bool)? ontap;
+  VoidCallback? ontap;
   String silaba;
+  bool isDisable;
+  Color? colorDisable;
+  bool isSelected;
 
   opcaoTipoUmWidgetSelectble({
+    this.isSelected = false,
+    this.colorDisable,
+    this.isDisable = false,
     this.ontap,
     required this.silaba,
     super.key,
@@ -36,8 +42,7 @@ class _opcaoTipoUmWidgetSelectbleState
     return InkWell(
       onTap: () {
         speak(widget.silaba);
-        widget.ontap!(isSelected);
-        isSelected = !isSelected;
+        if (widget.ontap != null) widget.ontap!();
       },
       child: Container(
           child: Center(
@@ -53,7 +58,11 @@ class _opcaoTipoUmWidgetSelectbleState
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                  color: isSelected ? Colors.green : Color(0XFFE5E5E5),
+                  color: widget.isDisable
+                      ? widget.colorDisable ?? Color(0XFFE5E5E5)
+                      : widget.isDisable
+                          ? ColorService.verdeClaro
+                          : Color(0XFFE5E5E5),
                   width: 2,
                   style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(12))),

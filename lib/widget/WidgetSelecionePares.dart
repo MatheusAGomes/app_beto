@@ -10,11 +10,16 @@ class WidgetSelecionePares extends StatefulWidget {
   VoidCallback? ontap;
   ObjetoSelecionePares objetoSelecionePares;
   bool isImage;
-
+  bool isSelected;
+  bool isDisable;
+  Color? colorDisable;
   WidgetSelecionePares({
+    this.colorDisable,
+    this.isDisable = false,
     this.ontap,
     required this.objetoSelecionePares,
     this.isImage = false,
+    this.isSelected = false,
     super.key,
   });
 
@@ -35,19 +40,26 @@ class _WidgetSelecioneParesState extends State<WidgetSelecionePares> {
     return InkWell(
       onTap: () {
         speak(widget.objetoSelecionePares.nome ?? "");
-        widget.ontap!();
+        if (widget.ontap != null) widget.ontap!();
       },
       child: Container(
           padding: EdgeInsets.all(10),
           child: Center(
-              child:
-                  Image.network(widget.objetoSelecionePares.urlimagem ?? "")),
+              child: widget.isImage
+                  ? Image.network(widget.objetoSelecionePares.urlimagem ?? "")
+                  : Text(widget.objetoSelecionePares.nome!)),
           height: 80,
           width: 80,
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                  color: Color(0XFFE5E5E5), width: 2, style: BorderStyle.solid),
+                  color: widget.isDisable
+                      ? widget.colorDisable ?? Color(0XFFE5E5E5)
+                      : widget.isSelected
+                          ? ColorService.verdeClaro
+                          : Color(0XFFE5E5E5),
+                  width: 2,
+                  style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(12))),
     );
   }

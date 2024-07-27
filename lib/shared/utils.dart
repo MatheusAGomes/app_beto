@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+
 String getImageUrlFromIndexString(String indexString) {
   List<String> imagens = [
     'assets/images/boiadeiro.jpg',
@@ -19,4 +23,14 @@ String getImageUrlFromIndexString(String indexString) {
   } catch (e) {
     throw FormatException('Invalid input: $indexString');
   }
+}
+
+Color getRandomColor() {
+  final Random random = Random();
+  return Color.fromARGB(
+    255, // Opacidade fixa em 255 (completamente opaco)
+    random.nextInt(256), // Valor aleatório para o vermelho (0-255)
+    random.nextInt(256), // Valor aleatório para o verde (0-255)
+    random.nextInt(256), // Valor aleatório para o azul (0-255)
+  );
 }
