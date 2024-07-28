@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:provider/provider.dart';
 
+import 'changeNotifier/auth.dart';
 import 'public/signinScreen.dart';
 import 'shared/service/ColorSevice.dart';
 import 'shared/service/app.interceptor.dart';
@@ -34,29 +36,34 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GlobalLoaderOverlay(
-      useDefaultLoading: false,
-      overlayWidgetBuilder: (_) {
-        //ignored progress for the moment
-        return Center(
-          child: SpinKitPouringHourGlass(
-            color: ColorService.laranja,
-            size: 40.0,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Auth(dio)),
+      ],
+      child: GlobalLoaderOverlay(
+        useDefaultLoading: false,
+        overlayWidgetBuilder: (_) {
+          //ignored progress for the moment
+          return Center(
+            child: SpinKitPouringHourGlass(
+              color: ColorService.laranja,
+              size: 40.0,
+            ),
+          );
+        },
+        child: MaterialApp(
+          theme: ThemeData(
+            textTheme: TextTheme(
+              bodyText1: TextStyle(fontFamily: 'Poppins'),
+              bodyText2: TextStyle(fontFamily: 'Poppins'),
+              // Adicione mais estilos de texto conforme necessário
+            ),
           ),
-        );
-      },
-      child: MaterialApp(
-        theme: ThemeData(
-          textTheme: TextTheme(
-            bodyText1: TextStyle(fontFamily: 'Poppins'),
-            bodyText2: TextStyle(fontFamily: 'Poppins'),
-            // Adicione mais estilos de texto conforme necessário
-          ),
+          debugShowCheckedModeBanner: false,
+          title: 'Brincando com beto',
+          navigatorKey: navigatorKey,
+          home: SigninScreen(),
         ),
-        debugShowCheckedModeBanner: false,
-        title: 'Brincando com beto',
-        navigatorKey: navigatorKey,
-        home: SigninScreen(),
       ),
     );
   }

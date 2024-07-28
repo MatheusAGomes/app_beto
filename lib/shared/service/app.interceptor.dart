@@ -1,7 +1,9 @@
+import 'package:app_beto/shared/service/stroreService.dart';
 import 'package:dio/dio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../main.dart';
+import '../constance/enviroment.dart';
 import 'toastService.dart';
 
 class AppInterceptors extends Interceptor {
@@ -16,10 +18,10 @@ class AppInterceptors extends Interceptor {
       navigatorKey.currentContext?.loaderOverlay.show();
     }
 
-    // final token = await Store.getString('auth');
-    // if (token != null && options.baseUrl.contains(Environment.BASE_URL)) {
-    //   options.headers['authorization'] = token;
-    // }
+    final token = await Store.getString('auth');
+    if (token != null && options.baseUrl.contains(Environment.BASE_URL)) {
+      options.headers['authorization'] = 'Bearer ' + token;
+    }
 
     return interceptorHandler.next(options);
   }

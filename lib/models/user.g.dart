@@ -14,11 +14,13 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
           ?.map((e) =>
               e == null ? null : Filho.fromJson(e as Map<String, dynamic>))
           .toList(),
+      senha: json['senha'] as String?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       '_id': instance.id,
       'nome': instance.nome,
       'email': instance.email,
+      'senha': instance.senha,
       'filhos': instance.filhos,
     };

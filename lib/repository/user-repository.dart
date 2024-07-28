@@ -12,12 +12,18 @@ part 'user-repository.g.dart';
 @RestApi(baseUrl: Environment.BASE_URL)
 abstract class UserApi {
   factory UserApi(Dio dio, {String baseUrl}) = _UserApi;
+
+  @POST("/authenticate")
+  Future<Map<String, String>> authenticate(
+      @Body() Map<String, String> userCredentials);
   //criar novo usuario
   @POST("/users")
   Future<void> postUser(@Body() User user);
   //pegar usuarios
   @GET("/users")
   Future<List<User>> getUsers();
+  @GET("/users/{id}")
+  Future<User> getUser(@Path('id') String id);
   //filhos de um usuario
   @GET("/users/{id}/filhos")
   Future<List<Filho>> getFilhos(@Path('id') String id);

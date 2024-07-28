@@ -107,8 +107,10 @@ class _Signup3ScreenState extends State<Signup3Screen> {
               InkWell(
                 onTap: () {
                   //ver como vai ser a senha dps
-                  User user =
-                      User(nome: widget.user.nome, email: widget.user.email);
+                  User user = User(
+                      nome: widget.user.nome,
+                      email: widget.user.email,
+                      senha: senhaController.text);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
