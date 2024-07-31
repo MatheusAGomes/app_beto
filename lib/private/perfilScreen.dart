@@ -4,6 +4,7 @@ import 'package:app_beto/private/telaDeSelecaoDeFilho.dart';
 import 'package:app_beto/public/signinScreen.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:app_beto/shared/utils.dart';
+import 'package:app_beto/widget/hexagonoPerfil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -127,35 +128,42 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   widget.user.filhos![widget.indexUsuario]!.nome!,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        color: Colors.grey,
-                        height: 50,
-                        width: 50,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.77,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [Text('Licao 1'), Text('8m ago')],
-                            ),
-                            Text(
-                                'Luca Gomes concluiu a Lição 1 no dia 30/02/2002')
-                          ],
+                Column(
+                  children: List.generate(
+                      widget.user.filhos![widget.indexUsuario]!.licaoCompleta
+                          .length, (index) {
+                    final licao = widget.user.filhos![widget.indexUsuario]!
+                        .licaoCompleta[index];
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        HexagonoPerfil(
+                          string: licao!.indexLicao.toString(),
+                          color: ColorService.verde,
                         ),
-                      ),
-                    )
-                  ],
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.77,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Lição ${licao!.indexLicao.toString()}"),
+                                  Text(formatTimeDifference(
+                                      licao.date!, DateTime.now()))
+                                ],
+                              ),
+                              Text(
+                                  '${widget.user.filhos![widget.indexUsuario]!.nome} concluiu esta licão com ${widget.user.filhos![widget.indexUsuario]!.licaoCompleta[index]!.estrelas} no dia ${formatDateToBrazilTime(licao.date!)}')
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 )
               ],
             ),

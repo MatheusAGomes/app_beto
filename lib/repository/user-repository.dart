@@ -18,7 +18,7 @@ abstract class UserApi {
       @Body() Map<String, String> userCredentials);
   //criar novo usuario
   @POST("/users")
-  Future<void> postUser(@Body() User user);
+  Future<Map<String, String>> postUser(@Body() User user);
   //pegar usuarios
   @GET("/users")
   Future<List<User>> getUsers();

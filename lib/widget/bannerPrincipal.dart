@@ -5,9 +5,11 @@ import '../shared/service/ColorSevice.dart';
 class BannerPrincipal extends StatelessWidget {
   int estelas;
   int qntConculidas;
+  int qntTrofeis;
   BannerPrincipal({
     required this.estelas,
     required this.qntConculidas,
+    required this.qntTrofeis,
     super.key,
   });
 
@@ -101,7 +103,7 @@ class BannerPrincipal extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Streak',
+                      'Troféus',
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           color: ColorService.cinza),
@@ -117,14 +119,14 @@ class BannerPrincipal extends StatelessWidget {
                               radius: 14,
                               backgroundColor: ColorService.roxo,
                               child: Icon(
-                                Icons.local_fire_department,
+                                Icons.emoji_events,
                                 size: 14,
                                 color: Colors.white,
                               ),
                             ),
                           ),
                           Text(
-                            '20',
+                            '$qntTrofeis',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           )

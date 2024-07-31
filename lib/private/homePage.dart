@@ -112,11 +112,18 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     List<LicaoCompleta?> listaDelicoes =
-        user.filhos![indexDoFilho]!.licaoCompleta;
+        user.filhos![indexDoFilho]!.licaoCompleta ?? [];
 
     int estrelas =
         listaDelicoes.fold(0, (soma, item) => soma + item!.estrelas!);
     int qntEstrelas = listaDelicoes.length;
+
+    int qnttrofeis = listaDelicoes.fold(0,(soma,item) {
+      if(item!.estrelas == 3) {
+        return soma + 1;
+      }
+      return soma + 0 ;
+    });
 
     int proximaLicao = listaDelicoes.length + 1;
     _fetchUser();
@@ -206,14 +213,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                 radius: 12,
                                 backgroundColor: Colors.white,
                                 child: Icon(
-                                  Icons.local_fire_department,
+                                  Icons.emoji_emotions,
                                   size: 12,
                                   color: ColorService.roxo,
                                 ),
                               ),
                             ),
                             Text(
-                              '20',
+                              '12',
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -281,6 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   BannerPrincipal(
+                    qntTrofeis: qnttrofeis,
                     estelas: estrelas,
                     qntConculidas: qntEstrelas,
                   ),

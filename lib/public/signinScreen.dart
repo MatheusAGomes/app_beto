@@ -26,8 +26,8 @@ class _SigninScreenState extends State<SigninScreen> {
   GlobalKey<FormFieldState> usernameKey = GlobalKey<FormFieldState>();
   GlobalKey<FormFieldState> passwordKey = GlobalKey<FormFieldState>();
 
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController(text: "matheus.gomes@gmail.com");
+  TextEditingController passwordController = TextEditingController(text: "Matheus@123");
 
   @override
   Widget build(BuildContext context) {

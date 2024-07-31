@@ -117,63 +117,15 @@ class StarMenuPrincipal extends StatelessWidget {
           );
 
         case 3:
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Transform.rotate(
-                angle: 184 * 3.14,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 70, right: 10),
-                  child:
-                      Stack(alignment: AlignmentDirectional.center, children: [
-                    Icon(
-                      Icons.star,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                      size: 20,
-                    ),
-                  ]),
-                ),
+          return Padding(
+            padding: const EdgeInsets.only(top: 90),
+            child: Stack(alignment: AlignmentDirectional.center, children: [
+              Icon(
+                Icons.emoji_events,
+                color: Colors.yellow,
+                size: 40,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: Stack(alignment: AlignmentDirectional.center, children: [
-                  Icon(
-                    Icons.star,
-                    color: Colors.white,
-                    size: 25,
-                  ),
-                  Icon(
-                    Icons.star,
-                    color: Colors.yellow,
-                    size: 20,
-                  ),
-                ]),
-              ),
-              Transform.rotate(
-                angle: -184 * 3.14,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 70, left: 10),
-                  child:
-                      Stack(alignment: AlignmentDirectional.center, children: [
-                    Icon(
-                      Icons.star,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                      size: 20,
-                    ),
-                  ]),
-                ),
-              )
-            ],
+            ]),
           );
         default:
           return Row(

@@ -21,6 +21,7 @@ import '../models/user.dart';
 import '../shared/service/stroreService.dart';
 import '../widget/WidgetSelecionePares.dart';
 import '../widget/opcaoTipoUmWidget.dart';
+import '../widget/widgetSelecionaTexto.dart';
 
 class LicaoScreen extends StatefulWidget {
   Licao licao;
@@ -138,6 +139,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
           context,
           MaterialPageRoute(
               builder: (context) => FimLicaoScreen(
+                    indexLicao: widget.licao.index,
                     idLicao: widget.licao.id!,
                     indexFilho: indexFilho,
                     resposta: listaDeResposta,
@@ -942,7 +944,16 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 direction: Axis.horizontal,
                 children: List.generate(
                     letrasParaExercicio!.length,
-                    (index) => opcaoTipoUmWidgetSelectble(
+                    (index) => WidgetSelecionaTexto(
+                        ontap: (isSelect) {
+                          if (!isSelect) {
+                            possiveisRespostas.add(letrasParaExercicio![index]);
+                          } else {
+                            possiveisRespostas
+                                .remove(letrasParaExercicio![index]);
+                          }
+                          setState(() {});
+                        },
                         silaba: letrasParaExercicio![index]!)))),
       ),
       const SizedBox(

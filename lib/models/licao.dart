@@ -7,8 +7,9 @@ class Licao {
   @JsonKey(name: '_id')
   String? id;
   final List<ExercicioSchema> exercicios;
+  final int index;
 
-  Licao({required this.exercicios, required this.id});
+  Licao({required this.exercicios, required this.id, required this.index});
 
   void adicionarExercicio(ExercicioSchema exercicio) {
     exercicios.add(exercicio);

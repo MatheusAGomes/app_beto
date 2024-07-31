@@ -11,6 +11,7 @@ import '../shared/service/ColorSevice.dart';
 import '../shared/service/stroreService.dart';
 
 class FimLicaoScreen extends StatefulWidget {
+  int indexLicao;
   User user;
   int indexFilho;
   int qntEstrelas;
@@ -19,6 +20,7 @@ class FimLicaoScreen extends StatefulWidget {
   List<Resposta> resposta;
   FimLicaoScreen(
       {super.key,
+      required this.indexLicao,
       required this.user,
       required this.indexFilho,
       required this.qntEstrelas,
@@ -194,6 +196,7 @@ class _FimLicaoScreenState extends State<FimLicaoScreen> {
                     widget.user.id!,
                     widget.indexFilho.toString(),
                     LicaoCompleta(
+                        indexLicao: widget.indexLicao,
                         idLicao: widget.idLicao,
                         respostas: widget.resposta,
                         estrelas: widget.qntEstrelas));

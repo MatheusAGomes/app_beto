@@ -93,9 +93,9 @@ class _Signup4ScreenState extends State<Signup4Screen> {
                 onTap: () {
                   User user = widget.user;
                   Filho filho = Filho(
+                    licaoCompleta: [],
                     foto: "url",
                     nome: nomeController.text,
-                    licaoCompleta: [],
                     idDoFilho: 0,
                   );
                   user.filhos = [filho];

@@ -10,9 +10,10 @@ class User {
   String? nome;
   String? email;
   String? senha;
+  String? tipo;
   List<Filho?>? filhos;
 
-  User({this.id, this.nome, this.email, this.filhos, this.senha});
+  User({this.id, this.nome, this.email, this.filhos, this.senha, this.tipo});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../main.dart';
+import '../models/user.dart';
 import '../repository/user-repository.dart';
 import '../shared/service/stroreService.dart';
 
@@ -67,6 +68,20 @@ class Auth with ChangeNotifier {
     return token;
   }
 
+  Future<void> _autenticarCadastro(User user) async {
+    try {
+      final data = await UserApi(dio).postUser(user);
+
+      _token = decodificar(data);
+
+      notifyListeners();
+      Store.saveString(_key, _token!);
+    } catch (e) {
+      rethrow;
+    }
+    return Future.value();
+  }
+
   Future<void> _autenticar(String username, String password) async {
     Map<String, String> userCredentials = {
       "email": username,
@@ -83,6 +98,10 @@ class Auth with ChangeNotifier {
       rethrow;
     }
     return Future.value();
+  }
+
+  Future<void> cadastrar(User user) async {
+    return _autenticarCadastro(user);
   }
 
   Future<void> logar(String username, String password) async {

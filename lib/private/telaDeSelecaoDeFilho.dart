@@ -5,7 +5,9 @@ import 'package:app_beto/repository/licao-repository.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:app_beto/shared/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../changeNotifier/auth.dart';
 import '../models/filho.dart';
 import '../models/user.dart';
 import '../repository/user-repository.dart';
@@ -33,6 +35,7 @@ class _SelecaoDeFilhoScreenState extends State<SelecaoDeFilhoScreen> {
         semaforo = true;
       });
     }
+    Auth auth = Provider.of<Auth>(context, listen: false);
     return Scaffold(
       backgroundColor: ColorService.roxo,
       appBar: AppBar(
@@ -120,8 +123,8 @@ class _SelecaoDeFilhoScreenState extends State<SelecaoDeFilhoScreen> {
               } else {
                 return InkWell(
                   onTap: () async {
-                    List<User> user = await UserApi(dio).getUsers();
-                    await Store.save("user", user[0]);
+                    User user = await UserApi(dio).getUser(auth.getUserId());
+                    await Store.save("user", user);
                     await Store.save("indexFilho", index);
 
                     Navigator.pushReplacement(context,

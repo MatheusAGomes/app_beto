@@ -4,8 +4,10 @@ import 'package:app_beto/repository/licao-repository.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../changeNotifier/auth.dart';
 import '../models/user.dart';
 import '../repository/user-repository.dart';
 import '../shared/service/stroreService.dart';
@@ -26,6 +28,8 @@ class _Signup6ScreenState extends State<Signup6Screen> {
   TextEditingController nomeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Auth auth = Provider.of<Auth>(context, listen: false);
+
     return Scaffold(
       backgroundColor: ColorService.roxo,
       body: SafeArea(
@@ -67,9 +71,9 @@ class _Signup6ScreenState extends State<Signup6Screen> {
               InkWell(
                 onTap: () async {
                   var licoes = await LicaoApi(dio).getLicoes(false);
-                  List<User> user = await UserApi(dio).getUsers();
+                  User user = await UserApi(dio).getUser(auth.getUserId());
 
-                  await Store.save("user", user.last);
+                  await Store.save("user", user);
                   await Store.save("indexFilho", 0);
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => MyHomePage()));

@@ -1,9 +1,13 @@
 import 'package:app_beto/repository/user-repository.dart';
+import 'package:app_beto/shared/enum/tipoUserEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
+import 'package:app_beto/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../changeNotifier/auth.dart';
 import '../main.dart';
 import '../models/user.dart';
 import '../widget/textFieldPadrao.dart';
@@ -50,6 +54,8 @@ class _Signup5ScreenState extends State<Signup5Screen> {
 
   @override
   Widget build(BuildContext context) {
+    Auth auth = Provider.of<Auth>(context, listen: false);
+
     return Scaffold(
       backgroundColor: ColorService.roxo,
       body: SafeArea(
@@ -139,7 +145,8 @@ class _Signup5ScreenState extends State<Signup5Screen> {
                     if (indexDaFoto == -1) return;
                     User user = widget.user;
                     user.filhos![0]!.foto = indexDaFoto.toString();
-                    await UserApi(dio).postUser(user);
+                    user.tipo = getTipoUser(TipoUserEnum.Usuario, context);
+                    auth.cadastrar(user);
 
                     Navigator.pushAndRemoveUntil(
                       context,
