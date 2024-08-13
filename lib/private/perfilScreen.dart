@@ -99,76 +99,81 @@ class _PerfilScreenState extends State<PerfilScreen> {
           )
         ],
       ),
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.2,
-            width: MediaQuery.of(context).size.width,
-            color: ColorService.roxo,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: CircleAvatar(
-                    radius: 115,
-                    backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.2,
+              width: MediaQuery.of(context).size.width,
+              color: ColorService.roxo,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
                     child: CircleAvatar(
-                      radius: 110,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(120),
-                          child: Image.asset(getImageUrlFromIndexString((widget
-                              .user.filhos![widget.indexUsuario]!.foto!)))),
+                      radius: 115,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 110,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(120),
+                            child: Image.asset(getImageUrlFromIndexString((widget
+                                .user.filhos![widget.indexUsuario]!.foto!)))),
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  widget.user.filhos![widget.indexUsuario]!.nome!,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
-                ),
-                Column(
-                  children: List.generate(
-                      widget.user.filhos![widget.indexUsuario]!.licaoCompleta
-                          .length, (index) {
-                    final licao = widget.user.filhos![widget.indexUsuario]!
-                        .licaoCompleta[index];
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        HexagonoPerfil(
-                          string: licao!.indexLicao.toString(),
-                          color: ColorService.verde,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.77,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                  Text(
+                    widget.user.filhos![widget.indexUsuario]!.nome!,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
+                  ),
+                  Column(
+                    children: List.generate(
+                        widget.user.filhos![widget.indexUsuario]!.licaoCompleta
+                            .length, (index) {
+                      final licao = widget.user.filhos![widget.indexUsuario]!
+                          .licaoCompleta[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            HexagonoPerfil(
+                              string: licao!.indexLicao.toString(),
+                              color: ColorService.verde,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.77,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Lição ${licao!.indexLicao.toString()}"),
-                                  Text(formatTimeDifference(
-                                      licao.date!, DateTime.now()))
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Lição ${licao!.indexLicao.toString()}"),
+                                      Text(formatTimeDifference(
+                                          licao.date!, DateTime.now()))
+                                    ],
+                                  ),
+                                  Text(
+                                      '${widget.user.filhos![widget.indexUsuario]!.nome} concluiu esta licão com ${widget.user.filhos![widget.indexUsuario]!.licaoCompleta[index]!.estrelas} no dia ${formatDateToBrazilTime(licao.date!)}')
                                 ],
                               ),
-                              Text(
-                                  '${widget.user.filhos![widget.indexUsuario]!.nome} concluiu esta licão com ${widget.user.filhos![widget.indexUsuario]!.licaoCompleta[index]!.estrelas} no dia ${formatDateToBrazilTime(licao.date!)}')
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    );
-                  }),
-                )
-              ],
-            ),
-          )
-        ],
+                      );
+                    }),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

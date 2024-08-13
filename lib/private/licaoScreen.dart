@@ -256,8 +256,26 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              height: MediaQuery.of(context).size.height * 0.35,
               width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                children: [
+                  SizedBox(height: 120,),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 50),
+                      child: Text(
+                        titulo,
+                        style: TextStyle(
+                            color: ColorService.azul,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Positioned(
               top: -30,
@@ -298,68 +316,54 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 180,
-                    width: 330,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        titulo,
-                        style: TextStyle(
-                            color: ColorService.azul,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             ),
           ],
         ),
       ),
-      SizedBox(
-        height: 106,
-      ),
-      InkWell(
-        onTap: () async {
-          final options = SpeechListenOptions(
-            cancelOnError: true,
-          );
-          //testes:
-          // usuario falar a palavra certa de primeira -> ok
-          // usuario falar errada -> ok mas colocar som de erro.
-          // usuario nao falar nada -> ok
-          if (speech.isListening == false) {
-            await speech.listen(
-                listenFor: const Duration(days: 1),
-                onResult: (speachResult) async {
-                  await recognizeListen(speachResult, speech);
-                  setState(() {});
-                },
-                listenOptions: options);
 
-            setState(() {});
-          } else {
-            speech.stop();
-            setState(() {});
-          }
-        },
-        child: Container(
-          height: 120,
-          width: 120,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: speech.isListening == false ? Color(0XFF4FFFAA) : Colors.red,
-          ),
-          child: Icon(
-            size: 65,
-            speech.isListening == false
-                ? Icons.mic_none
-                : Icons.pause_circle_outline,
-            color: Colors.white,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 100),
+        child: InkWell(
+          onTap: () async {
+            final options = SpeechListenOptions(
+              cancelOnError: true,
+            );
+            //testes:
+            // usuario falar a palavra certa de primeira -> ok
+            // usuario falar errada -> ok mas colocar som de erro.
+            // usuario nao falar nada -> ok
+            if (speech.isListening == false) {
+              await speech.listen(
+                  listenFor: const Duration(days: 1),
+                  onResult: (speachResult) async {
+                    await recognizeListen(speachResult, speech);
+                    setState(() {});
+                  },
+                  listenOptions: options);
+
+              setState(() {});
+            } else {
+              speech.stop();
+              setState(() {});
+            }
+          },
+          child: Container(
+            height: 120,
+            width: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: speech.isListening == false ? Color(0XFF4FFFAA) : Colors.red,
+            ),
+            child: Icon(
+              size: 65,
+              speech.isListening == false
+                  ? Icons.mic_none
+                  : Icons.pause_circle_outline,
+              color: Colors.white,
+            ),
           ),
         ),
       )
@@ -377,8 +381,30 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              height: MediaQuery.of(context).size.height * 0.35,
+
               width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                children: [
+                    SizedBox(
+                      height: 120,
+                    ),
+                  Container(
+                  alignment: Alignment.center,
+                  height: 180,
+                  width: 330,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      titulo,
+                      style: TextStyle(
+                          color: ColorService.azul,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 30),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),],
+              ),
             ),
             Positioned(
               top: -30,
@@ -419,31 +445,14 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 180,
-                    width: 330,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        titulo,
-                        style: TextStyle(
-                            color: ColorService.azul,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             ),
           ],
         ),
       ),
-      const SizedBox(
-        height: 20,
-      ),
+
       DragTarget(
         builder: (context, candidateData, rejectedData) => Container(
             padding: EdgeInsets.only(bottom: 10),
@@ -581,11 +590,184 @@ class _LicaoScreenState extends State<LicaoScreen> {
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              height: MediaQuery.of(context).size.height * 0.45,
-              width: MediaQuery.of(context).size.width * 0.8,
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: MediaQuery.of(context).size.width * 0.88,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(40)),
+                child: Column(
+                  children: [
+                    SizedBox(height: 120,),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 180,
+                      width: 330,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          titulo,
+                          style: TextStyle(
+                              color: ColorService.azul,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 30),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: Wrap(
+                        runAlignment: WrapAlignment.end,
+                        verticalDirection: VerticalDirection.down,
+                        crossAxisAlignment: WrapCrossAlignment.end,
+                        spacing: 3,
+                        alignment: WrapAlignment.center,
+                        runSpacing: 10,
+                        direction: Axis.horizontal,
+                        children: List.generate(letras.length, (index) {
+                          if (posicoesSemLetra?.contains(index) ?? false) {
+                            return DragTarget(
+                              builder: (context, candidateData, rejectedData) {
+                                return letras[index] == ""
+                                    ? Container(
+                                    width: 50,
+                                    height: 50,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 0),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0XFFAA8DFF)
+                                                .withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 20,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Color(0XFFAA8DFF),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1)),
+                                    child: Text(
+                                      letras[index],
+                                      style: TextStyle(
+                                          fontSize: 35,
+                                          color: Colors.transparent,
+                                          fontWeight: FontWeight.bold),
+                                    ))
+                                    : InkWell(
+                                  onTap: () {
+                                    letrasParaExercicio?.add(letras[index]);
+                                    letras[index] = '';
+                                    print(resposta);
+                                    setState(() {});
+                                  },
+                                  child: Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Container(
+                                          width: 50,
+                                          height: 50,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 2, vertical: 0),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 0),
+                                          decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Color(0XFFAA8DFF)
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 20,
+                                                  offset: Offset(0,
+                                                      3), // changes position of shadow
+                                                ),
+                                              ],
+                                              borderRadius:
+                                              BorderRadius.circular(12),
+                                              color: Color(0XFFAA8DFF),
+                                              border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 1)),
+                                          child: Text(
+                                            letras[index],
+                                            style: TextStyle(
+                                                fontSize: 35,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                      Positioned(
+                                        left: 35,
+                                        top: -5,
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor: Colors.white,
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              onAcceptWithDetails: (dynamic details) {
+                                letras[index] = details.data?['silaba'];
+                                resposta = letras;
+                                int i = letrasParaExercicio!
+                                    .indexOf(details.data?['silaba']);
+                                if (i != -1) letrasParaExercicio!.removeAt(i);
+                                setState(() {});
+                              },
+                            );
+                          }
+                          return DragTarget(
+                            builder: (context, candidateData, rejectedData) =>
+                                Container(
+                                    width: 50,
+                                    height: 50,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 0),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                            Color(0XFFAA8DFF).withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 20,
+                                            offset: Offset(
+                                                0, 3), // changes position of shadow
+                                          ),
+                                        ],
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Color(0XFFAA8DFF),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1)),
+                                    child: Center(
+                                      child: Text(
+                                        letras[index],
+                                        style: TextStyle(
+                                            fontSize: 35,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )),
+                          );
+                        }),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
             Positioned(
               top: -30,
@@ -626,168 +808,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 180,
-                    width: 330,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        titulo,
-                        style: TextStyle(
-                            color: ColorService.azul,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  Wrap(
-                    runAlignment: WrapAlignment.end,
-                    verticalDirection: VerticalDirection.down,
-                    crossAxisAlignment: WrapCrossAlignment.end,
-                    spacing: 3,
-                    alignment: WrapAlignment.center,
-                    runSpacing: 10,
-                    direction: Axis.horizontal,
-                    children: List.generate(letras.length, (index) {
-                      if (posicoesSemLetra?.contains(index) ?? false) {
-                        return DragTarget(
-                          builder: (context, candidateData, rejectedData) {
-                            return letras[index] == ""
-                                ? Container(
-                                    width: 50,
-                                    height: 50,
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 0),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 0),
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0XFFAA8DFF)
-                                                .withOpacity(0.5),
-                                            spreadRadius: 5,
-                                            blurRadius: 20,
-                                            offset: Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Color(0XFFAA8DFF),
-                                        border: Border.all(
-                                            color: Colors.white, width: 1)),
-                                    child: Text(
-                                      letras[index],
-                                      style: TextStyle(
-                                          fontSize: 35,
-                                          color: Colors.transparent,
-                                          fontWeight: FontWeight.bold),
-                                    ))
-                                : InkWell(
-                                    onTap: () {
-                                      letrasParaExercicio?.add(letras[index]);
-                                      letras[index] = '';
-                                      print(resposta);
-                                      setState(() {});
-                                    },
-                                    child: Stack(
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        Container(
-                                            width: 50,
-                                            height: 50,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 2, vertical: 0),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 0),
-                                            decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Color(0XFFAA8DFF)
-                                                        .withOpacity(0.5),
-                                                    spreadRadius: 5,
-                                                    blurRadius: 20,
-                                                    offset: Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ],
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Color(0XFFAA8DFF),
-                                                border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 1)),
-                                            child: Text(
-                                              letras[index],
-                                              style: TextStyle(
-                                                  fontSize: 35,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            )),
-                                        Positioned(
-                                          left: 35,
-                                          top: -5,
-                                          child: CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: Colors.white,
-                                            child: Icon(
-                                              Icons.close,
-                                              color: Colors.red,
-                                              size: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                          },
-                          onAcceptWithDetails: (dynamic details) {
-                            letras[index] = details.data?['silaba'];
-                            resposta = letras;
-                            int i = letrasParaExercicio!
-                                .indexOf(details.data?['silaba']);
-                            if (i != -1) letrasParaExercicio!.removeAt(i);
-                            setState(() {});
-                          },
-                        );
-                      }
-                      return DragTarget(
-                        builder: (context, candidateData, rejectedData) =>
-                            Container(
-                                width: 50,
-                                height: 50,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 2, vertical: 0),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 0),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color(0XFFAA8DFF).withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 20,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Color(0XFFAA8DFF),
-                                    border: Border.all(
-                                        color: Colors.white, width: 1)),
-                                child: Center(
-                                  child: Text(
-                                    letras[index],
-                                    style: TextStyle(
-                                        fontSize: 35,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )),
-                      );
-                    }),
-                  )
+
                 ],
               ),
             ),
@@ -882,8 +903,56 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              height: MediaQuery.of(context).size.height * 0.35,
               width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(children: [
+                SizedBox(height: 120,),
+                Container(
+                  alignment: Alignment.center,
+                  height: 180,
+                  width: 330,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      titulo,
+                      style: TextStyle(
+                          color: ColorService.azul,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 30),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  child: Container(
+                      color: Colors.transparent,
+                      height: 80,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Wrap(
+                          spacing: 3,
+                          alignment: WrapAlignment.center,
+                          runSpacing: 10,
+                          direction: Axis.horizontal,
+                          children: List.generate(
+                              letrasParaExercicio!.length,
+                                  (index) => WidgetSelecionaTexto(
+                                  ontap: (isSelect) {
+                                    if (!isSelect) {
+                                      possiveisRespostas
+                                          .add(letrasParaExercicio![index]!);
+                                      print(respostasDadas);
+                                    } else {
+                                      possiveisRespostas
+                                          .remove(letrasParaExercicio![index]);
+                                      print(respostasDadas);
+                                    }
+                                    setState(() {});
+                                  },
+                                  silaba: letrasParaExercicio![index]!)))),
+                ),
+
+              ],),
             ),
             Positioned(
               top: -30,
@@ -926,64 +995,16 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 180,
-                    width: 330,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        titulo,
-                        style: TextStyle(
-                            color: ColorService.azul,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             ),
           ],
         ),
       ),
-      const SizedBox(
-        height: 46,
-      ),
+
       Padding(
-        padding: EdgeInsets.symmetric(vertical: 15),
-        child: Container(
-            color: Colors.transparent,
-            height: 80,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Wrap(
-                spacing: 3,
-                alignment: WrapAlignment.center,
-                runSpacing: 10,
-                direction: Axis.horizontal,
-                children: List.generate(
-                    letrasParaExercicio!.length,
-                    (index) => WidgetSelecionaTexto(
-                        ontap: (isSelect) {
-                          if (!isSelect) {
-                            possiveisRespostas
-                                .add(letrasParaExercicio![index]!);
-                            print(respostasDadas);
-                          } else {
-                            possiveisRespostas
-                                .remove(letrasParaExercicio![index]);
-                            print(respostasDadas);
-                          }
-                          setState(() {});
-                        },
-                        silaba: letrasParaExercicio![index]!)))),
-      ),
-      const SizedBox(
-        height: 46,
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 40),
+        padding: EdgeInsets.symmetric(horizontal: 40,vertical: 20),
         child: InkWell(
           onTap: () {
             if (possiveisRespostas.isNotEmpty) {
@@ -1023,8 +1044,85 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              height: MediaQuery.of(context).size.height * 0.7,
               width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                children: [
+                  SizedBox(height: 120,),
+                  Container(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 35),
+                    child: Text(
+                      titulo,
+                      style: TextStyle(
+                          color: ColorService.azul,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 30),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: List.generate(
+                              objetos.length,
+                                  (index) => Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    child: Row(
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment.spaceBetween,
+                                                                    children: [
+                                    WidgetSelecionePares(
+                                      isDisable:
+                                      jaFoiAcertado(index, palavra),
+                                      colorDisable:
+                                      jaFoiAcertado(index, palavra)
+                                          ? ColorService.roxo
+                                          : null,
+                                      ontap: () {
+                                        if ((!jaFoiAcertado(
+                                            index, objetos))) {
+                                          indexDasImagensSelecioandas = index;
+                                          verificandoSelecionarPares();
+                                          setState(() {});
+                                        }
+                                      },
+                                      objetoSelecionePares: objetos[index],
+                                      isImage: true,
+                                      isSelected:
+                                      (indexDasImagensSelecioandas ==
+                                          index),
+                                    ),
+                                    opcaoTipoUmWidgetSelectble(
+                                        isDisable:
+                                        jaFoiAcertado(index, palavra),
+                                        ontap: () {
+                                          if ((!jaFoiAcertado(
+                                              index, objetos))) {
+                                            indexDosTextosSelecionados =
+                                                index;
+                                            verificandoSelecionarPares();
+                                            setState(() {});
+                                          }
+                                        },
+                                        colorDisable:
+                                        jaFoiAcertado(index, palavra)
+                                            ? ColorService.roxo
+                                            : null,
+                                        isSelected:
+                                        (indexDosTextosSelecionados ==
+                                            index),
+                                        silaba: palavra[index])
+                                                                    ],
+                                                                  ),
+                                  )),
+                        ),
+                      ))],
+              ),
             ),
             Positioned(
               top: -30,
@@ -1056,80 +1154,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 180,
-                    width: 330,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        titulo,
-                        style: TextStyle(
-                            color: ColorService.azul,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.width * 0.8,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: List.generate(
-                              objetos.length,
-                              (index) => Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      WidgetSelecionePares(
-                                        isDisable:
-                                            jaFoiAcertado(index, palavra),
-                                        colorDisable:
-                                            jaFoiAcertado(index, palavra)
-                                                ? ColorService.roxo
-                                                : null,
-                                        ontap: () {
-                                          if ((!jaFoiAcertado(
-                                              index, objetos))) {
-                                            indexDasImagensSelecioandas = index;
-                                            verificandoSelecionarPares();
-                                            setState(() {});
-                                          }
-                                        },
-                                        objetoSelecionePares: objetos[index],
-                                        isImage: true,
-                                        isSelected:
-                                            (indexDasImagensSelecioandas ==
-                                                index),
-                                      ),
-                                      opcaoTipoUmWidgetSelectble(
-                                          isDisable:
-                                              jaFoiAcertado(index, palavra),
-                                          ontap: () {
-                                            if ((!jaFoiAcertado(
-                                                index, objetos))) {
-                                              indexDosTextosSelecionados =
-                                                  index;
-                                              verificandoSelecionarPares();
-                                              setState(() {});
-                                            }
-                                          },
-                                          colorDisable:
-                                              jaFoiAcertado(index, palavra)
-                                                  ? ColorService.roxo
-                                                  : null,
-                                          isSelected:
-                                              (indexDosTextosSelecionados ==
-                                                  index),
-                                          silaba: palavra[index])
-                                    ],
-                                  )),
-                        ),
-                      ))
+
                 ],
               ),
             ),
@@ -1147,12 +1172,77 @@ class _LicaoScreenState extends State<LicaoScreen> {
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
           children: [
+
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-
-              height: MediaQuery.of(context).size.height * 0.7,
               width: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                children: [
+                  SizedBox(height: 120,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
+                    child: Text(
+                      titulo,
+                      style: TextStyle(
+                          color: ColorService.azul,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 30),
+                      textAlign: TextAlign.center,
+                    ),
+
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                            child:   Wrap(
+                              runAlignment: WrapAlignment.end,
+                              verticalDirection: VerticalDirection.down,
+                              crossAxisAlignment: WrapCrossAlignment.end,
+                              spacing: 3,
+                              alignment: WrapAlignment.center,
+                              runSpacing: 10,
+                              direction: Axis.horizontal,
+                              children: List.generate(
+                                  arrayAuxiliar!.length,
+                                      (index) => InkWell(
+                                    onTap: (){
+                                      if(possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']))
+                                      {
+                                        possiveisRespostas.remove(arrayAuxiliar![index]['nome']);
+
+                                      }
+                                      else{
+                                        possiveisRespostas.add(arrayAuxiliar![index]['nome']);
+
+                                      }
+                                      setState(() {
+
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Image.network(
+                                        arrayAuxiliar![index]['urlimagem'],
+
+                                      ),
+                                      height: 75,
+                                      width: 100,
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color:  Colors.white,border: Border.all(width: 2,color:possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']) ? Colors.green : Color(0xffE5E5E5))),
+                                    ),
+                                  )),
+                            )),
+
+                      ],
+                    ),
+
+                  ),
+
+                ],
+              ),
             ),
 
             Positioned(
@@ -1187,96 +1277,37 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 180,
-                    width: 330,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        titulo,
-                        style: TextStyle(
-                            color: ColorService.azul,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child:   Wrap(
-                                        runAlignment: WrapAlignment.end,
-                                        verticalDirection: VerticalDirection.down,
-                                        crossAxisAlignment: WrapCrossAlignment.end,
-                                        spacing: 3,
-                                        alignment: WrapAlignment.center,
-                                        runSpacing: 10,
-                                        direction: Axis.horizontal,
-                                        children: List.generate(
-                                            arrayAuxiliar!.length,
-                                                (index) => InkWell(
-                                                  onTap: (){
-                                                    if(possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']))
-                                                      {
-                                                        possiveisRespostas.remove(arrayAuxiliar![index]['nome']);
 
-                                                      }
-                                                    else{
-                                                      possiveisRespostas.add(arrayAuxiliar![index]['nome']);
-
-                                                    }
-                                                    setState(() {
-
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.all(10),
-                                                    child: Image.network(
-                                                      arrayAuxiliar![index]['urlimagem'],
-
-                                                    ),
-                                                    height: 75,
-                                                    width: 100,
-                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color:  Colors.white,border: Border.all(width: 2,color:possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']) ? Colors.green : Color(0xffE5E5E5))),
-                                                  ),
-                                                )),
-                                      )),
-                          InkWell(
-                            onTap: () {
-                              if (possiveisRespostas.isNotEmpty) {
-                                verificadoRespostaSelecaoDeImagens();
-                              }
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.white),
-                                  color: possiveisRespostas.isNotEmpty ? ColorService.verde : Colors.grey,
-                                  borderRadius: BorderRadius.circular(7)),
-                              width: double.infinity,
-                              height: 50,
-                              child: Center(
-                                child: Text(
-                                  'Check',
-                                  style:
-                                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-
-                      ),
 
                 ],
               ),
             ),
           ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 41, vertical: 10),
+        child: InkWell(
+          onTap: () {
+            if (possiveisRespostas.isNotEmpty) {
+              verificadoRespostaSelecaoDeImagens();
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                color: possiveisRespostas.isNotEmpty ? ColorService.verde : Colors.grey,
+                borderRadius: BorderRadius.circular(7)),
+            width: double.infinity,
+            height: 50,
+            child: Center(
+              child: Text(
+                'Check',
+                style:
+                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
         ),
       ),
     ];
