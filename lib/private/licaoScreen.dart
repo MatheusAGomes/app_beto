@@ -7,9 +7,11 @@ import 'package:app_beto/shared/service/ColorSevice.dart';
 import 'package:app_beto/shared/utils.dart';
 import 'package:app_beto/widget/opcaoTipoUmWidgetSelectble.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:linear_progress_bar/linear_progress_bar.dart';
@@ -118,6 +120,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   List<dynamic> respostasDadas = [];
   List<Resposta> listaDeResposta = [];
+  List<dynamic> auxiliarDoAuxiliar = [];
 
   stt.SpeechToText speech = stt.SpeechToText();
 
@@ -160,6 +163,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
       semaforo = false;
       resposta = [];
       possiveisRespostas = [];
+      arrayAuxiliar = [];
+
     }
 
     setState(() {});
@@ -174,6 +179,18 @@ class _LicaoScreenState extends State<LicaoScreen> {
       await finalizandoFase();
     }
   }
+
+  void verificadoRespostaSelecaoDeImagens() async {
+
+    respostasDadas.add(possiveisRespostas);
+
+    if (listEquals(possiveisRespostas, respostasEmArray)) {
+      listaDeResposta.add(Resposta(resposta: respostasDadas));
+      await finalizandoFase();
+    }
+  }
+
+
 
   void verficandoRespostasLicaoCompleta() async {
     String juncao = resposta.join('');
@@ -196,9 +213,11 @@ class _LicaoScreenState extends State<LicaoScreen> {
     //onde esta a resposta
     //respostasEmArray
     //funcao se verifica que os dois sao validos
-
-    respostasDadas.add(possiveisRespostas);
-
+    List<String> tentativa = [];
+    for (var i = 0; i < possiveisRespostas.length; i++) {
+      tentativa.add(possiveisRespostas[i]);
+    }
+    respostasDadas.add(tentativa);
     if (arraysHaveSameContent(possiveisRespostas, respostasEmArray!)) {
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
@@ -224,6 +243,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   List<int?>? posicoesSemLetra = [];
   List<String?>? letrasParaExercicio = [];
   List<dynamic?>? respostasEmArray = [];
+  List<dynamic?>? arrayAuxiliar = [];
 
   List<Widget> reproducao() {
     return [
@@ -947,10 +967,13 @@ class _LicaoScreenState extends State<LicaoScreen> {
                     (index) => WidgetSelecionaTexto(
                         ontap: (isSelect) {
                           if (!isSelect) {
-                            possiveisRespostas.add(letrasParaExercicio![index]);
+                            possiveisRespostas
+                                .add(letrasParaExercicio![index]!);
+                            print(respostasDadas);
                           } else {
                             possiveisRespostas
                                 .remove(letrasParaExercicio![index]);
+                            print(respostasDadas);
                           }
                           setState(() {});
                         },
@@ -1116,6 +1139,149 @@ class _LicaoScreenState extends State<LicaoScreen> {
     ];
   }
 
+  List<Widget> selecioneImagens() {
+    return [
+      Padding(
+        padding: const EdgeInsets.only(top: 60),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(40)),
+
+              height: MediaQuery.of(context).size.height * 0.7,
+              width: MediaQuery.of(context).size.width * 0.8,
+            ),
+
+            Positioned(
+              top: -30,
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (respostaFinal != null) {
+                        speak(respostaFinal!);
+                      } else {
+                        speak(titulo);
+                      }
+                    },
+                    child: Container(
+                      child: Center(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.14,
+                            width: MediaQuery.of(context).size.height * 0.14,
+                            child: Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.crosshairs, // Este é o ícone de alvo
+                                size: 55.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )),
+                      decoration: BoxDecoration(
+                          color: ColorService.roxo,
+                          borderRadius: BorderRadius.circular(12)),
+                      height: MediaQuery.of(context).size.height * 0.17,
+                      width: MediaQuery.of(context).size.height * 0.17,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 180,
+                    width: 330,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        titulo,
+                        style: TextStyle(
+                            color: ColorService.azul,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child:   Wrap(
+                                        runAlignment: WrapAlignment.end,
+                                        verticalDirection: VerticalDirection.down,
+                                        crossAxisAlignment: WrapCrossAlignment.end,
+                                        spacing: 3,
+                                        alignment: WrapAlignment.center,
+                                        runSpacing: 10,
+                                        direction: Axis.horizontal,
+                                        children: List.generate(
+                                            arrayAuxiliar!.length,
+                                                (index) => InkWell(
+                                                  onTap: (){
+                                                    if(possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']))
+                                                      {
+                                                        possiveisRespostas.remove(arrayAuxiliar![index]['nome']);
+
+                                                      }
+                                                    else{
+                                                      possiveisRespostas.add(arrayAuxiliar![index]['nome']);
+
+                                                    }
+                                                    setState(() {
+
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    child: Image.network(
+                                                      arrayAuxiliar![index]['urlimagem'],
+
+                                                    ),
+                                                    height: 75,
+                                                    width: 100,
+                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color:  Colors.white,border: Border.all(width: 2,color:possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']) ? Colors.green : Color(0xffE5E5E5))),
+                                                  ),
+                                                )),
+                                      )),
+                          InkWell(
+                            onTap: () {
+                              if (possiveisRespostas.isNotEmpty) {
+                                verificadoRespostaSelecaoDeImagens();
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white),
+                                  color: possiveisRespostas.isNotEmpty ? ColorService.verde : Colors.grey,
+                                  borderRadius: BorderRadius.circular(7)),
+                              width: double.infinity,
+                              height: 50,
+                              child: Center(
+                                child: Text(
+                                  'Check',
+                                  style:
+                                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+
+                      ),
+
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
   Future<void> verificandoSelecionarPares() async {
     if (indexDasImagensSelecioandas != null &&
         indexDosTextosSelecionados != null) {
@@ -1205,8 +1371,15 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 nome: e['nome'], urlimagem: e['urlimagem']))
             .toList();
         palavra = respostasEmArray!.map((e) => e['nome'] as String).toList();
-      }
-      semaforo = true;
+      } else if (widget.licao.exercicios[indexExercicios].tipo ==
+          TipoLicaoEnum.SelecioneImagens)
+        {
+          titulo = widget.licao.exercicios[indexExercicios].titulo;
+          respostasEmArray =
+              widget.licao.exercicios[indexExercicios].respostasEmArray;
+          arrayAuxiliar = widget.licao.exercicios[indexExercicios].arrayAuxiliar;
+        }
+        semaforo = true;
 
       setState(() {});
     }
@@ -1265,6 +1438,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 TipoLicaoEnum.CompleteAPalavra => completePalavra(),
                 TipoLicaoEnum.SelecioneTextos => selecioneTexto(),
                 TipoLicaoEnum.SelecionePares => selecionePares(),
+                TipoLicaoEnum.SelecioneImagens => selecioneImagens(),
                 _ => []
               },
             )

@@ -14,6 +14,7 @@ class ExercicioSchema {
   final List<int?>? posicoesSemLetra;
   final List<String?>? letrasParaExercicio;
   final List<dynamic>? respostasEmArray;
+  final List<dynamic>? arrayAuxiliar;
 
   ExercicioSchema(
       {required this.tipo,
@@ -24,7 +25,8 @@ class ExercicioSchema {
       this.possiveisSilabas,
       this.letrasParaExercicio,
       this.posicoesSemLetra,
-      this.respostasEmArray});
+      this.respostasEmArray,
+      this.arrayAuxiliar});
 
   factory ExercicioSchema.fromJson(Map<String, dynamic> json) =>
       _$ExercicioSchemaFromJson(json);

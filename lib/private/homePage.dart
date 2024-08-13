@@ -213,14 +213,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                 radius: 12,
                                 backgroundColor: Colors.white,
                                 child: Icon(
-                                  Icons.emoji_emotions,
+                                  Icons.emoji_events,
                                   size: 12,
                                   color: ColorService.roxo,
                                 ),
                               ),
                             ),
                             Text(
-                              '12',
+                              '$qnttrofeis',
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
