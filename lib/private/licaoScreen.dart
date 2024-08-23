@@ -1327,6 +1327,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
         indexDasImagensSelecioandas = null;
         indexDosTextosSelecionados = null;
         if (acertados.length == objetos.length) {
+          listaDeResposta.add(Resposta(resposta: respostasDadas));
+
           await finalizandoFase();
         }
       } else {
