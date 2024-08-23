@@ -252,14 +252,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: ()async {
+                           await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => PerfilScreen(
                                           user: user,
                                           indexUsuario: indexDoFilho,
-                                        )));
+                                        ))).then((value) {
+                              setState(() {
+
+                              });
+                           });
                           },
                           child: Row(
                             children: [

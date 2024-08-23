@@ -15,9 +15,10 @@ Filho _$FilhoFromJson(Map<String, dynamic> json) => Filho(
               : LicaoCompleta.fromJson(e as Map<String, dynamic>))
           .toList(),
       foto: json['foto'] as String?,
-    );
+    )..id = json['_id'] as String?;
 
 Map<String, dynamic> _$FilhoToJson(Filho instance) => <String, dynamic>{
+      '_id': instance.id,
       'idDoFilho': instance.idDoFilho,
       'nome': instance.nome,
       'foto': instance.foto,

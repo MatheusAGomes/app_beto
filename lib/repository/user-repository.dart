@@ -31,6 +31,9 @@ abstract class UserApi {
   @POST("/users/{id}/novofilho")
   Future<void> criarNovofilho(@Path('id') String id, @Body() Filho filho);
 
+  @POST("/users/editarFilho/{idFilho}")
+  Future<Filho> editarFilho(@Path('idFilho') String idDoFilho, @Body() Filho filho);
+
   @POST("/users/{id}/finalizarLicao/{idFilho}")
   Future<User> finalizarLicao(@Path('id') String id,
       @Path('idFilho') String idFilho, @Body() LicaoCompleta licaoCompleta);

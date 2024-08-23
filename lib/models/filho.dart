@@ -5,6 +5,8 @@ part 'filho.g.dart';
 
 @JsonSerializable()
 class Filho {
+  @JsonKey(name: '_id')
+  String? id;
   int? idDoFilho;
   String? nome;
   String? foto;

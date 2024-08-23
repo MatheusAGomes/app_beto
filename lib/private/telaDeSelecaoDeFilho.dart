@@ -46,15 +46,7 @@ class _SelecaoDeFilhoScreenState extends State<SelecaoDeFilhoScreen> {
           style: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.edit,
-                color: Colors.white,
-                size: 18,
-              ))
-        ],
+
       ),
       body: Column(
         children: [

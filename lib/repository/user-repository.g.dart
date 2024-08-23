@@ -13,7 +13,7 @@ class _UserApi implements UserApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://172.18.0.1:2020/';
+    baseUrl ??= 'http://172.17.0.1:2020/';
   }
 
   final Dio _dio;
@@ -188,6 +188,37 @@ class _UserApi implements UserApi {
           _dio.options.baseUrl,
           baseUrl,
         ))));
+  }
+
+  @override
+  Future<Filho> editarFilho(
+    String idDoFilho,
+    Filho filho,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(filho.toJson());
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Filho>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/users/editarFilho/${idDoFilho}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = Filho.fromJson(_result.data!);
+    return value;
   }
 
   @override
