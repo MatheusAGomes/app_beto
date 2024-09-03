@@ -1,3 +1,4 @@
+import 'package:app_beto/models/licaoCompleta.dart';
 import 'package:app_beto/models/user.dart';
 import 'package:app_beto/private/editarScreen.dart';
 import 'package:app_beto/private/settingScreen.dart';
@@ -41,15 +42,33 @@ class PerfilScreen extends StatefulWidget {
 class _PerfilScreenState extends State<PerfilScreen> {
 
  late Filho filho ;
+ List<LicaoCompleta?> licaoCompleta = [];
  @override
  void initState() {
     // TODO: implement initState
     super.initState();
-    filho = widget.user.filhos![widget.indexUsuario]!;}
+    filho = widget.user.filhos![widget.indexUsuario]!;
+    licaoCompleta = filho.licaoCompleta;}
+
+ void ordenarLicoes(List<LicaoCompleta?> licoes) {
+   licoes.sort((a, b) {
+     if (a?.date == null && b?.date == null) {
+       return 0;
+     } else if (a?.date == null) {
+       return 1; // Coloca as lições com data nula no final
+     } else if (b?.date == null) {
+       return -1; // Coloca as lições com data nula no final
+     } else {
+       return a!.date!.compareTo(b!.date!); // Compara datas não nulas
+     }
+   });
+ }
 
   @override
 
   Widget build(BuildContext context) {
+   ordenarLicoes(licaoCompleta);
+   licaoCompleta =   licaoCompleta.reversed.toList();
     return WillPopScope(
       onWillPop: () async {
         User usuario = widget.user;
@@ -161,9 +180,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     ),
                     Column(
                       children: List.generate(
-                          filho.licaoCompleta
-                              .length, (index) {
-                        final licao = filho.licaoCompleta[index];
+                          licaoCompleta.length, (index) {
+                        final licao = licaoCompleta[index];
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
                           child: Row(
@@ -189,14 +207,15 @@ class _PerfilScreenState extends State<PerfilScreen> {
                                       ],
                                     ),
                                     Text(
-                                        '${filho.nome} concluiu esta licão com ${filho.licaoCompleta[index]!.estrelas} no dia ${formatDateToBrazilTime(licao.date!)}')
+                                        '${filho.nome} concluiu esta licão com ${licaoCompleta[index]!.estrelas} no dia ${formatDateToBrazilTime(licao.date!)}')
                                   ],
                                 ),
                               ),
                             ],
                           ),
                         );
-                      }),
+                      },
+                      ),
                     )
                   ],
                 ),

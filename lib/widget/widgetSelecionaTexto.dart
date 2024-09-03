@@ -28,16 +28,31 @@ class _WidgetSelecionaTextoState
     await fluttertts.setPitch(1);
     await fluttertts.speak(texto);
   }
+ late bool isSelected;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isSelected = false;
 
-  bool isSelected = false;
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+
         speak(widget.silaba);
         widget.ontap!(isSelected);
+        setState(() {
+
+        });
         isSelected = !isSelected;
+
+
       },
       child: Container(
           child: Center(

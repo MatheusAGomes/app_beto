@@ -57,16 +57,18 @@ class _LicaoScreenState extends State<LicaoScreen> {
   //funcao de comecar a ouvir
   Future<void> recognizeListen(
       SpeechRecognitionResult speachResult, SpeechToText speach) async {
+    speech.stop();
+
     // discarta espacos reconhecidos e adicionando as respostas dadas pelo usuario
     if (speachResult.recognizedWords != "") {
       respostasDadas.add(speachResult.recognizedWords.toLowerCase());
     }
+
     // caso o usuario tenha acertado
     if (speachResult.recognizedWords.toLowerCase() ==
         widget.licao.exercicios[indexExercicios].respostaEsperada
             ?.toLowerCase()) {
       //para de ouvir
-      speech.stop();
       //adiciona as respostas a lista de resposta dessa fase
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
@@ -164,7 +166,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
       resposta = [];
       possiveisRespostas = [];
       arrayAuxiliar = [];
-
+      indexTentativas = 0;
     }
 
     setState(() {});
@@ -181,8 +183,12 @@ class _LicaoScreenState extends State<LicaoScreen> {
   }
 
   void verificadoRespostaSelecaoDeImagens() async {
-
-    respostasDadas.add(possiveisRespostas);
+    List<String> tentativa = [];
+    for (var i = 0; i < possiveisRespostas.length; i++) {
+      tentativa.add(possiveisRespostas[i]);
+    }
+    respostasDadas.add(tentativa);
+  //  respostasDadas.add(possiveisRespostas);
 
     if (listEquals(possiveisRespostas, respostasEmArray)) {
       listaDeResposta.add(Resposta(resposta: respostasDadas));
@@ -232,8 +238,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
       // qualquer erro 3 estrelas
       switch (qntExercicios / qntRespostas) {
         1 => 3,
-        > 0.5 && < 1 => 2,
-        <= 0.5 => 1,
+        >= 0.5 && < 1 => 2,
+        < 0.5 => 1,
         _ => 3
       };
 
@@ -330,6 +336,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
           onTap: () async {
             final options = SpeechListenOptions(
               cancelOnError: true,
+              partialResults: false,
+              listenMode: ListenMode.dictation
             );
             //testes:
             // usuario falar a palavra certa de primeira -> ok
@@ -337,8 +345,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
             // usuario nao falar nada -> ok
             if (speech.isListening == false) {
               await speech.listen(
-                  listenFor: const Duration(days: 1),
                   onResult: (speachResult) async {
+                  print(speachResult);
                     await recognizeListen(speachResult, speech);
                     setState(() {});
                   },
@@ -937,6 +945,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                           children: List.generate(
                               letrasParaExercicio!.length,
                                   (index) => WidgetSelecionaTexto(
+                                      key: ValueKey(letrasParaExercicio![index]),
                                   ontap: (isSelect) {
                                     if (!isSelect) {
                                       possiveisRespostas
@@ -959,9 +968,13 @@ class _LicaoScreenState extends State<LicaoScreen> {
               child: Column(
                 children: [
                   InkWell(
-                    onTap: () {
-                      if (respostaFinal != null) {
-                        speak(respostaFinal!);
+                    onTap: () async {
+                      if (respostasEmArray != null) {
+                        for(int i = 0;i < respostasEmArray!.length; i++ )
+                          {
+                          await  speak(respostasEmArray![i]);
+                          }
+
                       } else {
                         speak(titulo);
                       }
@@ -1219,6 +1232,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                         possiveisRespostas.add(arrayAuxiliar![index]['nome']);
 
                                       }
+                                      print(possiveisRespostas);
                                       setState(() {
 
                                       });
@@ -1313,7 +1327,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
     ];
   }
 
+  int indexTentativas = 0;
+
   Future<void> verificandoSelecionarPares() async {
+
     if (indexDasImagensSelecioandas != null &&
         indexDosTextosSelecionados != null) {
       respostasDadas.add({
@@ -1328,10 +1345,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
         indexDosTextosSelecionados = null;
         if (acertados.length == objetos.length) {
           listaDeResposta.add(Resposta(resposta: respostasDadas));
-
           await finalizandoFase();
         }
       } else {
+        indexTentativas ++;
         print('errou');
         indexDasImagensSelecioandas = null;
         indexDosTextosSelecionados = null;
