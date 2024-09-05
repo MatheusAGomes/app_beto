@@ -1,3 +1,4 @@
+import 'package:app_beto/models/exercicio.dart';
 import 'package:app_beto/models/licaoCompleta.dart';
 import 'package:app_beto/models/objetoSelecionePares.dart';
 import 'package:app_beto/models/resposta.dart';
@@ -57,21 +58,22 @@ class _LicaoScreenState extends State<LicaoScreen> {
   //funcao de comecar a ouvir
   Future<void> recognizeListen(
       SpeechRecognitionResult speachResult, SpeechToText speach) async {
-    speech.stop();
 
-    // discarta espacos reconhecidos e adicionando as respostas dadas pelo usuario
-    if (speachResult.recognizedWords != "") {
-      respostasDadas.add(speachResult.recognizedWords.toLowerCase());
-    }
+if(speachResult.finalResult) {
+      // discarta espacos reconhecidos e adicionando as respostas dadas pelo usuario
+      if (speachResult.recognizedWords != "") {
+        respostasDadas.add(speachResult.recognizedWords.toLowerCase());
+      }
 
-    // caso o usuario tenha acertado
-    if (speachResult.recognizedWords.toLowerCase() ==
-        widget.licao.exercicios[indexExercicios].respostaEsperada
-            ?.toLowerCase()) {
-      //para de ouvir
-      //adiciona as respostas a lista de resposta dessa fase
-      listaDeResposta.add(Resposta(resposta: respostasDadas));
-      await finalizandoFase();
+      // caso o usuario tenha acertado
+      if (speachResult.recognizedWords.toLowerCase() ==
+          widget.licao.exercicios[indexExercicios].respostaEsperada
+              ?.toLowerCase()) {
+        //para de ouvir
+        //adiciona as respostas a lista de resposta dessa fase
+        listaDeResposta.add(Resposta(resposta: respostasDadas));
+        await finalizandoFase();
+      }
     }
     setState(() {});
   }
@@ -128,6 +130,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   void initSpeech() async {
     await speech.initialize(
+finalTimeout: Duration(seconds: 10),
       onError: (errorNotification) {
         setState(() {});
       },
@@ -150,7 +153,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                     resposta: listaDeResposta,
                     user: user,
                     qntEstrelas: qntEstrelasFun(
-                        widget.licao.exercicios.length,
+                        widget.licao.exercicios,
                         listaDeResposta
                             .expand((element) => element.resposta)
                             .length),
@@ -230,19 +233,36 @@ class _LicaoScreenState extends State<LicaoScreen> {
     }
   }
 
-  int qntEstrelasFun(int qntExercicios, int qntRespostas) =>
+  int qntEstrelasFun(List<ExercicioSchema> exercicios, int qntRespostas) {
       // caso a quantindade de exercicios dividio por resposta seja:
       // 1 = 3 estrelas
       // maior que 0.5 mas menor que 1 = 2 estrelas
       // menor que 0.5 = 1 estrela
       // qualquer erro 3 estrelas
-      switch (qntExercicios / qntRespostas) {
+    int qntDeRespostas = 0;
+
+    for (var i = 0; i < exercicios.length; i++) {
+      switch (exercicios[i].tipo) {
+        case TipoLicaoEnum.SelecioneTextos:
+            qntDeRespostas += exercicios[i].respostasEmArray!.length;
+            break;
+        case TipoLicaoEnum.SelecionePares:
+              qntDeRespostas += exercicios[i].respostasEmArray!.length;
+              break;
+        case TipoLicaoEnum.SelecioneImagens:
+          qntDeRespostas += exercicios[i].respostasEmArray!.length;
+          break;
+        default:
+          qntDeRespostas += 1;
+      }
+      }
+   return   switch (qntDeRespostas / qntRespostas) {
         1 => 3,
         >= 0.5 && < 1 => 2,
         < 0.5 => 1,
         _ => 3
       };
-
+  }
   bool semaforo = false;
   int indexExercicios = 0;
   String titulo = "";
@@ -335,9 +355,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
         child: InkWell(
           onTap: () async {
             final options = SpeechListenOptions(
+              autoPunctuation: true,
+              listenMode: ListenMode.deviceDefault,
+
               cancelOnError: true,
-              partialResults: false,
-              listenMode: ListenMode.dictation
             );
             //testes:
             // usuario falar a palavra certa de primeira -> ok
@@ -345,13 +366,14 @@ class _LicaoScreenState extends State<LicaoScreen> {
             // usuario nao falar nada -> ok
             if (speech.isListening == false) {
               await speech.listen(
+                  listenFor: Duration(seconds: 10),
+                  pauseFor: Duration(seconds: 2),
                   onResult: (speachResult) async {
                   print(speachResult);
+
                     await recognizeListen(speachResult, speech);
-                    setState(() {});
                   },
                   listenOptions: options);
-
               setState(() {});
             } else {
               speech.stop();
@@ -1082,6 +1104,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: List.generate(
+
                               objetos.length,
                                   (index) => Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1091,14 +1114,14 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                                                     children: [
                                     WidgetSelecionePares(
                                       isDisable:
-                                      jaFoiAcertado(index, palavra),
+                                      jaFoiAcertado(objetos[index].nome!),
                                       colorDisable:
-                                      jaFoiAcertado(index, palavra)
+                                      jaFoiAcertado(objetos[index].nome!)
                                           ? ColorService.roxo
                                           : null,
                                       ontap: () {
                                         if ((!jaFoiAcertado(
-                                            index, objetos))) {
+                                            objetos[index].nome!))) {
                                           indexDasImagensSelecioandas = index;
                                           verificandoSelecionarPares();
                                           setState(() {});
@@ -1112,10 +1135,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                     ),
                                     opcaoTipoUmWidgetSelectble(
                                         isDisable:
-                                        jaFoiAcertado(index, palavra),
+                                        jaFoiAcertado(palavra[index]),
                                         ontap: () {
                                           if ((!jaFoiAcertado(
-                                              index, objetos))) {
+                                              palavra[index]))) {
                                             indexDosTextosSelecionados =
                                                 index;
                                             verificandoSelecionarPares();
@@ -1123,7 +1146,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                           }
                                         },
                                         colorDisable:
-                                        jaFoiAcertado(index, palavra)
+                                        jaFoiAcertado(palavra[index])
                                             ? ColorService.roxo
                                             : null,
                                         isSelected:
@@ -1350,16 +1373,16 @@ class _LicaoScreenState extends State<LicaoScreen> {
       } else {
         indexTentativas ++;
         print('errou');
+
         indexDasImagensSelecioandas = null;
         indexDosTextosSelecionados = null;
       }
     }
   }
 
-  bool jaFoiAcertado(index, list) {
-    bool retorno = list is List<String>
-        ? acertados.contains(list[index])
-        : acertados.contains(list[index].nome!);
+  bool jaFoiAcertado(String conteudo) {
+    bool retorno =  acertados.contains(conteudo);
+
     print(retorno);
     return retorno;
   }
@@ -1421,6 +1444,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 nome: e['nome'], urlimagem: e['urlimagem']))
             .toList();
         palavra = respostasEmArray!.map((e) => e['nome'] as String).toList();
+        palavra.shuffle();
       } else if (widget.licao.exercicios[indexExercicios].tipo ==
           TipoLicaoEnum.SelecioneImagens)
         {
