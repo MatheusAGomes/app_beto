@@ -28,6 +28,7 @@ import '../widget/widgetSelecionaTexto.dart';
 
 class LicaoScreen extends StatefulWidget {
   Licao licao;
+
   LicaoScreen({
     required this.licao,
     super.key,
@@ -41,6 +42,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   late DateTime _openTime;
   late DateTime finishTime;
   final FlutterTts fluttertts = FlutterTts();
+
   speak(String texto) async {
     await fluttertts.setLanguage('pt-BR');
     await fluttertts.setPitch(1);
@@ -58,8 +60,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   //funcao de comecar a ouvir
   Future<void> recognizeListen(
       SpeechRecognitionResult speachResult, SpeechToText speach) async {
-
-if(speachResult.finalResult) {
+    if (speachResult.finalResult) {
       // discarta espacos reconhecidos e adicionando as respostas dadas pelo usuario
       if (speachResult.recognizedWords != "") {
         respostasDadas.add(speachResult.recognizedWords.toLowerCase());
@@ -130,7 +131,7 @@ if(speachResult.finalResult) {
 
   void initSpeech() async {
     await speech.initialize(
-finalTimeout: Duration(seconds: 10),
+      finalTimeout: Duration(seconds: 10),
       onError: (errorNotification) {
         setState(() {});
       },
@@ -191,15 +192,13 @@ finalTimeout: Duration(seconds: 10),
       tentativa.add(possiveisRespostas[i]);
     }
     respostasDadas.add(tentativa);
-  //  respostasDadas.add(possiveisRespostas);
+    //  respostasDadas.add(possiveisRespostas);
 
     if (listEquals(possiveisRespostas, respostasEmArray)) {
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
     }
   }
-
-
 
   void verficandoRespostasLicaoCompleta() async {
     String juncao = resposta.join('');
@@ -234,35 +233,36 @@ finalTimeout: Duration(seconds: 10),
   }
 
   int qntEstrelasFun(List<ExercicioSchema> exercicios, int qntRespostas) {
-      // caso a quantindade de exercicios dividio por resposta seja:
-      // 1 = 3 estrelas
-      // maior que 0.5 mas menor que 1 = 2 estrelas
-      // menor que 0.5 = 1 estrela
-      // qualquer erro 3 estrelas
+    // caso a quantindade de exercicios dividio por resposta seja:
+    // 1 = 3 estrelas
+    // maior que 0.5 mas menor que 1 = 2 estrelas
+    // menor que 0.5 = 1 estrela
+    // qualquer erro 3 estrelas
     int qntDeRespostas = 0;
 
     for (var i = 0; i < exercicios.length; i++) {
       switch (exercicios[i].tipo) {
         case TipoLicaoEnum.SelecioneTextos:
-            qntDeRespostas += exercicios[i].respostasEmArray!.length;
-            break;
+          qntDeRespostas += exercicios[i].respostasEmArray!.length;
+          break;
         case TipoLicaoEnum.SelecionePares:
-              qntDeRespostas += exercicios[i].respostasEmArray!.length;
-              break;
+          qntDeRespostas += exercicios[i].respostasEmArray!.length;
+          break;
         case TipoLicaoEnum.SelecioneImagens:
           qntDeRespostas += exercicios[i].respostasEmArray!.length;
           break;
         default:
           qntDeRespostas += 1;
       }
-      }
-   return   switch (qntDeRespostas / qntRespostas) {
-        1 => 3,
-        >= 0.5 && < 1 => 2,
-        < 0.5 => 1,
-        _ => 3
-      };
+    }
+    return switch (qntDeRespostas / qntRespostas) {
+      1 => 3,
+      >= 0.5 && < 1 => 2,
+      < 0.5 => 1,
+      _ => 3
+    };
   }
+
   bool semaforo = false;
   int indexExercicios = 0;
   String titulo = "";
@@ -285,11 +285,14 @@ finalTimeout: Duration(seconds: 10),
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 children: [
-                  SizedBox(height: 120,),
+                  SizedBox(
+                    height: 120,
+                  ),
                   Container(
                     alignment: Alignment.center,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 50),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 50),
                       child: Text(
                         titulo,
                         style: TextStyle(
@@ -342,14 +345,12 @@ finalTimeout: Duration(seconds: 10),
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-
                 ],
               ),
             ),
           ],
         ),
       ),
-
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 100),
         child: InkWell(
@@ -357,7 +358,6 @@ finalTimeout: Duration(seconds: 10),
             final options = SpeechListenOptions(
               autoPunctuation: true,
               listenMode: ListenMode.deviceDefault,
-
               cancelOnError: true,
             );
             //testes:
@@ -369,7 +369,7 @@ finalTimeout: Duration(seconds: 10),
                   listenFor: Duration(seconds: 10),
                   pauseFor: Duration(seconds: 2),
                   onResult: (speachResult) async {
-                  print(speachResult);
+                    print(speachResult);
 
                     await recognizeListen(speachResult, speech);
                   },
@@ -385,7 +385,8 @@ finalTimeout: Duration(seconds: 10),
             width: 120,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: speech.isListening == false ? Color(0XFF4FFFAA) : Colors.red,
+              color:
+                  speech.isListening == false ? Color(0XFF4FFFAA) : Colors.red,
             ),
             child: Icon(
               size: 65,
@@ -411,29 +412,29 @@ finalTimeout: Duration(seconds: 10),
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 children: [
-                    SizedBox(
-                      height: 120,
-                    ),
+                  SizedBox(
+                    height: 120,
+                  ),
                   Container(
-                  alignment: Alignment.center,
-                  height: 180,
-                  width: 330,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      titulo,
-                      style: TextStyle(
-                          color: ColorService.azul,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 30),
-                      textAlign: TextAlign.center,
+                    alignment: Alignment.center,
+                    height: 180,
+                    width: 330,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        titulo,
+                        style: TextStyle(
+                            color: ColorService.azul,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),],
+                ],
               ),
             ),
             Positioned(
@@ -475,14 +476,12 @@ finalTimeout: Duration(seconds: 10),
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-
                 ],
               ),
             ),
           ],
         ),
       ),
-
       DragTarget(
         builder: (context, candidateData, rejectedData) => Container(
             padding: EdgeInsets.only(bottom: 10),
@@ -626,10 +625,13 @@ finalTimeout: Duration(seconds: 10),
               ),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white, borderRadius: BorderRadius.circular(40)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40)),
                 child: Column(
                   children: [
-                    SizedBox(height: 120,),
+                    SizedBox(
+                      height: 120,
+                    ),
                     Container(
                       alignment: Alignment.center,
                       height: 180,
@@ -662,91 +664,96 @@ finalTimeout: Duration(seconds: 10),
                               builder: (context, candidateData, rejectedData) {
                                 return letras[index] == ""
                                     ? Container(
-                                    width: 50,
-                                    height: 50,
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 0),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 0),
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0XFFAA8DFF)
-                                                .withOpacity(0.5),
-                                            spreadRadius: 5,
-                                            blurRadius: 20,
-                                            offset: Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Color(0XFFAA8DFF),
-                                        border: Border.all(
-                                            color: Colors.white, width: 1)),
-                                    child: Text(
-                                      letras[index],
-                                      style: TextStyle(
-                                          fontSize: 35,
-                                          color: Colors.transparent,
-                                          fontWeight: FontWeight.bold),
-                                    ))
+                                        width: 50,
+                                        height: 50,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 0),
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color(0XFFAA8DFF)
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 5,
+                                                blurRadius: 20,
+                                                offset: Offset(0,
+                                                    3), // changes position of shadow
+                                              ),
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: Color(0XFFAA8DFF),
+                                            border: Border.all(
+                                                color: Colors.white, width: 1)),
+                                        child: Text(
+                                          letras[index],
+                                          style: TextStyle(
+                                              fontSize: 35,
+                                              color: Colors.transparent,
+                                              fontWeight: FontWeight.bold),
+                                        ))
                                     : InkWell(
-                                  onTap: () {
-                                    letrasParaExercicio?.add(letras[index]);
-                                    letras[index] = '';
-                                    print(resposta);
-                                    setState(() {});
-                                  },
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Container(
-                                          width: 50,
-                                          height: 50,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 0),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 0),
-                                          decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Color(0XFFAA8DFF)
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 5,
-                                                  blurRadius: 20,
-                                                  offset: Offset(0,
-                                                      3), // changes position of shadow
+                                        onTap: () {
+                                          letrasParaExercicio
+                                              ?.add(letras[index]);
+                                          letras[index] = '';
+                                          print(resposta);
+                                          setState(() {});
+                                        },
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            Container(
+                                                width: 50,
+                                                height: 50,
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 2, vertical: 0),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 0),
+                                                decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Color(0XFFAA8DFF)
+                                                            .withOpacity(0.5),
+                                                        spreadRadius: 5,
+                                                        blurRadius: 20,
+                                                        offset: Offset(0,
+                                                            3), // changes position of shadow
+                                                      ),
+                                                    ],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    color: Color(0XFFAA8DFF),
+                                                    border: Border.all(
+                                                        color: Colors.white,
+                                                        width: 1)),
+                                                child: Text(
+                                                  letras[index],
+                                                  style: TextStyle(
+                                                      fontSize: 35,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )),
+                                            Positioned(
+                                              left: 35,
+                                              top: -5,
+                                              child: CircleAvatar(
+                                                radius: 10,
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: Colors.red,
+                                                  size: 12,
                                                 ),
-                                              ],
-                                              borderRadius:
-                                              BorderRadius.circular(12),
-                                              color: Color(0XFFAA8DFF),
-                                              border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 1)),
-                                          child: Text(
-                                            letras[index],
-                                            style: TextStyle(
-                                                fontSize: 35,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                      Positioned(
-                                        left: 35,
-                                        top: -5,
-                                        child: CircleAvatar(
-                                          radius: 10,
-                                          backgroundColor: Colors.white,
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 12,
-                                          ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                      );
                               },
                               onAcceptWithDetails: (dynamic details) {
                                 letras[index] = details.data?['silaba'];
@@ -770,12 +777,12 @@ finalTimeout: Duration(seconds: 10),
                                     decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
-                                            color:
-                                            Color(0XFFAA8DFF).withOpacity(0.5),
+                                            color: Color(0XFFAA8DFF)
+                                                .withOpacity(0.5),
                                             spreadRadius: 5,
                                             blurRadius: 20,
-                                            offset: Offset(
-                                                0, 3), // changes position of shadow
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
                                           ),
                                         ],
                                         borderRadius: BorderRadius.circular(12),
@@ -838,7 +845,6 @@ finalTimeout: Duration(seconds: 10),
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -934,56 +940,58 @@ finalTimeout: Duration(seconds: 10),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
               width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(children: [
-                SizedBox(height: 120,),
-                Container(
-                  alignment: Alignment.center,
-                  height: 180,
-                  width: 330,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      titulo,
-                      style: TextStyle(
-                          color: ColorService.azul,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 30),
-                      textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 120,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 180,
+                    width: 330,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        titulo,
+                        style: TextStyle(
+                            color: ColorService.azul,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  child: Container(
-                      color: Colors.transparent,
-                      height: 80,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Wrap(
-                          spacing: 3,
-                          alignment: WrapAlignment.center,
-                          runSpacing: 10,
-                          direction: Axis.horizontal,
-                          children: List.generate(
-                              letrasParaExercicio!.length,
-                                  (index) => WidgetSelecionaTexto(
-                                      key: ValueKey(letrasParaExercicio![index]),
-                                  ontap: (isSelect) {
-                                    if (!isSelect) {
-                                      possiveisRespostas
-                                          .add(letrasParaExercicio![index]!);
-                                      print(respostasDadas);
-                                    } else {
-                                      possiveisRespostas
-                                          .remove(letrasParaExercicio![index]);
-                                      print(respostasDadas);
-                                    }
-                                    setState(() {});
-                                  },
-                                  silaba: letrasParaExercicio![index]!)))),
-                ),
-
-              ],),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Container(
+                        color: Colors.transparent,
+                        height: 80,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: Wrap(
+                            spacing: 3,
+                            alignment: WrapAlignment.center,
+                            runSpacing: 10,
+                            direction: Axis.horizontal,
+                            children: List.generate(
+                                letrasParaExercicio!.length,
+                                (index) => WidgetSelecionaTexto(
+                                    key: ValueKey(letrasParaExercicio![index]),
+                                    ontap: (isSelect) {
+                                      if (!isSelect) {
+                                        possiveisRespostas
+                                            .add(letrasParaExercicio![index]!);
+                                        print(respostasDadas);
+                                      } else {
+                                        possiveisRespostas.remove(
+                                            letrasParaExercicio![index]);
+                                        print(respostasDadas);
+                                      }
+                                      setState(() {});
+                                    },
+                                    silaba: letrasParaExercicio![index]!)))),
+                  ),
+                ],
+              ),
             ),
             Positioned(
               top: -30,
@@ -992,11 +1000,9 @@ finalTimeout: Duration(seconds: 10),
                   InkWell(
                     onTap: () async {
                       if (respostasEmArray != null) {
-                        for(int i = 0;i < respostasEmArray!.length; i++ )
-                          {
-                          await  speak(respostasEmArray![i]);
-                          }
-
+                        for (int i = 0; i < respostasEmArray!.length; i++) {
+                          await speak(respostasEmArray![i]);
+                        }
                       } else {
                         speak(titulo);
                       }
@@ -1030,16 +1036,14 @@ finalTimeout: Duration(seconds: 10),
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-
                 ],
               ),
             ),
           ],
         ),
       ),
-
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 40,vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: InkWell(
           onTap: () {
             if (possiveisRespostas.isNotEmpty) {
@@ -1082,82 +1086,88 @@ finalTimeout: Duration(seconds: 10),
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 children: [
-                  SizedBox(height: 120,),
+                  SizedBox(
+                    height: 120,
+                  ),
                   Container(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 35),
-                    child: Text(
-                      titulo,
-                      style: TextStyle(
-                          color: ColorService.azul,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 30),
-                      textAlign: TextAlign.center,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 35),
+                      child: Text(
+                        titulo,
+                        style: TextStyle(
+                            color: ColorService.azul,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 20),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: List.generate(
-
                               objetos.length,
-                                  (index) => Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                              (index) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
                                     child: Row(
-                                                                    mainAxisAlignment:
-                                                                    MainAxisAlignment.spaceBetween,
-                                                                    children: [
-                                    WidgetSelecionePares(
-                                      isDisable:
-                                      jaFoiAcertado(objetos[index].nome!),
-                                      colorDisable:
-                                      jaFoiAcertado(objetos[index].nome!)
-                                          ? ColorService.roxo
-                                          : null,
-                                      ontap: () {
-                                        if ((!jaFoiAcertado(
-                                            objetos[index].nome!))) {
-                                          indexDasImagensSelecioandas = index;
-                                          verificandoSelecionarPares();
-                                          setState(() {});
-                                        }
-                                      },
-                                      objetoSelecionePares: objetos[index],
-                                      isImage: true,
-                                      isSelected:
-                                      (indexDasImagensSelecioandas ==
-                                          index),
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        WidgetSelecionePares(
+                                          isDisable: jaFoiAcertado(
+                                              objetos[index].nome!),
+                                          colorDisable: jaFoiAcertado(
+                                                  objetos[index].nome!)
+                                              ? ColorService.roxo
+                                              : null,
+                                          ontap: () {
+                                            if ((!jaFoiAcertado(
+                                                objetos[index].nome!))) {
+                                              indexDasImagensSelecioandas =
+                                                  index;
+                                              verificandoSelecionarPares();
+                                              setState(() {});
+                                            }
+                                          },
+                                          objetoSelecionePares: objetos[index],
+                                          isImage: true,
+                                          isSelected:
+                                              (indexDasImagensSelecioandas ==
+                                                  index),
+                                        ),
+                                        opcaoTipoUmWidgetSelectble(
+                                            isDisable:
+                                                jaFoiAcertado(palavra[index]),
+                                            ontap: () {
+                                              if ((!jaFoiAcertado(
+                                                  palavra[index]))) {
+                                                indexDosTextosSelecionados =
+                                                    index;
+                                                verificandoSelecionarPares();
+                                                setState(() {});
+                                              }
+                                            },
+                                            colorDisable:
+                                                jaFoiAcertado(palavra[index])
+                                                    ? ColorService.roxo
+                                                    : null,
+                                            isSelected:
+                                                (indexDosTextosSelecionados ==
+                                                    index),
+                                            silaba: palavra[index])
+                                      ],
                                     ),
-                                    opcaoTipoUmWidgetSelectble(
-                                        isDisable:
-                                        jaFoiAcertado(palavra[index]),
-                                        ontap: () {
-                                          if ((!jaFoiAcertado(
-                                              palavra[index]))) {
-                                            indexDosTextosSelecionados =
-                                                index;
-                                            verificandoSelecionarPares();
-                                            setState(() {});
-                                          }
-                                        },
-                                        colorDisable:
-                                        jaFoiAcertado(palavra[index])
-                                            ? ColorService.roxo
-                                            : null,
-                                        isSelected:
-                                        (indexDosTextosSelecionados ==
-                                            index),
-                                        silaba: palavra[index])
-                                                                    ],
-                                                                  ),
                                   )),
                         ),
-                      ))],
+                      ))
+                ],
               ),
             ),
             Positioned(
@@ -1190,7 +1200,6 @@ finalTimeout: Duration(seconds: 10),
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -1208,16 +1217,18 @@ finalTimeout: Duration(seconds: 10),
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
           children: [
-
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 children: [
-                  SizedBox(height: 120,),
+                  SizedBox(
+                    height: 120,
+                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 20),
                     child: Text(
                       titulo,
                       style: TextStyle(
@@ -1226,15 +1237,15 @@ finalTimeout: Duration(seconds: 10),
                           fontSize: 30),
                       textAlign: TextAlign.center,
                     ),
-
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: Column(
                       children: [
                         Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
-                            child:   Wrap(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 20),
+                            child: Wrap(
                               runAlignment: WrapAlignment.end,
                               verticalDirection: VerticalDirection.down,
                               crossAxisAlignment: WrapCrossAlignment.end,
@@ -1244,44 +1255,52 @@ finalTimeout: Duration(seconds: 10),
                               direction: Axis.horizontal,
                               children: List.generate(
                                   arrayAuxiliar!.length,
-                                      (index) => InkWell(
-                                    onTap: (){
-                                      if(possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']))
-                                      {
-                                        possiveisRespostas.remove(arrayAuxiliar![index]['nome']);
-
-                                      }
-                                      else{
-                                        possiveisRespostas.add(arrayAuxiliar![index]['nome']);
-
-                                      }
-                                      print(possiveisRespostas);
-                                      setState(() {
-
-                                      });
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Image.network(
-                                        arrayAuxiliar![index]['urlimagem'],
-
-                                      ),
-                                      height: 75,
-                                      width: 100,
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color:  Colors.white,border: Border.all(width: 2,color:possiveisRespostas.any((element) => element== arrayAuxiliar![index]['nome']) ? Colors.green : Color(0xffE5E5E5))),
-                                    ),
-                                  )),
+                                  (index) => InkWell(
+                                        onTap: () {
+                                          if (possiveisRespostas.any(
+                                              (element) =>
+                                                  element ==
+                                                  arrayAuxiliar![index]
+                                                      ['nome'])) {
+                                            possiveisRespostas.remove(
+                                                arrayAuxiliar![index]['nome']);
+                                          } else {
+                                            possiveisRespostas.add(
+                                                arrayAuxiliar![index]['nome']);
+                                          }
+                                          print(possiveisRespostas);
+                                          setState(() {});
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(10),
+                                          child: Image.network(
+                                            arrayAuxiliar![index]['urlimagem'],
+                                          ),
+                                          height: 75,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: possiveisRespostas.any(
+                                                          (element) =>
+                                                              element ==
+                                                              arrayAuxiliar![
+                                                                      index]
+                                                                  ['nome'])
+                                                      ? Colors.green
+                                                      : Color(0xffE5E5E5))),
+                                        ),
+                                      )),
                             )),
-
                       ],
                     ),
-
                   ),
-
                 ],
               ),
             ),
-
             Positioned(
               top: -30,
               child: Column(
@@ -1297,16 +1316,17 @@ finalTimeout: Duration(seconds: 10),
                     child: Container(
                       child: Center(
                           child: Container(
-                            height: MediaQuery.of(context).size.height * 0.14,
-                            width: MediaQuery.of(context).size.height * 0.14,
-                            child: Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.crosshairs, // Este é o ícone de alvo
-                                size: 55.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )),
+                        height: MediaQuery.of(context).size.height * 0.14,
+                        width: MediaQuery.of(context).size.height * 0.14,
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.crosshairs,
+                            // Este é o ícone de alvo
+                            size: 55.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )),
                       decoration: BoxDecoration(
                           color: ColorService.roxo,
                           borderRadius: BorderRadius.circular(12)),
@@ -1314,8 +1334,6 @@ finalTimeout: Duration(seconds: 10),
                       width: MediaQuery.of(context).size.height * 0.17,
                     ),
                   ),
-
-
                 ],
               ),
             ),
@@ -1333,7 +1351,9 @@ finalTimeout: Duration(seconds: 10),
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.white),
-                color: possiveisRespostas.isNotEmpty ? ColorService.verde : Colors.grey,
+                color: possiveisRespostas.isNotEmpty
+                    ? ColorService.verde
+                    : Colors.grey,
                 borderRadius: BorderRadius.circular(7)),
             width: double.infinity,
             height: 50,
@@ -1341,7 +1361,7 @@ finalTimeout: Duration(seconds: 10),
               child: Text(
                 'Check',
                 style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -1353,7 +1373,6 @@ finalTimeout: Duration(seconds: 10),
   int indexTentativas = 0;
 
   Future<void> verificandoSelecionarPares() async {
-
     if (indexDasImagensSelecioandas != null &&
         indexDosTextosSelecionados != null) {
       respostasDadas.add({
@@ -1371,7 +1390,7 @@ finalTimeout: Duration(seconds: 10),
           await finalizandoFase();
         }
       } else {
-        indexTentativas ++;
+        indexTentativas++;
         print('errou');
 
         indexDasImagensSelecioandas = null;
@@ -1381,7 +1400,7 @@ finalTimeout: Duration(seconds: 10),
   }
 
   bool jaFoiAcertado(String conteudo) {
-    bool retorno =  acertados.contains(conteudo);
+    bool retorno = acertados.contains(conteudo);
 
     print(retorno);
     return retorno;
@@ -1446,14 +1465,13 @@ finalTimeout: Duration(seconds: 10),
         palavra = respostasEmArray!.map((e) => e['nome'] as String).toList();
         palavra.shuffle();
       } else if (widget.licao.exercicios[indexExercicios].tipo ==
-          TipoLicaoEnum.SelecioneImagens)
-        {
-          titulo = widget.licao.exercicios[indexExercicios].titulo;
-          respostasEmArray =
-              widget.licao.exercicios[indexExercicios].respostasEmArray;
-          arrayAuxiliar = widget.licao.exercicios[indexExercicios].arrayAuxiliar;
-        }
-        semaforo = true;
+          TipoLicaoEnum.SelecioneImagens) {
+        titulo = widget.licao.exercicios[indexExercicios].titulo;
+        respostasEmArray =
+            widget.licao.exercicios[indexExercicios].respostasEmArray;
+        arrayAuxiliar = widget.licao.exercicios[indexExercicios].arrayAuxiliar;
+      }
+      semaforo = true;
 
       setState(() {});
     }
