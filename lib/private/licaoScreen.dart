@@ -180,7 +180,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
     String juncao = joinSilabas(resposta);
     respostasDadas.add(juncao);
 
-    if (juncao == respostaFinal) {
+    if (juncao.toLowerCase() == respostaFinal!.toLowerCase()) {
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
     }

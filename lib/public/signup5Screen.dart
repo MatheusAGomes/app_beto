@@ -1,6 +1,7 @@
 import 'package:app_beto/repository/user-repository.dart';
 import 'package:app_beto/shared/enum/tipoUserEnum.dart';
 import 'package:app_beto/shared/service/ColorSevice.dart';
+import 'package:app_beto/shared/service/toastService.dart';
 import 'package:app_beto/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
@@ -142,7 +143,10 @@ class _Signup5ScreenState extends State<Signup5Screen> {
                   onTap: () async {
                     //to passando
                     int indexDaFoto = getSelectedIndex(selecionados);
-                    if (indexDaFoto == -1) return;
+                    if (indexDaFoto == -1) {
+                      ToastService.showToastError('Selecione uma imagem');
+                      return;
+                    }
                     User user = widget.user;
                     user.filhos![0]!.foto = indexDaFoto.toString();
                     user.tipo = getTipoUser(TipoUserEnum.Usuario, context);

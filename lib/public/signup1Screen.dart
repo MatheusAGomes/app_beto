@@ -73,7 +73,7 @@ class _Signup1ScreenState extends State<Signup1Screen> {
               ),
               TextFieldPadrao(
                 onchange: (p0) {
-                  // usernameKey.currentState?.validate();
+                  nomeKey.currentState?.validate();
                 },
                 textFormFildKey: nomeKey,
                 validator: Validatorless.required('Campo obrigatorio'),
@@ -85,16 +85,19 @@ class _Signup1ScreenState extends State<Signup1Screen> {
               ),
               InkWell(
                 onTap: () {
-                  User user = User(
-                    id: null,
-                    nome: nomeController.text,
-                  );
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Signup2Screen(
-                                user: user,
-                              )));
+                  if(nomeKey.currentState!.validate()) {
+                    User user = User(
+                      id: null,
+                      nome: nomeController.text,
+                    );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Signup2Screen(
+                                  user: user,
+                                )));
+                  }
                 },
                 child: Container(
                   height: 46,

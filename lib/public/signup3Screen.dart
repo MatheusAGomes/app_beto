@@ -16,6 +16,8 @@ class Signup3Screen extends StatefulWidget {
 }
 
 class _Signup3ScreenState extends State<Signup3Screen> {
+  GlobalKey<FormFieldState> senhaKey = GlobalKey<FormFieldState>();
+
   TextEditingController senhaController = TextEditingController();
   bool visible = true;
   @override
@@ -73,9 +75,16 @@ class _Signup3ScreenState extends State<Signup3Screen> {
                 height: 10,
               ),
               TextFieldPadrao(
+
+                onchange: (p0) {
+                  senhaKey.currentState?.validate();
+                },
+                textFormFildKey: senhaKey,
+                key: senhaKey,
                 controller: senhaController,
                 validator: Validatorless.multiple([
-                  Validatorless.required('Campo obrigatorio'),
+                  Validatorless.required('Campo obrigatório'),
+                  Validatorless.min(8, 'Mínimo 8 caracteres'),
                 ]),
                 hideTextfild: visible,
                 hintText: 'Senha',
@@ -107,16 +116,18 @@ class _Signup3ScreenState extends State<Signup3Screen> {
               InkWell(
                 onTap: () {
                   //ver como vai ser a senha dps
-                  User user = User(
-                      nome: widget.user.nome,
-                      email: widget.user.email,
-                      senha: senhaController.text);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Signup4Screen(
-                                user: user,
-                              )));
+                  if(senhaKey.currentState!.validate()) {
+                    User user = User(
+                        nome: widget.user.nome,
+                        email: widget.user.email,
+                        senha: senhaController.text);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Signup4Screen(
+                                  user: user,
+                                )));
+                  }
                 },
                 child: Container(
                   height: 46,

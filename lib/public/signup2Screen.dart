@@ -74,7 +74,7 @@ class _Signup2ScreenState extends State<Signup2Screen> {
               ),
               TextFieldPadrao(
                 onchange: (p0) {
-                  // usernameKey.currentState?.validate();
+                   emailKey.currentState?.validate();
                 },
                 textFormFildKey: emailKey,
                 validator: Validatorless.required('Campo obrigatorio'),
@@ -86,14 +86,17 @@ class _Signup2ScreenState extends State<Signup2Screen> {
               ),
               InkWell(
                 onTap: () {
-                  User user =
-                      User(nome: widget.user.nome, email: emailController.text);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Signup3Screen(
-                                user: user,
-                              )));
+                  if(emailKey.currentState!.validate()) {
+                    User user =
+                    User(nome: widget.user.nome, email: emailController.text);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Signup3Screen(
+                                  user: user,
+                                )));
+                  }
                 },
                 child: Container(
                   height: 46,
