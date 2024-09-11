@@ -6,12 +6,14 @@ import 'package:flutter_tts/flutter_tts.dart';
 import '../shared/service/ColorSevice.dart';
 
 class WidgetSelecionaTexto extends StatefulWidget {
-  final Function(bool)? ontap;
+  final Function()? ontap;
   String silaba;
+  bool isSelected;
 
   WidgetSelecionaTexto({
     this.ontap,
     required this.silaba,
+     required this.isSelected,
     super.key,
   });
 
@@ -26,14 +28,15 @@ class _WidgetSelecionaTextoState
   speak(String texto) async {
     await fluttertts.setLanguage('pt-BR');
     await fluttertts.setPitch(1);
+    await fluttertts.setVolume(1);
     await fluttertts.speak(texto);
   }
- late bool isSelected;
+// late bool isSelected;
   @override
   void initState() {
-    // TODO: implement initState
+
+   // isSelected = false;
     super.initState();
-    isSelected = false;
 
   }
 
@@ -42,15 +45,14 @@ class _WidgetSelecionaTextoState
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return  InkWell(
       onTap: () {
 
         speak(widget.silaba);
-        widget.ontap!(isSelected);
+        widget.ontap!();
         setState(() {
 
         });
-        isSelected = !isSelected;
 
 
       },
@@ -68,7 +70,7 @@ class _WidgetSelecionaTextoState
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                  color: isSelected ? Colors.green : Color(0XFFE5E5E5),
+                  color: widget.isSelected ? Colors.green : Color(0XFFE5E5E5),
                   width: 2,
                   style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(12))),

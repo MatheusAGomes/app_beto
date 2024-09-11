@@ -26,6 +26,8 @@ class _OpcaoTipoUmWidgetState extends State<OpcaoTipoUmWidget> {
   speak(String texto) async {
     await fluttertts.setLanguage('pt-BR');
     await fluttertts.setPitch(1);
+    await fluttertts.setVolume(1);
+
     await fluttertts.speak(texto);
   }
 

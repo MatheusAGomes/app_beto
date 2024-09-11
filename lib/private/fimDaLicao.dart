@@ -3,6 +3,7 @@ import 'package:app_beto/models/licaoCompleta.dart';
 import 'package:app_beto/models/resposta.dart';
 import 'package:app_beto/private/homePage.dart';
 import 'package:app_beto/repository/user-repository.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -41,8 +42,16 @@ class _FimLicaoScreenState extends State<FimLicaoScreen> {
     return '$minutes:$seconds';
   }
 
+  final player = AudioPlayer();
+
+  void playFinishSound() async {
+    await player.play(AssetSource('sounds/grunt-birthday-party.mp3'));
+  }
+
+
   @override
   Widget build(BuildContext context) {
+  //  playFinishSound();
     return Scaffold(
       backgroundColor: ColorService.roxo,
       body: Column(
