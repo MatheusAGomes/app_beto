@@ -8,8 +8,9 @@ class Licao {
   String? id;
   final List<ExercicioSchema> exercicios;
   final int index;
+  bool? ativo;
 
-  Licao({required this.exercicios, required this.id, required this.index});
+  Licao({required this.exercicios, required this.id, required this.index,this.ativo});
 
   void adicionarExercicio(ExercicioSchema exercicio) {
     exercicios.add(exercicio);

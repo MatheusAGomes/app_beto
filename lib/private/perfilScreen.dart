@@ -182,6 +182,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       children: List.generate(
                           licaoCompleta.length, (index) {
                         final licao = licaoCompleta[index];
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
                           child: Row(

@@ -12,6 +12,9 @@ abstract class LicaoApi {
   @GET("/licoes")
   Future<List<Licao>> getLicoes(@Header('hidden-loader') bool load);
 
+  @GET("/licoes-filtradas")
+  Future<List<Licao>> getLicoesfiltrada(@Header('hidden-loader') bool load);
+
   @POST("/licoes")
   Future<void> postLicao(@Body() Licao licao);
 }

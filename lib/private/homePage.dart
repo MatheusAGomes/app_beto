@@ -52,6 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
     _fetchIndex();
   }
 
+
+
   infiniteScrolling() {
     print(_scrollController.offset);
 
@@ -73,13 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   LicaoCompleta? findLicaoCompleta(
-      int indexListaDeTodasAsLicoes, List<LicaoCompleta?> licoesCompletas) {
-    if (indexListaDeTodasAsLicoes < licoesCompletas.length) {
-      if (licoesCompletas[indexListaDeTodasAsLicoes] != null) {
-        return licoesCompletas[indexListaDeTodasAsLicoes];
-      }
-    }
-    return null;
+      Licao licao, List<LicaoCompleta?> licoesCompletas) {
+  return licoesCompletas.firstWhere((element) => licao.id == element!.idLicao, orElse: () => null);
   }
 
   // Crie um método para buscar as lições
@@ -89,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       licoes = result;
     });
+
   }
 
   Future<void> _fetchUser() async {
@@ -125,9 +123,34 @@ class _MyHomePageState extends State<MyHomePage> {
       return soma + 0 ;
     });
 
-    int proximaLicao = listaDelicoes.length + 1;
-    _fetchUser();
 
+    _fetchUser();
+    
+    List<Licao> listaLicoesCompleta = [];
+    int proximaLicao = listaDelicoes.length + 1;
+
+    criacaodaLista(){
+      for(int i =0 ; i< licoes.length; i++)
+        {
+          // tem que ser ativo e o usuario nao pode ja ter passado por essa
+          if(licoes[i]!.ativo!)
+            {
+              if(!((licoes[i]!.index < listaDelicoes.length + 1) && (!listaDelicoes.any((e) => (e!.idLicao == licoes[i]!.id)))))
+                {
+                  listaLicoesCompleta.add(licoes[i]!);
+                }
+
+          //    print(listaLicoesCompleta);
+
+            }
+          else if(listaDelicoes.any((e) => (e!.idLicao == licoes[i]!.id))){
+            listaLicoesCompleta.add(licoes[i]!);
+         //   print(listaLicoesCompleta);
+          }
+            
+        }
+    }
+    criacaodaLista();
     return Scaffold(
         appBar: cordalinha
             ? AppBar(
@@ -303,7 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           LicaoCompleta? licao =
-                              findLicaoCompleta(index, listaDelicoes ?? []);
+                              findLicaoCompleta(listaLicoesCompleta[index], listaDelicoes ?? []);
 
                           return InkWell(
                               highlightColor: Colors.transparent,
@@ -315,8 +338,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => LicaoScreen(
-                                                licao: licoes[index]!,
-                                              )));
+                                            licao: listaLicoesCompleta[index]!,
+                                          )));
                                   setState(() {});
                                 }
                               },
@@ -324,8 +347,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 proximaLicao: proximaLicao,
                                 qntEstrelas: licao?.estrelas ?? 0,
                                 exercicioFeito:
-                                    licao?.estrelas != null ? true : false,
-                                numeroDaLicao: (index + 1).toString(),
+                                licao?.estrelas != null ? true : false,
+                                numeroDaLicao: (index+1).toString() ?? "0",
                               ));
                         },
                         separatorBuilder: (context, index) => Center(
@@ -343,7 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   )),
                             ),
-                        itemCount: licoes.length),
+                        itemCount: listaLicoesCompleta.length),
                   )
                 ],
               ),

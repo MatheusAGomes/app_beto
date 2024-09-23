@@ -12,10 +12,12 @@ Licao _$LicaoFromJson(Map<String, dynamic> json) => Licao(
           .toList(),
       id: json['_id'] as String?,
       index: (json['index'] as num).toInt(),
+      ativo: json['ativo'] as bool?,
     );
 
 Map<String, dynamic> _$LicaoToJson(Licao instance) => <String, dynamic>{
       '_id': instance.id,
       'exercicios': instance.exercicios,
       'index': instance.index,
+      'ativo': instance.ativo,
     };
