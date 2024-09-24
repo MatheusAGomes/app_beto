@@ -51,6 +51,11 @@ class _PerfilScreenState extends State<PerfilScreen> {
     licaoCompleta = filho.licaoCompleta;}
 
  void ordenarLicoes(List<LicaoCompleta?> licoes) {
+
+   for(int i = 0; i <  licoes!.length ; i++ ){
+     licoes[i]!.indexLicao = i+1;
+   }
+
    licoes.sort((a, b) {
      if (a?.date == null && b?.date == null) {
        return 0;

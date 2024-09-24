@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/licao.dart';
+import '../models/licaoCompleta.dart';
 import '../shared/constance/enviroment.dart';
 part 'licao-repository.g.dart';
 
@@ -12,9 +13,10 @@ abstract class LicaoApi {
   @GET("/licoes")
   Future<List<Licao>> getLicoes(@Header('hidden-loader') bool load);
 
-  @GET("/licoes-filtradas")
-  Future<List<Licao>> getLicoesfiltrada(@Header('hidden-loader') bool load);
 
   @POST("/licoes")
   Future<void> postLicao(@Body() Licao licao);
+
+  @GET("/licoesOrdenada/{idFilho}")
+  Future<List<LicaoCompleta?>> getLicoesOrdenada(@Path('idFilho') String idFilho);
 }

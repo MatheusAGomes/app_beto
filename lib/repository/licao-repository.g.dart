@@ -51,36 +51,6 @@ class _LicaoApi implements LicaoApi {
   }
 
   @override
-  Future<List<Licao>> getLicoesfiltrada(bool load) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'hidden-loader': load};
-    _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Licao>>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/licoes-filtradas',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    var value = _result.data!
-        .map((dynamic i) => Licao.fromJson(i as Map<String, dynamic>))
-        .toList();
-    return value;
-  }
-
-  @override
   Future<void> postLicao(Licao licao) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -103,6 +73,37 @@ class _LicaoApi implements LicaoApi {
           _dio.options.baseUrl,
           baseUrl,
         ))));
+  }
+
+  @override
+  Future<List<LicaoCompleta?>> getLicoesOrdenada(String idFilho) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<LicaoCompleta>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/licoesOrdenada/${idFilho}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => i == null
+            ? null
+            : LicaoCompleta.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
