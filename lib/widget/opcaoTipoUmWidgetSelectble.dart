@@ -11,13 +11,14 @@ class opcaoTipoUmWidgetSelectble extends StatefulWidget {
   bool isDisable;
   Color? colorDisable;
   bool isSelected;
-
+int? numeroPar;
   opcaoTipoUmWidgetSelectble({
     this.isSelected = false,
     this.colorDisable,
     this.isDisable = false,
     this.ontap,
     required this.silaba,
+    this.numeroPar,
     super.key,
   });
 
@@ -46,28 +47,41 @@ class _opcaoTipoUmWidgetSelectbleState
         speak(widget.silaba);
         if (widget.ontap != null) widget.ontap!();
       },
-      child: Container(
-          child: Center(
-              child: Text(
-            widget.silaba,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: ColorService.azul,
-                fontSize: 15),
-          )),
-          height: 35,
-          width: 80,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                  color: widget.isDisable
-                      ? widget.colorDisable ?? Color(0XFFE5E5E5)
-                      : widget.isDisable
-                          ? ColorService.verdeClaro
-                          : Color(0XFFE5E5E5),
-                  width: 2,
-                  style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(12))),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topRight,
+        children: [Container(
+            child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:20,vertical: 5),
+                  child: Text(
+                                widget.silaba,
+                                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: ColorService.azul,
+                    fontSize: 15),
+                              ),
+                )),
+            decoration: BoxDecoration(
+
+                color: Colors.white,
+                border: Border.all(
+                    color: Color(0XFFE5E5E5),
+                    width: 2,
+                    style: BorderStyle.solid),
+                borderRadius: BorderRadius.circular(12))),
+          if(widget.numeroPar != null)        Container(
+              child: Center(child: Text(widget.numeroPar.toString(),style: TextStyle(fontSize: 10,color: ColorService.azul,fontWeight: FontWeight.bold),)),
+              height: 20,
+              width: 20,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                      color:Color(0XFFE5E5E5),
+                      width: 2,
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(5)))],
+      ),
     );
   }
 }

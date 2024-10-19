@@ -48,7 +48,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   final player = AudioPlayer();
 
-
   void playCorrectSound() async {
     await player.play(AssetSource('sounds/duolingo-correct.mp3'));
   }
@@ -56,6 +55,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   void playWrongSound() async {
     await player.play(AssetSource('sounds/duolingo-wrong.mp3'));
   }
+
   List<Widget> novaLista = [];
 
   speak(String texto) async {
@@ -68,11 +68,13 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   @override
   void initState() {
+
     // TODO: implement initState
     super.initState();
     _openTime = DateTime.now();
     initSpeech();
   }
+  late int indiceSelecionaPares = listaRespostaSelecionePares.length + 1;
 
   //funcao de comecar a ouvir
   Future<void> recognizeListen(
@@ -92,10 +94,9 @@ class _LicaoScreenState extends State<LicaoScreen> {
         playCorrectSound();
         listaDeResposta.add(Resposta(resposta: respostasDadas));
         await finalizandoFase();
-      }else
-        {
-          playWrongSound();
-        }
+      } else {
+        playWrongSound();
+      }
     }
     setState(() {});
   }
@@ -194,12 +195,13 @@ class _LicaoScreenState extends State<LicaoScreen> {
       possiveisRespostas = [];
       arrayAuxiliar = [];
       indexTentativas = 0;
+      listaDeResposta = [];
     }
 
     setState(() {});
   }
 
-  funLimpar(){
+  funLimpar() {
     possiveisRespostas = [];
   }
 
@@ -211,17 +213,59 @@ class _LicaoScreenState extends State<LicaoScreen> {
       playCorrectSound();
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
+    } else {
+      playWrongSound();
+      resposta = [];
+      possiveisRespostas = List.from(convertToJsonList(
+          widget.licao.exercicios[indexExercicios].possiveisSilabas!));
+      setState(() {});
     }
-    else
-      {
-        playWrongSound();
-        resposta = [];
-        possiveisRespostas = List.from(convertToJsonList(
-            widget.licao.exercicios[indexExercicios].possiveisSilabas!));
-        setState(() {
+  }
 
-        });
-      }
+  void verficandoRespostasSelecionePares() async {
+    bool gabaritou = true;
+   listaRespostaSelecionePares.forEach((e) {
+     respostasDadas.add({
+       "objeto": e.r1,
+       "palavra": e.r2
+     });
+     if(e.r1!.nome != e.r2!)
+       {
+         playWrongSound();
+         gabaritou = false;
+       }
+
+   });
+
+   if(gabaritou)
+     {
+       playCorrectSound();
+       listaDeResposta.add(Resposta(resposta: respostasDadas));
+       await finalizandoFase();
+     }
+    listaRespostaSelecionePares = [];
+   setState(() {
+
+   });
+
+      // if (objetos[indexDasImagensSelecioandas!].nome ==
+      //     palavra[indexDosTextosSelecionados!]) {
+      //   acertados.add(objetos[indexDasImagensSelecioandas!].nome!);
+      //   print('acertou');
+      //   indexDasImagensSelecioandas = null;
+      //   indexDosTextosSelecionados = null;
+      //   if (acertados.length == objetos.length) {
+      //
+      //   }
+      // } else {
+      //   playWrongSound();
+      //   indexTentativas++;
+      //   print('errou');
+      //
+      //   indexDasImagensSelecioandas = null;
+      //   indexDosTextosSelecionados = null;
+      // }
+
   }
 
   void verificadoRespostaSelecaoDeImagens() async {
@@ -236,12 +280,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
       playCorrectSound();
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
-    }else{
+    } else {
       playWrongSound();
       funLimpar();
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 
@@ -253,27 +295,23 @@ class _LicaoScreenState extends State<LicaoScreen> {
       playCorrectSound();
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
-    }else
-      {
-        playWrongSound();
-        respostaFinal =
-            widget.licao.exercicios[indexExercicios].respostaEsperada;
-        titulo = widget.licao.exercicios[indexExercicios].titulo;
-        posicoesSemLetra = List.from(widget.licao.exercicios[indexExercicios].posicoesSemLetra!);
-        letrasParaExercicio = List.from(widget.licao.exercicios[indexExercicios].letrasParaExercicio!);
+    } else {
+      playWrongSound();
+      respostaFinal = widget.licao.exercicios[indexExercicios].respostaEsperada;
+      titulo = widget.licao.exercicios[indexExercicios].titulo;
+      posicoesSemLetra =
+          List.from(widget.licao.exercicios[indexExercicios].posicoesSemLetra!);
+      letrasParaExercicio = List.from(
+          widget.licao.exercicios[indexExercicios].letrasParaExercicio!);
 
-        letras = respostaFinal!.split('');
-        for (var i = 0; i < letras.length; i++) {
-          if (posicoesSemLetra!.contains(i)) {
-            letras[i] = '';
-          }
+      letras = respostaFinal!.split('');
+      for (var i = 0; i < letras.length; i++) {
+        if (posicoesSemLetra!.contains(i)) {
+          letras[i] = '';
         }
-        setState(() {
-
-        });
-
       }
-
+      setState(() {});
+    }
   }
 
   bool arraysHaveSameContent(List<dynamic> array1, List<dynamic> array2) {
@@ -296,12 +334,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
       playCorrectSound();
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
-    }else{
+    } else {
       playWrongSound();
       funLimpar();
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 
@@ -367,7 +403,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 50),
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           speak(titulo);
                         },
                         child: Text(
@@ -503,7 +539,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           speak(titulo);
                         },
                         child: Text(
@@ -598,19 +634,25 @@ class _LicaoScreenState extends State<LicaoScreen> {
         onAcceptWithDetails: (dynamic details) {
           // print(details);
           // possiveisRespostas.removeAt(details.data as int);
-          resposta.add({
-            "index": "${details.data?['index']}",
-            "silaba": "${details.data?['silaba']}"
-          });
-          int i = indexOfMap(possiveisRespostas, {
-            "index": "${details.data?['index']}",
-            "silaba": "${details.data?['silaba']}"
-          });
+          if (!(indexOfMap(resposta, {
+                "index": "${details.data?['index']}",
+                "silaba": "${details.data?['silaba']}"
+              }) !=
+              -1)) {
+            resposta.add({
+              "index": "${details.data?['index']}",
+              "silaba": "${details.data?['silaba']}"
+            });
+            int i = indexOfMap(possiveisRespostas, {
+              "index": "${details.data?['index']}",
+              "silaba": "${details.data?['silaba']}"
+            });
 
-          possiveisRespostas.removeAt(i);
+            if (i != -1) possiveisRespostas.removeAt(i);
 
-          print(i);
-          setState(() {});
+            print(i);
+            setState(() {});
+          }
         },
       ),
       Container(
@@ -625,18 +667,24 @@ class _LicaoScreenState extends State<LicaoScreen> {
         onAcceptWithDetails: (dynamic details) {
           // print(details);
           // possiveisRespostas.removeAt(details.data as int);
-          possiveisRespostas.add({
-            "index": "${details.data?['index']}",
-            "silaba": "${details.data?['silaba']}"
-          });
-          int i = indexOfMap(resposta, {
-            "index": "${details.data?['index']}",
-            "silaba": "${details.data?['silaba']}"
-          });
+          if (!(indexOfMap(possiveisRespostas, {
+                "index": "${details.data?['index']}",
+                "silaba": "${details.data?['silaba']}"
+              }) !=
+              -1)) {
+            possiveisRespostas.add({
+              "index": "${details.data?['index']}",
+              "silaba": "${details.data?['silaba']}"
+            });
+            int i = indexOfMap(resposta, {
+              "index": "${details.data?['index']}",
+              "silaba": "${details.data?['silaba']}"
+            });
 
-          resposta.removeAt(i);
+            if (i != -1) resposta.removeAt(i);
 
-          setState(() {});
+            setState(() {});
+          }
         },
         builder: (context, candidateData, rejectedData) => Padding(
           padding: EdgeInsets.symmetric(vertical: 15),
@@ -683,7 +731,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
             height: 50,
             child: Center(
               child: Text(
-                'Check',
+                'Corrigir',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -721,8 +769,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       width: 330,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child:InkWell(
-                          onTap: (){
+                        child: InkWell(
+                          onTap: () {
                             speak(titulo);
                           },
                           child: Text(
@@ -946,18 +994,24 @@ class _LicaoScreenState extends State<LicaoScreen> {
         onAcceptWithDetails: (dynamic details) {
           // print(details);
           // possiveisRespostas.removeAt(details.data as int);
-          possiveisRespostas.add({
-            "index": "${details.data?['index']}",
-            "silaba": "${details.data?['silaba']}"
-          });
-          int i = indexOfMap(resposta, {
-            "index": "${details.data?['index']}",
-            "silaba": "${details.data?['silaba']}"
-          });
+          if ((indexOfMap(possiveisRespostas, {
+                "index": "${details.data?['index']}",
+                "silaba": "${details.data?['silaba']}"
+              }) !=
+              -1)) {
+            possiveisRespostas.add({
+              "index": "${details.data?['index']}",
+              "silaba": "${details.data?['silaba']}"
+            });
+            int i = indexOfMap(resposta, {
+              "index": "${details.data?['index']}",
+              "silaba": "${details.data?['silaba']}"
+            });
 
-          resposta.removeAt(i);
+            resposta.removeAt(i);
 
-          setState(() {});
+            setState(() {});
+          }
         },
         builder: (context, candidateData, rejectedData) => Padding(
           padding: EdgeInsets.symmetric(vertical: 15),
@@ -1005,7 +1059,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
             height: 50,
             child: Center(
               child: Text(
-                'Check',
+                'Corrigir',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -1017,25 +1071,22 @@ class _LicaoScreenState extends State<LicaoScreen> {
   }
 
   List<Widget> selecioneTexto() {
-
     novaLista = List.generate(
         letrasParaExercicio!.length,
-            (index) =>  WidgetSelecionaTexto(
-            isSelected: possiveisRespostas.contains(letrasParaExercicio![index]),
+        (index) => WidgetSelecionaTexto(
+            isSelected:
+                possiveisRespostas.contains(letrasParaExercicio![index]),
             ontap: () {
               if (!possiveisRespostas.contains(letrasParaExercicio![index])) {
-                possiveisRespostas
-                    .add(letrasParaExercicio![index]!);
+                possiveisRespostas.add(letrasParaExercicio![index]!);
                 print(respostasDadas);
               } else {
-                possiveisRespostas.remove(
-                    letrasParaExercicio![index]);
+                possiveisRespostas.remove(letrasParaExercicio![index]);
                 print(respostasDadas);
               }
               setState(() {});
             },
             silaba: letrasParaExercicio![index]!));
-
 
     return [
       Padding(
@@ -1060,7 +1111,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           speak(titulo);
                         },
                         child: Text(
@@ -1096,7 +1147,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 children: [
                   InkWell(
                     onTap: () async {
-
                       //todo entender isso
                       if (respostasEmArray != null) {
                         for (int i = 0; i < respostasEmArray!.length; i++) {
@@ -1160,7 +1210,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
             height: 50,
             child: Center(
               child: Text(
-                'Check',
+                'Corrigir',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -1194,7 +1244,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 35),
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           speak(titulo);
                         },
                         child: Text(
@@ -1225,20 +1275,24 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         WidgetSelecionePares(
-                                          isDisable: jaFoiAcertado(
-                                              objetos[index].nome!),
-                                          colorDisable: jaFoiAcertado(
-                                                  objetos[index].nome!)
-                                              ? ColorService.roxo
-                                              : null,
+                                         numeroPar:  !listaRespostaSelecionePares.map((e) => e.r1).toList().contains( objetos[index])  ? indexDasImagensSelecioandas == index ? listaRespostaSelecionePares.length + 1 :null :  listaRespostaSelecionePares.map((e) => e.r1).toList().indexOf( objetos[index]) + 1,
+                                          isDisable: false,
+                                          colorDisable: null,
                                           ontap: () {
-                                            if ((!jaFoiAcertado(
-                                                objetos[index].nome!))) {
+                                            if (!listaRespostaSelecionePares.map((e) => e.r1).toList().contains( objetos[index])) {
                                               indexDasImagensSelecioandas =
                                                   index;
-                                              verificandoSelecionarPares();
+                                              controlandoIndiceDeResposta();
                                               setState(() {});
                                             }
+                                            else
+                                              {
+                                                listaRespostaSelecionePares.removeAt(listaRespostaSelecionePares.map((e) => e.r1).toList().indexOf( objetos[index]));
+                                                setState(() {
+
+                                                });
+                                              }
+
                                           },
                                           objetoSelecionePares: objetos[index],
                                           isImage: true,
@@ -1247,16 +1301,24 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                                   index),
                                         ),
                                         opcaoTipoUmWidgetSelectble(
+                                          numeroPar: !listaRespostaSelecionePares.map((e) => e.r2).toList().contains(palavra[index])  ? indexDosTextosSelecionados == index ? listaRespostaSelecionePares.length + 1 :null  :  listaRespostaSelecionePares.map((e) => e.r2).toList().indexOf(palavra[index]) + 1,
                                             isDisable:
-                                                jaFoiAcertado(palavra[index]),
+                                               false,
                                             ontap: () {
-                                              if ((!jaFoiAcertado(
-                                                  palavra[index]))) {
+                                              if (!listaRespostaSelecionePares.map((e) => e.r2).toList().contains(palavra[index])) {
                                                 indexDosTextosSelecionados =
                                                     index;
-                                                verificandoSelecionarPares();
+                                                controlandoIndiceDeResposta();
                                                 setState(() {});
                                               }
+                                              else
+                                                {
+                                                  listaRespostaSelecionePares.removeAt(listaRespostaSelecionePares.map((e) => e.r2).toList().indexOf( palavra[index]));
+                                                  setState(() {
+
+                                                  });
+
+                                                }
                                             },
                                             colorDisable:
                                                 jaFoiAcertado(palavra[index])
@@ -1270,7 +1332,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                     ),
                                   )),
                         ),
-                      ))
+                      )),
                 ],
               ),
             ),
@@ -1278,7 +1340,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
               top: -30,
               child: Column(
                 children: [
-                  //todo pq isso ta aqui
                   InkWell(
                     onTap: () {
                       if (respostaFinal != null) {
@@ -1311,6 +1372,34 @@ class _LicaoScreenState extends State<LicaoScreen> {
           ],
         ),
       ),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: InkWell(
+          onTap: () {
+            if (listaRespostaSelecionePares.length  == palavra.length) {
+              verficandoRespostasSelecionePares();
+            }
+          },
+          child: Container(
+
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                color: listaRespostaSelecionePares.length  == palavra.length
+                    ? ColorService.verde
+                    : Colors.grey,
+                borderRadius: BorderRadius.circular(7)),
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: 50,
+            child: Center(
+              child: Text(
+                'Corrigir',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      ),
     ];
   }
 
@@ -1335,7 +1424,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 20),
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         speak(titulo);
                       },
                       child: Text(
@@ -1469,7 +1558,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
             height: 50,
             child: Center(
               child: Text(
-                'Check',
+                'Corrigir',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -1482,33 +1571,40 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   int indexTentativas = 0;
 
-  Future<void> verificandoSelecionarPares() async {
+  Future<void> controlandoIndiceDeResposta() async {
     if (indexDasImagensSelecioandas != null &&
         indexDosTextosSelecionados != null) {
-      respostasDadas.add({
-        "objeto": objetos[indexDasImagensSelecioandas!],
-        "palavra": palavra[indexDosTextosSelecionados!]
-      });
-      if (objetos[indexDasImagensSelecioandas!].nome ==
-          palavra[indexDosTextosSelecionados!]) {
-        acertados.add(objetos[indexDasImagensSelecioandas!].nome!);
-        print('acertou');
+        listaRespostaSelecionePares.add(ObjetoRespostaSelecionaPares(r1: objetos[indexDasImagensSelecioandas!],r2: palavra[indexDosTextosSelecionados!]));
         indexDasImagensSelecioandas = null;
-        indexDosTextosSelecionados = null;
-        if (acertados.length == objetos.length) {
-          playCorrectSound();
-          listaDeResposta.add(Resposta(resposta: respostasDadas));
-          await finalizandoFase();
-        }
-      } else {
-        playWrongSound();
-        indexTentativas++;
-        print('errou');
-
-        indexDasImagensSelecioandas = null;
-        indexDosTextosSelecionados = null;
-      }
+        indexDosTextosSelecionados= null;
     }
+
+    // if (indexDasImagensSelecioandas != null &&
+    //     indexDosTextosSelecionados != null) {
+    //   respostasDadas.add({
+    //     "objeto": objetos[indexDasImagensSelecioandas!],
+    //     "palavra": palavra[indexDosTextosSelecionados!]
+    //   });
+    //   if (objetos[indexDasImagensSelecioandas!].nome ==
+    //       palavra[indexDosTextosSelecionados!]) {
+    //     acertados.add(objetos[indexDasImagensSelecioandas!].nome!);
+    //     print('acertou');
+    //     indexDasImagensSelecioandas = null;
+    //     indexDosTextosSelecionados = null;
+    //     if (acertados.length == objetos.length) {
+    //       playCorrectSound();
+    //       listaDeResposta.add(Resposta(resposta: respostasDadas));
+    //       await finalizandoFase();
+    //     }
+    //   } else {
+    //     playWrongSound();
+    //     indexTentativas++;
+    //     print('errou');
+    //
+    //     indexDasImagensSelecioandas = null;
+    //     indexDosTextosSelecionados = null;
+    //   }
+    // }
   }
 
   bool jaFoiAcertado(String conteudo) {
@@ -1526,7 +1622,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
   int? indexDasImagensSelecioandas;
   int? indexDosTextosSelecionados;
-
+  List<ObjetoRespostaSelecionaPares> listaRespostaSelecionePares = [];
   @override
   Widget build(BuildContext context) {
     if (semaforo == false) {
@@ -1548,8 +1644,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
         respostaFinal =
             widget.licao.exercicios[indexExercicios].respostaEsperada;
         titulo = widget.licao.exercicios[indexExercicios].titulo;
-        posicoesSemLetra = List.from(widget.licao.exercicios[indexExercicios].posicoesSemLetra!);
-        letrasParaExercicio = List.from(widget.licao.exercicios[indexExercicios].letrasParaExercicio!);
+        posicoesSemLetra = List.from(
+            widget.licao.exercicios[indexExercicios].posicoesSemLetra!);
+        letrasParaExercicio = List.from(
+            widget.licao.exercicios[indexExercicios].letrasParaExercicio!);
 
         letras = respostaFinal!.split('');
         for (var i = 0; i < letras.length; i++) {
@@ -1650,4 +1748,14 @@ class _LicaoScreenState extends State<LicaoScreen> {
       ),
     );
   }
+}
+
+class ObjetoRespostaSelecionaPares {
+  ObjetoSelecionePares? r1;
+  String? r2;
+
+  ObjetoRespostaSelecionaPares({
+     this.r1,
+     this.r2,
+  });
 }

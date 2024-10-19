@@ -46,9 +46,9 @@ class _PerfilScreenState extends State<PerfilScreen> {
  @override
  void initState() {
     // TODO: implement initState
+
     super.initState();
-    filho = widget.user.filhos![widget.indexUsuario]!;
-    licaoCompleta = filho.licaoCompleta;}
+ }
 
  void ordenarLicoes(List<LicaoCompleta?> licoes) {
 
@@ -72,6 +72,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
   @override
 
   Widget build(BuildContext context) {
+    filho = widget.user.filhos![widget.indexUsuario]!;
+    licaoCompleta = widget.user.filhos![widget.indexUsuario]!.licaoCompleta;
    ordenarLicoes(licaoCompleta);
    licaoCompleta =   licaoCompleta.reversed.toList();
     return WillPopScope(
