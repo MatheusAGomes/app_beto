@@ -18,12 +18,11 @@ class BannerPrincipal extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(25)),
-      height: MediaQuery.of(context).size.height * 0.265,
       width: MediaQuery.of(context).size.width * 0.9,
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+            padding: EdgeInsets.only(top: 20,left: 30, right: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -139,7 +138,7 @@ class BannerPrincipal extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 10,bottom: 20,left: 30, right: 30),
             child: Image.asset('assets/images/compartilhar.png'),
           )
         ],

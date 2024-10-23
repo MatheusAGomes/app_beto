@@ -155,7 +155,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
     await speech.initialize(
       finalTimeout: Duration(seconds: 10),
       onError: (errorNotification) {
-        setState(() {});
       },
     );
   }
@@ -274,9 +273,9 @@ class _LicaoScreenState extends State<LicaoScreen> {
       tentativa.add(possiveisRespostas[i]);
     }
     respostasDadas.add(tentativa);
-    //  respostasDadas.add(possiveisRespostas);
-
-    if (listEquals(possiveisRespostas, respostasEmArray)) {
+    //  respostasDadas.add(possiveisRespostas)possiveisRespostas;
+  //todo ordem nao importa
+    if (Set.from(possiveisRespostas).containsAll(respostasEmArray!) && Set.from(respostasEmArray!).containsAll(possiveisRespostas)){
       playCorrectSound();
       listaDeResposta.add(Resposta(resposta: respostasDadas));
       await finalizandoFase();
@@ -1096,9 +1095,11 @@ class _LicaoScreenState extends State<LicaoScreen> {
           clipBehavior: Clip.none,
           children: [
             Container(
+
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
               width: MediaQuery.of(context).size.width * 0.8,
+              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
               child: Column(
                 children: [
                   SizedBox(

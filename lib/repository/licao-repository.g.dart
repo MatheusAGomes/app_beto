@@ -13,7 +13,7 @@ class _LicaoApi implements LicaoApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://172.17.0.1:2020/';
+    baseUrl ??= 'http://192.168.32.105:2020/';
   }
 
   final Dio _dio;

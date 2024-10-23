@@ -33,42 +33,39 @@ class _Signup6ScreenState extends State<Signup6Screen> {
     return Scaffold(
       backgroundColor: ColorService.roxo,
       body: SafeArea(
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 20, right: 20, top: 220, bottom: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              CircleAvatar(
-                radius: 72,
-                backgroundColor: Colors.white,
-                child: CircleAvatar(
-                  radius: 70,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(120),
-                      child: Image.asset(getImageUrlFromIndexString(
-                          (widget.user.filhos![0]!.foto!)))),
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 72,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                radius: 70,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(120),
+                    child: Image.asset(getImageUrlFromIndexString(
+                        (widget.user.filhos![0]!.foto!)))),
               ),
-              Text(
-                'Bem-vindo !',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              ),
-              Text(
-                'O seu perfil foi criado com sucesso',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.normal),
-              ),
-              SizedBox(
-                height: 300,
-              ),
-              InkWell(
+            ),
+            Text(
+              'Bem-vindo !',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
+            Text(
+              'O seu perfil foi criado com sucesso',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: InkWell(
                 onTap: () async {
                   var licoes = await LicaoApi(dio).getLicoes(false);
                   User user = await UserApi(dio).getUser(auth.getUserId());
@@ -94,8 +91,8 @@ class _Signup6ScreenState extends State<Signup6Screen> {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -44,7 +44,7 @@ class _Signup1ScreenState extends State<Signup1Screen> {
                     ),
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.78,
+                    width: MediaQuery.of(context).size.width * 0.7,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: LinearProgressBar(
