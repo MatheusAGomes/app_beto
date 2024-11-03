@@ -107,13 +107,12 @@ class _Signup5ScreenState extends State<Signup5Screen> {
                       fontSize: 28),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.7,
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 41,
+                      spacing: 10,
                       runAlignment: WrapAlignment.center,
                       alignment: WrapAlignment.center,
                       runSpacing: 35,
@@ -121,12 +120,12 @@ class _Signup5ScreenState extends State<Signup5Screen> {
                         return InkWell(
                           onTap: () => selecionarImagem(index),
                           child: CircleAvatar(
-                            radius: selecionados[index] ? 72 : 67,
+                            radius: selecionados[index] ? 70 : 65,
                             backgroundColor: selecionados[index]
                                 ? ColorService.laranja
                                 : Colors.white,
                             child: CircleAvatar(
-                              radius: selecionados[index] ? 70 : 65,
+                              radius: selecionados[index] ? 68 : 62,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(120),
                                 child: Image.asset(imagens[index]),

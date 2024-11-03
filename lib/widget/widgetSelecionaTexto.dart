@@ -47,26 +47,26 @@ class _WidgetSelecionaTextoState
   Widget build(BuildContext context) {
     return  InkWell(
       onTap: () {
-
         speak(widget.silaba);
         widget.ontap!();
         setState(() {
 
         });
-
-
       },
       child: Container(
+        constraints: BoxConstraints(
+          maxHeight: 35,
+          maxWidth: 80,
+        ),
           child: Center(
               child: Text(
                 widget.silaba,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: ColorService.azul,
-                    fontSize: 15),
+                    fontSize: 11),
               )),
-          height: 35,
-          width: 80,
+
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(

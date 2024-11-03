@@ -59,7 +59,7 @@ class _opcaoTipoUmWidgetSelectbleState
                                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: ColorService.azul,
-                    fontSize: 15),
+                    fontSize: 12),
                               ),
                 )),
             decoration: BoxDecoration(

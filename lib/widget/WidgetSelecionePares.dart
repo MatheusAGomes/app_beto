@@ -56,8 +56,8 @@ class _WidgetSelecioneParesState extends State<WidgetSelecionePares> {
                 child: widget.isImage
                     ? Image.network(widget.objetoSelecionePares.urlimagem ?? "")
                     : Text(widget.objetoSelecionePares.nome!)),
-            height: 80,
-            width: 80,
+            height: MediaQuery.of(context).size.width * 0.2,
+            width:  MediaQuery.of(context).size.width * 0.2,
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(

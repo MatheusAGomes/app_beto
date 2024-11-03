@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:app_beto/models/exercicio.dart';
@@ -194,7 +195,6 @@ class _LicaoScreenState extends State<LicaoScreen> {
       possiveisRespostas = [];
       arrayAuxiliar = [];
       indexTentativas = 0;
-      listaDeResposta = [];
     }
 
     setState(() {});
@@ -382,7 +382,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   List<Widget> reproducao() {
     return [
       Padding(
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
         child: Stack(
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
@@ -390,17 +390,17 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.88,
               child: Column(
                 children: [
                   SizedBox(
-                    height: 120,
+                    height: 70,
                   ),
                   Container(
                     alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 50),
+                          horizontal: 15, vertical: 10),
                       child: InkWell(
                         onTap: () {
                           speak(titulo);
@@ -465,7 +465,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(vertical: 100),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: InkWell(
           onTap: () async {
             final options = SpeechListenOptions(
@@ -494,15 +494,15 @@ class _LicaoScreenState extends State<LicaoScreen> {
             }
           },
           child: Container(
-            height: 120,
-            width: 120,
+            height: MediaQuery.of(context).size.width * 0.25,
+            width: MediaQuery.of(context).size.width * 0.25,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color:
                   speech.isListening == false ? Color(0XFF4FFFAA) : Colors.red,
             ),
             child: Icon(
-              size: 65,
+              size: 30,
               speech.isListening == false
                   ? Icons.mic_none
                   : Icons.pause_circle_outline,
@@ -517,7 +517,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   List<Widget> juncaoDeSilabas() {
     return [
       Padding(
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
         child: Stack(
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
@@ -525,18 +525,16 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.88,
               child: Column(
                 children: [
                   SizedBox(
-                    height: 120,
+                    height: 70,
                   ),
                   Container(
                     alignment: Alignment.center,
-                    height: 180,
-                    width: 330,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.only(left: 15,right: 15,top: 10,bottom: 20),
                       child: InkWell(
                         onTap: () {
                           speak(titulo);
@@ -546,7 +544,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                           style: TextStyle(
                               color: ColorService.azul,
                               fontWeight: FontWeight.w900,
-                              fontSize: 30),
+                              fontSize: 25),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -604,7 +602,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
         builder: (context, candidateData, rejectedData) => Container(
             padding: EdgeInsets.only(bottom: 10),
             width: 330,
-            height: 100,
+            height: 70,
             color: Colors.transparent,
             child: Wrap(
               runAlignment: WrapAlignment.end,
@@ -660,7 +658,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
         height: 2,
       ),
       const SizedBox(
-        height: 46,
+        height: 20,
       ),
       DragTarget(
         onAcceptWithDetails: (dynamic details) {
@@ -744,7 +742,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   List<Widget> completePalavra() {
     return [
       Padding(
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
         child: Stack(
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
@@ -760,14 +758,12 @@ class _LicaoScreenState extends State<LicaoScreen> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 120,
+                      height: 70,
                     ),
                     Container(
                       alignment: Alignment.center,
-                      height: 180,
-                      width: 330,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                         child: InkWell(
                           onTap: () {
                             speak(titulo);
@@ -777,14 +773,14 @@ class _LicaoScreenState extends State<LicaoScreen> {
                             style: TextStyle(
                                 color: ColorService.azul,
                                 fontWeight: FontWeight.w900,
-                                fontSize: 30),
+                                fontSize: 25),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
+                      padding: const EdgeInsets.only(bottom: 30,top: 10),
                       child: Wrap(
                         runAlignment: WrapAlignment.end,
                         verticalDirection: VerticalDirection.down,
@@ -799,8 +795,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
                               builder: (context, candidateData, rejectedData) {
                                 return letras[index] == ""
                                     ? Container(
-                                        width: 50,
-                                        height: 50,
+                                        width: 40,
+                                        height: 40,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 2, vertical: 0),
                                         padding: EdgeInsets.symmetric(
@@ -824,7 +820,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                         child: Text(
                                           letras[index],
                                           style: TextStyle(
-                                              fontSize: 35,
+                                              fontSize: 25,
                                               color: Colors.transparent,
                                               fontWeight: FontWeight.bold),
                                         ))
@@ -840,8 +836,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                           clipBehavior: Clip.none,
                                           children: [
                                             Container(
-                                                width: 50,
-                                                height: 50,
+                                                width: 40,
+                                                height: 40,
                                                 margin: EdgeInsets.symmetric(
                                                     horizontal: 2, vertical: 0),
                                                 padding: EdgeInsets.symmetric(
@@ -865,17 +861,19 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                                     border: Border.all(
                                                         color: Colors.white,
                                                         width: 1)),
-                                                child: Text(
-                                                  letras[index],
-                                                  style: TextStyle(
-                                                      fontSize: 35,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                child: Center(
+                                                  child: Text(
+                                                    letras[index],
+                                                    style: TextStyle(
+                                                        fontSize: 25,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 )),
                                             Positioned(
-                                              left: 35,
-                                              top: -5,
+                                              left: 30,
+                                              top: -10,
                                               child: CircleAvatar(
                                                 radius: 10,
                                                 backgroundColor: Colors.white,
@@ -903,8 +901,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
                           return DragTarget(
                             builder: (context, candidateData, rejectedData) =>
                                 Container(
-                                    width: 50,
-                                    height: 50,
+                                    width: 40,
+                                    height: 40,
                                     margin: EdgeInsets.symmetric(
                                         horizontal: 2, vertical: 0),
                                     padding: EdgeInsets.symmetric(
@@ -928,7 +926,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                       child: Text(
                                         letras[index],
                                         style: TextStyle(
-                                            fontSize: 35,
+                                            fontSize: 25,
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -987,7 +985,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
         ),
       ),
       const SizedBox(
-        height: 46,
+        height: 20,
       ),
       DragTarget(
         onAcceptWithDetails: (dynamic details) {
@@ -1016,7 +1014,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
           padding: EdgeInsets.symmetric(vertical: 15),
           child: Container(
               color: Colors.transparent,
-              height: 80,
+
               width: MediaQuery.of(context).size.width * 0.8,
               child: Wrap(
                   spacing: 3,
@@ -1041,10 +1039,10 @@ class _LicaoScreenState extends State<LicaoScreen> {
         ),
       ),
       const SizedBox(
-        height: 46,
+        height: 10,
       ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 40),
+        padding: EdgeInsets.symmetric(horizontal: 40,),
         child: InkWell(
           onTap: () {
             verficandoRespostasLicaoCompleta();
@@ -1089,7 +1087,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
     return [
       Padding(
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
         child: Stack(
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
@@ -1098,16 +1096,15 @@ class _LicaoScreenState extends State<LicaoScreen> {
 
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              width: MediaQuery.of(context).size.width * 0.8,
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              width: MediaQuery.of(context).size.width * 0.88,
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   SizedBox(
-                    height: 120,
+                    height: 75,
                   ),
                   Container(
                     alignment: Alignment.center,
-                    height: 180,
                     width: 330,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -1120,7 +1117,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                           style: TextStyle(
                               color: ColorService.azul,
                               fontWeight: FontWeight.w900,
-                              fontSize: 30),
+                              fontSize: 25),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -1152,6 +1149,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       if (respostasEmArray != null) {
                         for (int i = 0; i < respostasEmArray!.length; i++) {
                           await speak(respostasEmArray![i]);
+                              sleep(Duration(seconds: 1));
                         }
                       } else {
                         speak(titulo);
@@ -1225,7 +1223,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   List<Widget> selecionePares() {
     return [
       Padding(
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
         child: Stack(
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
@@ -1233,17 +1231,17 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.88,
               child: Column(
                 children: [
                   SizedBox(
-                    height: 120,
+                    height: 80,
                   ),
                   Container(
                     alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 35),
+                          horizontal: 15,),
                       child: InkWell(
                         onTap: () {
                           speak(titulo);
@@ -1253,7 +1251,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                           style: TextStyle(
                               color: ColorService.azul,
                               fontWeight: FontWeight.w900,
-                              fontSize: 30),
+                              fontSize: 25),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -1262,15 +1260,15 @@ class _LicaoScreenState extends State<LicaoScreen> {
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 20),
+                        padding: const EdgeInsets.only(left: 30,right: 30,top: 0,bottom: 10,
+                            ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: List.generate(
                               objetos.length,
                               (index) => Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
+                                        vertical: 5),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -1407,7 +1405,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
   List<Widget> selecioneImagens() {
     return [
       Padding(
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
         child: Stack(
           alignment: Alignment.topCenter,
           clipBehavior: Clip.none,
@@ -1415,15 +1413,15 @@ class _LicaoScreenState extends State<LicaoScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(40)),
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.88,
               child: Column(
                 children: [
                   SizedBox(
-                    height: 120,
+                    height: 80,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 20),
+                        horizontal: 15),
                     child: InkWell(
                       onTap: () {
                         speak(titulo);
@@ -1433,7 +1431,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                         style: TextStyle(
                             color: ColorService.azul,
                             fontWeight: FontWeight.w900,
-                            fontSize: 30),
+                            fontSize: 23),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -1444,7 +1442,7 @@ class _LicaoScreenState extends State<LicaoScreen> {
                       children: [
                         Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 20),
+                                horizontal: 30, vertical: 10),
                             child: Wrap(
                               runAlignment: WrapAlignment.end,
                               verticalDirection: VerticalDirection.down,
@@ -1476,8 +1474,8 @@ class _LicaoScreenState extends State<LicaoScreen> {
                                           child: Image.network(
                                             arrayAuxiliar![index]['urlimagem'],
                                           ),
-                                          height: 75,
-                                          width: 100,
+                                          height: MediaQuery.of(context).size.width * 0.2,
+                                          width: MediaQuery.of(context).size.width * 0.2,
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(12),
